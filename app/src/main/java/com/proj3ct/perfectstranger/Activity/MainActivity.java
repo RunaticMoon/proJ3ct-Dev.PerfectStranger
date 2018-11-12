@@ -39,18 +39,11 @@ public class MainActivity extends AppCompatActivity {
         lv_message = findViewById(R.id.lv_message);
 
         // 카카오 링크타고 들어오면 자동으로 채팅방 들어가기
-        Intent intent = getIntent();
-        if(intent != null) {
-            Uri uri = intent.getData();
-
-            if(uri != null) {
-                String roomKey = uri.getQuery().split("=")[1];
-                Log.e("[Intent Data]", roomKey);
-
-                et_roomId.setText(roomKey);
-                firebaseDB.setLv_message(lv_message);
-                firebaseDB.enterRoom(et_roomId.getText().toString());
-            }
+        String roomKey = kakaoLink.checkLink(getIntent());
+        if(roomKey != null) {
+            et_roomId.setText(roomKey);
+            firebaseDB.setLv_message(lv_message);
+            firebaseDB.enterRoom(roomKey);
         }
 
         // 해시키 알아내기

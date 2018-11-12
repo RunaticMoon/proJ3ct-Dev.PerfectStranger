@@ -1,9 +1,11 @@
 package com.proj3ct.perfectstranger.Firebase;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
 
@@ -46,6 +48,23 @@ public class KakaoLink {
                 // 템플릿 밸리데이션과 쿼터 체크가 성공적으로 끝남. 톡에서 정상적으로 보내졌는지 보장은 할 수 없다. 전송 성공 유무는 서버콜백 기능을 이용하여야 한다.
             }
         });
+    }
+
+    public String checkLink(Intent intent) {
+        if(intent != null) {
+            Uri uri = intent.getData();
+
+            if(uri != null) {
+                String query = uri.getQuery();
+
+                if(query != null) {
+                    String roomKey = query.split("=")[1];
+                    Log.e("[Intent Data]", roomKey);
+                    return roomKey;
+                }
+            }
+        }
+        return null;
     }
 
     public String getKeyHash(final Context context) {
