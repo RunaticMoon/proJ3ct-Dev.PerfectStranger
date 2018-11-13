@@ -17,6 +17,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,8 +29,11 @@ public class startActivity extends AppCompatActivity {
 
     TextView text_title;
     Transition transition;
-    ConstraintLayout bg_start;
+    ConstraintLayout bg_start,layout_profile;
     ConstraintSet con;
+    EditText edit_name;
+    Button but_waitingRoom;
+    ImageView but_setprofile;
 
     @Override
     public void onBackPressed() {
@@ -47,18 +51,26 @@ public class startActivity extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onResume() {
-        con.setVerticalBias(R.id.text_title,0.6f);
+        con.setVerticalBias(R.id.light,0.3f);
         TransitionManager.beginDelayedTransition(bg_start,transition);
         con.applyTo(bg_start);
         Handler delayHandler = new Handler();
         delayHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                con.setVerticalBias(R.id.light,0.3f);
-                TransitionManager.beginDelayedTransition(bg_start,transition);
-                con.applyTo(bg_start);
+                Animation move_right = AnimationUtils.loadAnimation(startActivity.this,R.anim.fade_left_to_right);
+                move_right.setFillAfter(true);
+                text_title.startAnimation(move_right);
+                layout_profile.startAnimation(move_right);
             }
         },500);
+        delayHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                but_setprofile.setEnabled(true);
+                but_waitingRoom.setEnabled(true);
+            }
+        },800);
         super.onResume();
     }
 
@@ -67,11 +79,14 @@ public class startActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        Button but_waitingRoom = (Button)findViewById(R.id.but_room);
+        but_waitingRoom = (Button)findViewById(R.id.but_room);
         text_title = (TextView)findViewById(R.id.text_title);
         bg_start = (ConstraintLayout)findViewById(R.id.bg_start);
         TextView under_light2 = (TextView)findViewById(R.id.under_light2);
         ImageView under_light1= (ImageView)findViewById(R.id.under_light);
+        but_setprofile=(ImageView)findViewById(R.id.but_profile);
+        layout_profile=(ConstraintLayout)findViewById(R.id.layout_profile);
+        edit_name=(EditText)findViewById(R.id.edit_name);
         Animation alpha_change = AnimationUtils.loadAnimation(startActivity.this,R.anim.light_alpha);
         alpha_change.setRepeatCount(0);
         under_light1.startAnimation(alpha_change);
@@ -85,26 +100,36 @@ public class startActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                con.setVerticalBias(R.id.light,0.1f);
-                TransitionManager.beginDelayedTransition(bg_start,transition);
-                con.applyTo(bg_start);
-                Handler delayHandler = new Handler();
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        con.setVerticalBias(R.id.text_title,0.25f);
-                        TransitionManager.beginDelayedTransition(bg_start,transition);
-                        con.applyTo(bg_start);
-                    }
-                },500);
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(startActivity.this,waitingRoom.class);
-                        startActivity(intent);
-                    }
-                },1000);
+                if(edit_name.getText().toString().trim().equals("")){
+                    Toast.makeText(startActivity.this, "이름을 입력해주세요.", Toast.LENGTH_LONG).show();
+                }else if(edit_name.getText().toString().trim().length()>10){
+                    Toast.makeText(startActivity.this, "형식에 맡게 입력해주세요.", Toast.LENGTH_LONG).show();
+                }else
+                {
+                    con.setVerticalBias(R.id.light,0.1f);
+                    TransitionManager.beginDelayedTransition(bg_start,transition);
+                    con.applyTo(bg_start);
+                    but_waitingRoom.setEnabled(false);
+                    but_setprofile.setEnabled(false);
+                    Handler delayHandler = new Handler();
+                    delayHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Animation move_left = AnimationUtils.loadAnimation(startActivity.this,R.anim.fade_right_to_left);
+                            move_left.setFillAfter(true);
+                            text_title.startAnimation(move_left);
+                            layout_profile.startAnimation(move_left);
 
+                        }
+                    },500);
+                    delayHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(startActivity.this,chetRoom.class);
+                            startActivity(intent);
+                        }
+                    },800);
+                }
             }
         });
 

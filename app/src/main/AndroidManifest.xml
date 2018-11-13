@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.proj3ct.perfectstranger.startActivity"
+            android:name=".startActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,9 +19,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.proj3ct.perfectstranger.waitingRoom"
+            android:name=".waitingRoom"
             android:theme="@style/Theme.Transparent" />
-        <activity android:name="com.proj3ct.perfectstranger.chetRoom"></activity>
+        <activity
+            android:name=".chetRoom"
+            android:theme="@style/Theme.Transparent" />
+        <activity android:name=".RulesActivity"
+            android:theme="@style/Theme.Transparent"></activity>
     </application>
 
 </manifest>

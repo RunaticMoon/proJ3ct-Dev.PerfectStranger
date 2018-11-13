@@ -1,32 +1,55 @@
 package com.proj3ct.perfectstranger;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 public class chetRoom extends AppCompatActivity {
 
     RecyclerView list_chet;
     chetRoomAdapter adapter;
     LinearLayoutManager listviewManager;
+    Button but_back;
+    TextView but_friends,but_rules;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chet_room);
-
+        but_back=(Button)findViewById(R.id.but_back);
+        but_friends=(TextView)findViewById(R.id.text_friends);
+        but_rules=(TextView)findViewById(R.id.text_rules);
         list_chet = (RecyclerView)findViewById(R.id.listview_chat);
         adapter = new chetRoomAdapter();
         listviewManager = new LinearLayoutManager(this);
-        adapter.add(new aChet(new Participant(null,"김치짜장덥밥맨"),"Facebook","강호랑나비님이 회원님을 언급했습니다.\n김치볶음밥과\n짜장덥밥","12:10",null,null),false);
-        adapter.add(new aChet(new Participant(null,"허정근"),"Facebook","고구마와 삶은정근","12:10",null,null),false);
-        adapter.add(new aChet(new Participant(null,"이진승"),"Facebook","국밥엔 사이다","12:10",null,null),false);
-        adapter.add(new aChet(new Participant(null,"이종원"),"KakaoTalk","섹시한 종워니의 삶\n\uD83D\uDE02","12:10",null,null),true);
-        adapter.add(new aChet(new Participant(null,"문주호"),"Facebook","Hello World","12:10",null,null),false);
         list_chet.setAdapter(adapter);
         list_chet.setLayoutManager(listviewManager);
-        adapter.add(new aChet(new Participant(null,"이청원"),"Facebook","밥버거 애무킹\n\n\n삼각자","12:10",null,null),false);
-        adapter.add(new aChet(new Participant(null,"이종원"),"KakaoTalk","지수 : 종원오빠 나 한번만 만나줘","12:10",null,null),true);
-        adapter.add(new aChet(new Participant(null,"이종원"),"KakaoTalk","사나 : 치즈김밥♥","12:10",null,null),true);
+
+        but_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        but_friends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(chetRoom.this,waitingRoom.class);
+                startActivity(intent);
+            }
+        });
+        but_rules.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(chetRoom.this,RulesActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

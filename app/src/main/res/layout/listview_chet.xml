@@ -10,9 +10,11 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/bg_chet"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/image_profile"
         app:layout_constraintTop_toTopOf="@+id/image_profile">
 
@@ -37,13 +39,15 @@
 
         <TextView
             android:id="@+id/text_description"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
             android:text="김치짜장님이 회원님을 언급하였습니다.
 알랄라
 아색기 존나빡친다"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/image_applogo"
             app:layout_constraintTop_toBottomOf="@+id/text_appname" />
 
