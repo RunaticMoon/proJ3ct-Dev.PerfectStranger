@@ -23,9 +23,30 @@
             android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".chetRoom"
-            android:theme="@style/Theme.Transparent" />
+            android:theme="@style/Theme.Transparent">
+            <!--카카오링크-->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/kakao_scheme"
+                    android:host="@string/kakaolink_host" />
+            </intent-filter>
+
+        </activity>>
         <activity android:name=".RulesActivity"
             android:theme="@style/Theme.Transparent"></activity>
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key" />
+        <service android:name=".Notification.NotificationService"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

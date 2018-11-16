@@ -2,11 +2,13 @@ package com.proj3ct.perfectstranger;
 
 import android.media.Image;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2018-11-11.
  */
 
-public class Participant {
+public class Participant implements Serializable {
     Image profile;
     String name;
 

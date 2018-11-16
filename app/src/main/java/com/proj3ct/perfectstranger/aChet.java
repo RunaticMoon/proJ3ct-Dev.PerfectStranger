@@ -7,25 +7,56 @@ import android.media.Image;
  */
 
 public class aChet {
-    Participant user;
-    String appName,description,sendTime;
-    Image appLogo,image;
+    private String userName;
+    private String appName, mainText, mainTitle,subTitle;
+    private Long timeStamp;
 
-    public aChet(Participant user, String appName, String description, String sendTime, Image appLogo, Image image) {
-        this.user = user;
-        this.appName = appName;
-        this.description = description;
-        this.sendTime = sendTime;
-        this.appLogo = appLogo;
-        this.image = image;
+    public String getUserName() {
+        return userName;
     }
 
-    public aChet() {
-        this.user = new Participant();
-        this.appName = "";
-        this.description = "";
-        this.sendTime = "";
-        this.appLogo = null;
-        this.image = null;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public String getMainText() {
+        return mainText;
+    }
+
+    public void setMainText(String mainText) {
+        this.mainText = mainText;
+    }
+
+    public String getMainTitle() {
+        return mainTitle;
+    }
+
+    public void setMainTitle(String mainTitle) {
+        this.mainTitle = mainTitle;
+    }
+
+    public String getSubTitle() {
+        return subTitle;
+    }
+
+    public void setSubTitle(String subTitle) {
+        this.subTitle = subTitle;
+    }
+
+
+    public Long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(Long timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }
