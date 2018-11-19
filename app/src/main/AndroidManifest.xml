@@ -16,16 +16,7 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".waitingRoom"
-            android:theme="@style/Theme.Transparent" />
-        <activity
-            android:name=".chetRoom"
-            android:theme="@style/Theme.Transparent">
-            <!--카카오링크-->
-            <intent-filter>
+
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
@@ -33,10 +24,15 @@
                 <data android:scheme="@string/kakao_scheme"
                     android:host="@string/kakaolink_host" />
             </intent-filter>
-
-        </activity>>
+        </activity>
+        <activity
+            android:name=".waitingRoom"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".chetRoom"
+            android:theme="@style/Theme.Transparent" />
         <activity android:name=".RulesActivity"
-            android:theme="@style/Theme.Transparent"></activity>
+            android:theme="@style/Theme.Transparent" />
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />

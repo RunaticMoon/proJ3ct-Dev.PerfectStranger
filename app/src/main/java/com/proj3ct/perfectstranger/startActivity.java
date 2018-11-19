@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.transition.AutoTransition;
 import android.transition.Transition;
 import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -80,11 +81,15 @@ public class startActivity extends AppCompatActivity {
 
         // 링크를 타고 들어왔는가?
         roomKey = kakaoLink.checkLink(getIntent());
+        Log.e("[roomKey]", "카카오톡 링크 확인");
         if(roomKey != null) {
             byLink = true;
             but_waitingRoom.setText("게임입장");
+            Log.e("[roomKey]", roomKey);
         }
-
+        else {
+            Log.e("[roomKey]", "roomKey is null");
+        }
 
         // 방입장(방생성) 버튼 클릭
         but_waitingRoom.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +130,7 @@ public class startActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 participant.setName(edit_name.getText().toString().trim());
+                                firebaseDB.setParticipant(participant);
                                 firebaseDB.createNewRoom();
                                 roomKey = firebaseDB.getRoomKey();
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
