@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -19,7 +20,7 @@ public class waitingRoom extends AppCompatActivity {
 
     // KakaoLink
     private KakaoLink kakaoLink = new KakaoLink();
-    String roomKey;
+    private String roomKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,9 @@ public class waitingRoom extends AppCompatActivity {
         adapter.add(new Participant(null,"허말순"));
 
         Intent intent = getIntent();
-        roomKey = intent.getStringExtra("roomKey");
+        if(intent!=null){
+            roomKey = intent.getStringExtra("roomKey");
+        }
 
         but_add = (Button)findViewById(R.id.but_add);
         but_done= (Button)findViewById(R.id.but_start);
@@ -54,6 +57,15 @@ public class waitingRoom extends AppCompatActivity {
                 Intent intent = new Intent(waitingRoom.this,chetRoom.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        but_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("[roomKey]", roomKey);
+
+                kakaoLink.sendLink(getApplicationContext(), roomKey);
             }
         });
     }
