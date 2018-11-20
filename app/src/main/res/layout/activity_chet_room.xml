@@ -63,20 +63,46 @@
             android:id="@+id/but_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:text="뒤로" />
+            android:text="뒤로"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/text_roominfo"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/btn_setNoti"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="참가자 10, 방장:이종원"
-            android:textAppearance="?android:textAppearanceLarge"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/but_back"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginEnd="5dp"
+            android:text="set"
+            app:layout_constraintEnd_toStartOf="@+id/btn_startService"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <Button
+            android:id="@+id/btn_startService"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:text="On"
+            app:layout_constraintEnd_toStartOf="@+id/btn_stopService"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <Button
+            android:id="@+id/btn_stopService"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:text="OFF"
+            app:layout_constraintEnd_toStartOf="@+id/btn_checkStatus"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <Button
+            android:id="@+id/btn_checkStatus"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:text="상태확인"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:layout_editor_absoluteY="0dp" />
+
     </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>
