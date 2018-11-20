@@ -51,6 +51,10 @@ public class startActivity extends AppCompatActivity {
     private Button but_waitingRoom;
     private ImageView but_setprofile;
 
+
+
+
+
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,8 @@ public class startActivity extends AppCompatActivity {
         transition.setInterpolator(new DecelerateInterpolator());
         con.clone(bg_start);
 
+        Log.e("[hash]",kakaoLink.getKeyHash(getApplicationContext()));
+
         //---------------------------------------------------------------------------------------------------------------------------------------
 
         // 링크를 타고 들어왔는가?
@@ -92,6 +98,13 @@ public class startActivity extends AppCompatActivity {
         }
 
         // 방입장(방생성) 버튼 클릭
+        but_setprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(startActivity.this,profileSettingActivity.class);
+                startActivity(intent);
+            }
+        });
         but_waitingRoom.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
@@ -170,31 +183,34 @@ public class startActivity extends AppCompatActivity {
         }
     }
 
-    // 다시켰을때
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onResume() {
         con.setVerticalBias(R.id.light,0.3f);
         TransitionManager.beginDelayedTransition(bg_start,transition);
         con.applyTo(bg_start);
-        Handler delayHandler = new Handler();
-        delayHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Animation move_right = AnimationUtils.loadAnimation(startActivity.this,R.anim.fade_left_to_right);
-                move_right.setFillAfter(true);
-                text_title.startAnimation(move_right);
-                layout_profile.startAnimation(move_right);
-            }
-        },500);
-        delayHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                but_setprofile.setEnabled(true);
-                but_waitingRoom.setEnabled(true);
-            }
-        },800);
+        if(text_title.getAnimation()!=null)
+        {
+            Handler delayHandler = new Handler();
+            delayHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Animation move_right = AnimationUtils.loadAnimation(startActivity.this,R.anim.fade_left_to_right);
+                    move_right.setFillBefore(true);
+                    move_right.setFillAfter(true);
+                    text_title.startAnimation(move_right);
+                    layout_profile.startAnimation(move_right);
+                }
+            },500);
+            delayHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    but_setprofile.setEnabled(true);
+                    but_waitingRoom.setEnabled(true);
+                }
+            },800);
+        }
+
         super.onResume();
     }
-
 }

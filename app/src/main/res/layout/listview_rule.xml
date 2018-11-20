@@ -6,50 +6,45 @@
     android:layout_width="match_parent"
     android:background="#FFFFFF"
     android:layout_height="wrap_content">
-    <android.support.constraint.ConstraintLayout
+
+    <LinearLayout
         android:id="@+id/constraintLayout5"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-        <ImageView
-            android:id="@+id/image_setType"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+
+        <CheckBox
+            android:id="@+id/check_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginBottom="10dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_2line" />
+            android:layout_marginStart="5dp"
+            android:button="@drawable/custom_checkbox"
+            android:checked="true"
+            android:clickable="false" />
+
         <TextView
             android:id="@+id/text_rule"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="5dp"
             android:background="@drawable/allround_rectengle"
-            android:paddingLeft="7dp"
             android:text="3분도안 연락 안온사람 마시기"
-            android:gravity="center"
-            android:textAppearance="?android:textAppearanceMedium"
-            app:layout_constraintBottom_toBottomOf="@+id/image_setType"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/image_setType"
-            app:layout_constraintTop_toTopOf="@+id/image_setType" />
-        <ImageView
-            android:id="@+id/but_del"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="h,1:1"
-            app:layout_constraintStart_toEndOf="@+id/text_rule"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_close" />
-    </android.support.constraint.ConstraintLayout>
+            android:gravity="center_vertical|left"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textAppearance="?android:textAppearanceMedium"/>
+
+
+    </LinearLayout>
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/layout_setrule"
         android:layout_width="0dp"

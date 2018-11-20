@@ -31,7 +31,11 @@
         <activity
             android:name=".chetRoom"
             android:theme="@style/Theme.Transparent" />
-        <activity android:name=".RulesActivity"
+        <activity
+            android:name=".RulesActivity"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".profileSettingActivity"
             android:theme="@style/Theme.Transparent" />
         <meta-data
             android:name="com.kakao.sdk.AppKey"

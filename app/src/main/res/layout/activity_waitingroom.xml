@@ -1,96 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="5"
-    android:orientation="vertical"
     android:background="@android:color/transparent"
-    tools:context="com.proj3ct.perfectstranger.waitingRoom">
+    tools:context="com.proj3ct.perfectstranger.RulesActivity">
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
+        android:id="@+id/layout_checklist"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="2">
+        android:layout_marginBottom="64dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="64dp"
+        android:background="@drawable/gray_allround"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
 
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_weight="3"
-        android:layout_gravity="bottom"
-        android:layout_height="0dp">
+        android:id="@+id/layout_base"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="94dp"
+        android:layout_marginEnd="47dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginTop="94dp"
+        android:background="@android:color/white"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:paddingTop="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/constraintLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/white_allround"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/list_friends"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        <LinearLayout
+            android:id="@+id/but_del"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/but_add"
+            app:layout_constraintEnd_toStartOf="@+id/but_add"
+            app:layout_constraintTop_toTopOf="@+id/but_add">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="참가자 명단"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_weight="1"
+                android:text="추방" />
 
-            <Button
-                android:id="@+id/but_add"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/add_circle"
-                android:padding="5dp"
-                android:elevation="10dp"
-                app:layout_constraintBottom_toBottomOf="@+id/list_friends"
-                app:layout_constraintEnd_toEndOf="@+id/list_friends" />
-        </android.support.constraint.ConstraintLayout>
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_close" />
 
-        <Button
-            android:id="@+id/but_start"
-            style="?android:borderlessButtonStyle"
-            android:layout_width="48dp"
-            android:layout_height="60dp"
-            android:layout_marginEnd="24dp"
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_friends"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/but_add"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:background="@drawable/topround_check_button"
-            android:gravity="bottom|center_horizontal"
-            android:paddingBottom="3dp"
-            android:textColor="#FFFFFF"
-            app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-            app:layout_constraintEnd_toEndOf="@+id/constraintLayout"
-            app:layout_constraintHorizontal_bias="0.984"
-            app:layout_constraintStart_toStartOf="@+id/constraintLayout"
-            app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
+            android:background="#FFFFFF"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="#FFFFFF"
+                android:button="@drawable/custom_checkbox"
+                android:enabled="false"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
+                android:translationY="-3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:background="#FFFFFF"
+                android:gravity="center_vertical"
+                android:text="참가자 명단"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/text_count"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="right|bottom"
+                android:layout_margin="3dp"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textStyle="italic"
+                android:text="총 4명" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/but_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="친구 추가" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_add" />
+
+        </LinearLayout>
+
     </android.support.constraint.ConstraintLayout>
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/img_clip"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:elevation="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/layout_checklist"
+        app:srcCompat="@drawable/checktop" />
+
+</android.support.constraint.ConstraintLayout>

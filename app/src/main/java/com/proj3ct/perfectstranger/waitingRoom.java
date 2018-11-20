@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.proj3ct.perfectstranger.Firebase.KakaoLink;
 
@@ -16,57 +18,53 @@ public class waitingRoom extends AppCompatActivity {
     RecyclerView list_participant;
     waitingRoomAdapter adapter;
     LinearLayoutManager listviewManager;
-    Button but_done, but_add;
+    Button but_done;
 
     // KakaoLink
     private KakaoLink kakaoLink = new KakaoLink();
     private String roomKey;
+
+    LinearLayout but_del,but_add;
+    TextView text_count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waitingroom);
         list_participant = (RecyclerView)findViewById(R.id.list_friends);
+        but_del=(LinearLayout)findViewById(R.id.but_del);
+        but_add=(LinearLayout)findViewById(R.id.but_add);
+        text_count=(TextView)findViewById(R.id.text_count);
         adapter = new waitingRoomAdapter();
         listviewManager = new LinearLayoutManager(this);
-        adapter.add(new Participant(null,"김덕배"));
+        //adapter.add(new Participant(null,"김덕배"));
         list_participant.setAdapter(adapter);
         list_participant.setLayoutManager(listviewManager);
-        adapter.add(new Participant(null,"박덕춘"));
+      /*  adapter.add(new Participant(null,"박덕춘"));
         adapter.add(new Participant(null,"김치짜장"));
         adapter.add(new Participant(null,"강우석"));
         adapter.add(new Participant(null,"이기상"));
-        adapter.add(new Participant(null,"허말순"));
+        adapter.add(new Participant(null,"허말순"));*/
+
 
         Intent intent = getIntent();
         if(intent!=null){
             roomKey = intent.getStringExtra("roomKey");
         }
 
-        but_add = (Button)findViewById(R.id.but_add);
-        but_done= (Button)findViewById(R.id.but_start);
         but_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 kakaoLink.sendLink(getApplicationContext(), roomKey);
             }
         });
-        but_done.setOnClickListener(new View.OnClickListener() {
+
+        but_del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(waitingRoom.this,chetRoom.class);
-                startActivity(intent);
-                finish();
+                adapter.del();
             }
         });
 
-        but_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.e("[roomKey]", roomKey);
-
-                kakaoLink.sendLink(getApplicationContext(), roomKey);
-            }
-        });
     }
 }

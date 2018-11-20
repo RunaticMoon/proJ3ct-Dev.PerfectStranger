@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +22,7 @@ public class rulesViewHolder extends RecyclerView.ViewHolder {
     EditText edit_text;
     boolean inSet;
     Rule rule;
-    Drawable drawable_2line,drawable_5line;
+    CheckBox check_edit;
     public rulesViewHolder(final View itemView) {
         super(itemView);
         layout_bg = (ConstraintLayout)itemView.findViewById(R.id.listview_rule_bg);
@@ -29,7 +30,6 @@ public class rulesViewHolder extends RecyclerView.ViewHolder {
         set_num=(ConstraintLayout)itemView.findViewById(R.id.set_num);
         set_type=(ConstraintLayout)itemView.findViewById(R.id.set_type);
         set_text=(ConstraintLayout)itemView.findViewById(R.id.set_text);
-        but_set = (ImageView)itemView.findViewById(R.id.image_setType);
         text_rule = (TextView)itemView.findViewById(R.id.text_rule);
         but_changerull= (TextView)itemView.findViewById(R.id.but_changerull);
         but_down= (TextView)itemView.findViewById(R.id.but_down);
@@ -37,22 +37,16 @@ public class rulesViewHolder extends RecyclerView.ViewHolder {
         text_num= (TextView)itemView.findViewById(R.id.text_numset);
         text_type= (TextView)itemView.findViewById(R.id.text_type);
         edit_text=(EditText)itemView.findViewById(R.id.edit_text);
-        but_del = (ImageView)itemView.findViewById(R.id.but_del);
-        drawable_2line = itemView.getResources().getDrawable(R.drawable.ic_2line);
-        drawable_5line=itemView.getResources().getDrawable(R.drawable.ic_3line);
+        check_edit = (CheckBox)itemView.findViewById(R.id.check_edit);
         ChangeSetMode(false);
-        but_set.setOnClickListener(new View.OnClickListener() {
+
+        layout_bg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 itemListener.onEditButtonClick(getAdapterPosition());
             }
         });
-        but_del.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                itemListener.onDeleteButtonClick(getAdapterPosition());
-            }
-        });
+
         but_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,13 +198,11 @@ public class rulesViewHolder extends RecyclerView.ViewHolder {
         inSet=set;
         if(set){
             layout_set.setVisibility(View.VISIBLE);
-            layout_bg.setBackgroundColor(Color.argb(255,237,237,237));
-            but_set.setImageDrawable(drawable_5line);
+            check_edit.setChecked(true);
         }else
         {
             layout_set.setVisibility(View.GONE);
-            layout_bg.setBackgroundColor(Color.WHITE);
-            but_set.setImageDrawable(drawable_2line);
+            check_edit.setChecked(false);
         }
     }
     public void setOnItemClickListener(rulesViewHolder.OnListItemClickListener onListItemClickListener){
