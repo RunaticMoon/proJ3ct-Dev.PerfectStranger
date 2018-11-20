@@ -54,23 +54,28 @@ public class startActivity extends AppCompatActivity {
         con.setVerticalBias(R.id.light,0.3f);
         TransitionManager.beginDelayedTransition(bg_start,transition);
         con.applyTo(bg_start);
-        Handler delayHandler = new Handler();
-        delayHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Animation move_right = AnimationUtils.loadAnimation(startActivity.this,R.anim.fade_left_to_right);
-                move_right.setFillAfter(true);
-                text_title.startAnimation(move_right);
-                layout_profile.startAnimation(move_right);
-            }
-        },500);
-        delayHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                but_setprofile.setEnabled(true);
-                but_waitingRoom.setEnabled(true);
-            }
-        },800);
+        if(text_title.getAnimation()!=null)
+        {
+            Handler delayHandler = new Handler();
+            delayHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Animation move_right = AnimationUtils.loadAnimation(startActivity.this,R.anim.fade_left_to_right);
+                    move_right.setFillBefore(true);
+                    move_right.setFillAfter(true);
+                    text_title.startAnimation(move_right);
+                    layout_profile.startAnimation(move_right);
+                }
+            },500);
+            delayHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    but_setprofile.setEnabled(true);
+                    but_waitingRoom.setEnabled(true);
+                }
+            },800);
+        }
+
         super.onResume();
     }
 
@@ -96,6 +101,13 @@ public class startActivity extends AppCompatActivity {
         transition.setDuration(500);
         transition.setInterpolator(new DecelerateInterpolator());
         con.clone(bg_start);
+        but_setprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(startActivity.this,profileSettingActivity.class);
+                startActivity(intent);
+            }
+        });
         but_waitingRoom.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override

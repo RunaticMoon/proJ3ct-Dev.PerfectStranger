@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +19,12 @@ public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implemen
     List<Rule> rules = new ArrayList<>();
     Vector<Boolean> editing = new Vector<>();
     boolean newRule=false;
+    ViewGroup con;
     @NonNull
     @Override
     public rulesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v;
+        con=parent;
         final rulesViewHolder holder;
         if(viewType==1) {
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_rule_add, parent, false);
@@ -36,6 +39,20 @@ public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implemen
         return holder;
     }
 
+    public void delete(){
+        for(int i=0;i<editing.size();i++)
+        {
+            if(editing.get(i))
+            {
+                rules.remove(i);
+                editing.remove(i);
+                notifyDataSetChanged();
+                return;
+            }
+        }
+        Toast.makeText(con.getContext(),"선택된 규칙이 없습니다",Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public int getItemViewType(int position) {
         if(position>=rules.size()) return 1;
@@ -44,7 +61,7 @@ public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implemen
 
     @Override
     public void onBindViewHolder(@NonNull rulesViewHolder holder, int position) {
-        if(rules.size()>1 && rules.size()!=position)
+        if(rules.size()>0 && rules.size()!=position)
         {
             holder.initiallizeSetting(rules.get(position));
             if(editing.get(position)) holder.ChangeSetMode(true);

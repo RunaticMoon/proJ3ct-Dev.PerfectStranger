@@ -24,8 +24,12 @@
         <activity
             android:name=".chetRoom"
             android:theme="@style/Theme.Transparent" />
-        <activity android:name=".RulesActivity"
-            android:theme="@style/Theme.Transparent"></activity>
+        <activity
+            android:name=".RulesActivity"
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name=".profileSettingActivity"
+            android:theme="@style/Theme.Transparent" />
     </application>
 
 </manifest>
