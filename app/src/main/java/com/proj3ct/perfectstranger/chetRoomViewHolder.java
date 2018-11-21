@@ -1,7 +1,9 @@
 package com.proj3ct.perfectstranger;
 
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +22,11 @@ public class chetRoomViewHolder extends RecyclerView.ViewHolder {
     private Image appLogo,image,profile;
     private TextView text_name,text_time,text_description,text_appname;
     private ImageView image_logo,image_profile,image_image;
+
+
+    private static final String KAKAO = "com.kakao.talk";
+    private static final String FACEBOOK = "com.facebook.orca";
+
     public chetRoomViewHolder(View itemView) {
         super(itemView);
         text_name=(TextView)itemView.findViewById(R.id.text_name);
@@ -34,6 +41,13 @@ public class chetRoomViewHolder extends RecyclerView.ViewHolder {
         appName=chet.getAppName();
         mainText = chet.getMainText();
 
+        Log.e("appName",appName);
+
+        if(appName.equals(KAKAO)){
+            image_logo.setImageResource(R.drawable.logo_kakaotalk);
+        }else if(appName.equals(FACEBOOK)){
+            image_logo.setImageResource(R.drawable.logo_facebook);
+        }
         Date time = new Date((chet.getTimeStamp()));
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd hh:mm:ss", Locale.KOREA);
         sendTime=sdf.format(time);

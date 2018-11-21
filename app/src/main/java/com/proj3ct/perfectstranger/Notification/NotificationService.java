@@ -23,7 +23,14 @@ public class NotificationService extends NotificationListenerService {
     @Override
     public void onCreate( ) {
         super.onCreate();
+        Log.e("NOTIFICATION_LISTENER_", "onCreate");
         context = getApplicationContext();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("NOTIFICATION_LISTENER_", "onDestroy");
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

@@ -25,6 +25,9 @@ public class chetRoom extends AppCompatActivity {
     private Button but_back, btn_startService, btn_stopService, btn_checkStatus, btn_setNoti;
     private TextView but_friends, but_rules;
 
+    private static final String KAKAO = "com.kakao.talk";
+    private static final String FACEBOOK = "com.facebook.orca";
+
     // BroadcasRecevier : service를 감시하여 값을 받아서 firebaseDB 방아온 메세지를 넘겨줌
     // 받아오는 메세지 : 앱이름 / MainText / subText / 시간 / text / 프로필( 예정 ) 정도.
     private BroadcastReceiver onNotice = new BroadcastReceiver() {
@@ -35,6 +38,7 @@ public class chetRoom extends AppCompatActivity {
             String subTitle = intent.getStringExtra("subTitle");
             String mainText = intent.getStringExtra("mainText");
             String appName = intent.getStringExtra("appName");
+            if(appName.equals(KAKAO) || appName.equals(FACEBOOK))
             firebaseDB.sendMessage(participant.getName(), mainTitle, subTitle, mainText, appName);
         }
     };
