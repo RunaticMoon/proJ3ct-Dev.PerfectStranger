@@ -17,10 +17,7 @@ import android.util.Log;
 // https://www.learn2crack.com/2014/11/reading-notification-using-notificationlistenerservice.html
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class NotificationService extends NotificationListenerService {
-
     Context context;
-
-
 
 
     @Override
@@ -28,6 +25,70 @@ public class NotificationService extends NotificationListenerService {
         super.onCreate();
         context = getApplicationContext();
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onNotificationPosted(StatusBarNotification sbn) {
+        if (sbn == null) return;
+        String packName = sbn.getPackageName();
+        Notification mNotification = sbn.getNotification();
+        String mainTitle;
+        String subTitle;
+        String mainText;
+
+        String text = "";
+        Bundle extras = mNotification.extras;
+
+        extras = mNotification.extras;
+        if(extras.getString(Notification.EXTRA_TITLE) != null) {
+            mainTitle = extras.getString(Notification.EXTRA_TITLE);
+            subTitle = extras.getString(Notification.EXTRA_TITLE);
+            mainText =extras.getString(Notification.EXTRA_TEXT);
+            Intent intent = new Intent("Msg");
+            intent.putExtra("mainTitle", mainTitle);
+            intent.putExtra("subTitle", subTitle);
+            intent.putExtra("mainText", mainText);
+            intent.putExtra("appName", packName);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        }
+
+       /* if (text != null) {
+            Intent intent = new Intent("Msg");
+            intent.putExtra("text", text);
+            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        }*/
+//
+//        String dateS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA).format(mNotification.when);
+
+    }
+
+    @Override
+    public void onNotificationRemoved(StatusBarNotification sbn) {
+        Log.i("Msg","Notification Removed");
+    }
+
+    private static final int VERSION_SDK_INT = Build.VERSION.SDK_INT;
+
+    public static boolean supportsNotificationListenerSettings() {
+        return VERSION_SDK_INT >= 19;
+    }
+
+    @SuppressLint("InlinedApi")
+    @TargetApi(19)
+    public static Intent getIntentNotificationListenerSettings() {
+        final String ACTION_NOTIFICATION_LISTENER_SETTINGS;
+        if (VERSION_SDK_INT >= 22) {
+            // sdk 버전 22보다 크면
+            ACTION_NOTIFICATION_LISTENER_SETTINGS = Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS;
+        }
+        else {
+            ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
+        }
+        return new Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS);
+    }
+
+}
+
 
 //    // StatusBarNotification 내용 가공
 //    // https://www.learn2crack.com/2014/11/reading-notification-using-notificationlistenerservice.html
@@ -110,67 +171,3 @@ public class NotificationService extends NotificationListenerService {
 //
 //        return null;
 //    }
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
-    public void onNotificationPosted(StatusBarNotification sbn) {
-        if (sbn == null) return;
-
-        String packName = sbn.getPackageName();
-        Notification mNotification = sbn.getNotification();
-        String mainTitle;
-        String subTitle;
-        String mainText;
-
-        String text = "";
-        Bundle extras = mNotification.extras;
-
-        extras = mNotification.extras;
-        if(extras.getString(Notification.EXTRA_TITLE) != null) {
-            mainTitle = extras.getString(Notification.EXTRA_TITLE);
-            subTitle = extras.getString(Notification.EXTRA_TITLE);
-            mainText =extras.getString(Notification.EXTRA_TEXT);
-            Intent intent = new Intent("Msg");
-            intent.putExtra("mainTitle", mainTitle);
-            intent.putExtra("subTitle", subTitle);
-            intent.putExtra("mainText", mainText);
-            intent.putExtra("appName", packName);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-        }
-
-       /* if (text != null) {
-            Intent intent = new Intent("Msg");
-            intent.putExtra("text", text);
-            LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-        }*/
-//
-//        String dateS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA).format(mNotification.when);
-
-    }
-
-    @Override
-    public void onNotificationRemoved(StatusBarNotification sbn) {
-        Log.i("Msg","Notification Removed");
-    }
-
-    private static final int VERSION_SDK_INT = Build.VERSION.SDK_INT;
-
-    public static boolean supportsNotificationListenerSettings() {
-        return VERSION_SDK_INT >= 19;
-    }
-
-    @SuppressLint("InlinedApi")
-    @TargetApi(19)
-    public static Intent getIntentNotificationListenerSettings() {
-        final String ACTION_NOTIFICATION_LISTENER_SETTINGS;
-        if (VERSION_SDK_INT >= 22) {
-            // sdk 버전 22보다 크면
-            ACTION_NOTIFICATION_LISTENER_SETTINGS = Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS;
-        }
-        else {
-            ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
-        }
-        return new Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS);
-    }
-
-}

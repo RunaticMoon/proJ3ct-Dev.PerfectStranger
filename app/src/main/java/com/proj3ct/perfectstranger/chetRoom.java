@@ -1,31 +1,20 @@
 package com.proj3ct.perfectstranger;
 
-import android.app.Notification;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.os.Build;
-import android.os.IBinder;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
-import com.proj3ct.perfectstranger.Notification.NotificationService;
-import com.proj3ct.perfectstranger.Notification.NotificationService.*;
-
-import org.w3c.dom.Text;
 
 public class chetRoom extends AppCompatActivity {
     private String roomkey;
@@ -53,6 +42,7 @@ public class chetRoom extends AppCompatActivity {
     private Participant participant = new Participant();
 
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -67,7 +57,7 @@ public class chetRoom extends AppCompatActivity {
         btn_startService = (Button) findViewById(R.id.btn_startService);
         btn_stopService = (Button) findViewById(R.id.btn_stopService);
         btn_checkStatus = (Button) findViewById(R.id.btn_checkStatus);
-        btn_setNoti =  (Button) findViewById(R.id.btn_setNoti);
+        btn_setNoti = (Button) findViewById(R.id.btn_setNoti);
         //fireBaseDB 설정
         firebaseDB.setList_chet(list_chet, getApplicationContext());
 
@@ -124,15 +114,14 @@ public class chetRoom extends AppCompatActivity {
             public void onClick(View view) {
 
             }
-    });
+        });
 
         btn_setNoti.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
                 startActivity(intent);
             }
         });
-
-}
+    }
 }
