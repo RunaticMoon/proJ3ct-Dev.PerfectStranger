@@ -49,7 +49,10 @@ public class chetRoomViewHolder extends RecyclerView.ViewHolder {
         String description;
         if(appName.equals(KAKAO)){
             image_logo.setImageResource(R.drawable.logo_kakaotalk);
-            description = chet.getMainText() + "\n" + chet.getSubText();
+            description = chet.getMainTitle() +  "\n" + chet.getMainText()  + "\n" ;
+                   if(chet.getSubText() != null){
+                       description += chet.getSubText();
+                   }
             text_description.setText(description);
             appName = "카카오톡";
         }else if(appName.equals(FACEBOOK)){

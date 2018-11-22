@@ -18,6 +18,7 @@ import android.util.Log;
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class NotificationService extends NotificationListenerService {
     Context context;
+    private boolean On = true;
 
 
     @Override
@@ -36,6 +37,9 @@ public class NotificationService extends NotificationListenerService {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
+        if(!On){
+            return;
+        }
         if (sbn == null) return;
         String packName = sbn.getPackageName();
         Notification mNotification = sbn.getNotification();
@@ -51,35 +55,35 @@ public class NotificationService extends NotificationListenerService {
             mainTitle = extras.getString(Notification.EXTRA_TITLE);
             subText = extras.getString(Notification.EXTRA_SUB_TEXT);
             mainText =extras.getString(Notification.EXTRA_TEXT);
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_INFO_TEXT));
-            Log.d("BACKGROUND_IMAGE_URI",extras.getString(Notification.EXTRA_BACKGROUND_IMAGE_URI));
-            Log.d("EXTRA_TEXT_LINES",extras.getString(Notification.EXTRA_TEXT_LINES));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_TEXT));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_BIG_TEXT));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_SUB_TEXT));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_TITLE));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_AUDIO_CONTENTS_URI));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_CHANNEL_ID));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_CHRONOMETER_COUNT_DOWN));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_COLORIZED));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_COMPACT_ACTIONS));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_CONVERSATION_TITLE));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_HISTORIC_MESSAGES));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_LARGE_ICON_BIG));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_MEDIA_SESSION));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_MESSAGES));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_NOTIFICATION_ID));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_NOTIFICATION_TAG));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_PEOPLE));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_PICTURE));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_PROGRESS));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_PROGRESS_INDETERMINATE));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_PROGRESS_MAX));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_SHOW_CHRONOMETER));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_SHOW_WHEN));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_SUMMARY_TEXT));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_TEMPLATE));
-            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_TITLE_BIG));
+//            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_INFO_TEXT));
+//            Log.d("BACKGROUND_IMAGE_URI",extras.getString(Notification.EXTRA_BACKGROUND_IMAGE_URI));
+//            Log.d("EXTRA_TEXT_LINES",extras.getString(Notification.EXTRA_TEXT_LINES));
+            Log.d("EXTRA_TEXT",extras.getString(Notification.EXTRA_TEXT));
+//            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_BIG_TEXT));
+//            Log.d("EXTRA_SUB_TEXT",extras.getString(Notification.EXTRA_SUB_TEXT));
+            Log.d("EXTRA_TITLE",extras.getString(Notification.EXTRA_TITLE));
+//            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_AUDIO_CONTENTS_URI));
+//            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_CHANNEL_ID));
+//            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_CHRONOMETER_COUNT_DOWN));
+//            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_COLORIZED));
+//            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_COMPACT_ACTIONS));
+//            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_CONVERSATION_TITLE));
+//            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_HISTORIC_MESSAGES));
+//            Log.d("EXTRA_LARGE_ICON_BIG",extras.getString(Notification.EXTRA_LARGE_ICON_BIG));
+//            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_MEDIA_SESSION));
+//            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_MESSAGES));
+//            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_NOTIFICATION_ID));
+//            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_NOTIFICATION_TAG));
+//            Log.d("EXTRA_PEOPLE",extras.getString(Notification.EXTRA_PEOPLE));
+//            Log.d("EXTRA_PICTURE",extras.getString(Notification.EXTRA_PICTURE));
+//            Log.d("EXTRA_PROGRESS",extras.getString(Notification.EXTRA_PROGRESS));
+//            Log.d("PROGRESS_INDETERMINATE",extras.getString(Notification.EXTRA_PROGRESS_INDETERMINATE));
+//            Log.d("EXTRA_PROGRESS_MAX",extras.getString(Notification.EXTRA_PROGRESS_MAX));
+//            Log.d("EXTRA_SHOW_CHRONOMETER",extras.getString(Notification.EXTRA_SHOW_CHRONOMETER));
+//            Log.d("EXTRA_SHOW_WHEN",extras.getString(Notification.EXTRA_SHOW_WHEN));
+//            Log.d("EXTRA_SUMMARY_TEXT",extras.getString(Notification.EXTRA_SUMMARY_TEXT));
+//            Log.d("INFO_TEXT",extras.getString(Notification.EXTRA_TEMPLATE));
+            Log.d("EXTRA_TITLE_BIG",extras.getString(Notification.EXTRA_TITLE_BIG));
             Intent intent = new Intent("Msg");
             intent.putExtra("mainTitle", mainTitle);
             intent.putExtra("subText", subText);
