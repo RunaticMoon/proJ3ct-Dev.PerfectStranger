@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -37,6 +38,7 @@ import android.widget.Toast;
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
 import com.proj3ct.perfectstranger.Firebase.KakaoLink;
 
+import java.util.List;
 import java.util.Set;
 
 public class startActivity extends AppCompatActivity {
@@ -95,6 +97,18 @@ public class startActivity extends AppCompatActivity {
         con.clone(bg_start);
 
         Log.e("[hash]", kakaoLink.getKeyHash(getApplicationContext()));
+
+
+
+        PackageManager packageName = this.getPackageManager();
+        List<PackageInfo> installList = packageName.getInstalledPackages(0);
+
+        for(int i = 0 ; i < installList.size() ; i++ ){
+            Log.d("PackageManager", installList.get(i).packageName);
+        }
+
+
+        출처: http://taehyun71.tistory.com/23 [코딩하는 블로그]
 
         //---------------------------------------------------------------------------------------------------------------------------------------
 

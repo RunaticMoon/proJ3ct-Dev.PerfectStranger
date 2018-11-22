@@ -69,11 +69,11 @@ public class FirebaseDB {
         list_rule.setLayoutManager(listviewManager);
     }
 
-    public void sendMessage(String userName,String mainTitle, String subTitle, String mainText, String appName ) {
+    public void sendMessage(String userName,String mainTitle, String subText, String mainText, String appName ) {
         Map<String, Object> welcomMessage = new HashMap<>();
         welcomMessage.put("userName", userName);
         welcomMessage.put("mainTitle", mainTitle);
-        welcomMessage.put("subTitle", subTitle);
+        welcomMessage.put("subText", subText);
         welcomMessage.put("mainText", mainText);
         welcomMessage.put("appName", appName);
         welcomMessage.put("timeStamp", ServerValue.TIMESTAMP);
@@ -114,7 +114,7 @@ public class FirebaseDB {
 
         setSetting(10);
 
-        sendMessage("userName", "mainTitle", "subTitle",
+        sendMessage("userName", "mainTitle", "subText",
                 "mainText", "appName");
 
         addRule(0, 0, "모든 알람 공유하기");
@@ -134,7 +134,6 @@ public class FirebaseDB {
         setRef = roomRef.child("setList");
         ruleRef = roomRef.child("ruleList");
         userRef = roomRef.child("userList");
-
         if(list_chet != null)
             setMessageListener();
         if(list_rule != null)

@@ -27,6 +27,10 @@ public class chetRoom extends AppCompatActivity {
 
     private static final String KAKAO = "com.kakao.talk";
     private static final String FACEBOOK = "com.facebook.orca";
+    private static final String FACEBOOK_REPLY = "com.facebook.katana";
+    private static final String CALL_IN = "com.samsaung.android.incallui"; // 내용1 : 현재통화 ,내용2 : 수신전화
+    private static final String MESSAGE = "com.facebook.orca";
+    private static final String INSTAGRAM = "com.instagram.android";
 
     // BroadcasRecevier : service를 감시하여 값을 받아서 firebaseDB 방아온 메세지를 넘겨줌
     // 받아오는 메세지 : 앱이름 / MainText / subText / 시간 / text / 프로필( 예정 ) 정도.
@@ -35,11 +39,11 @@ public class chetRoom extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String mainTitle = intent.getStringExtra("mainTitle");
-            String subTitle = intent.getStringExtra("subTitle");
+            String subText = intent.getStringExtra("subText");
             String mainText = intent.getStringExtra("mainText");
             String appName = intent.getStringExtra("appName");
-            if(appName.equals(KAKAO) || appName.equals(FACEBOOK))
-            firebaseDB.sendMessage(participant.getName(), mainTitle, subTitle, mainText, appName);
+            if(appName.equals(KAKAO) || appName.equals(FACEBOOK) || appName.equals(FACEBOOK_REPLY) || appName.equals(CALL_IN) || appName.equals(MESSAGE) || appName.equals(INSTAGRAM))
+            firebaseDB.sendMessage(participant.getName(), mainTitle, subText, mainText, appName);
         }
     };
 
