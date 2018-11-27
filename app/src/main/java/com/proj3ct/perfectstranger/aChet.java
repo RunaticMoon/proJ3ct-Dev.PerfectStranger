@@ -6,7 +6,7 @@ package com.proj3ct.perfectstranger;
 
 public class aChet {
     private String userName;
-    private String appName, mainText, mainTitle, subText;
+    private String appName, mainText, mainTitle;
     private Long timeStamp;
 
     public String getUserName() {
@@ -39,14 +39,6 @@ public class aChet {
 
     public void setMainTitle(String mainTitle) {
         this.mainTitle = mainTitle;
-    }
-
-    public String getSubText() {
-        return subText;
-    }
-
-    public void setSubText(String subText) {
-        this.subText = subText;
     }
 
 

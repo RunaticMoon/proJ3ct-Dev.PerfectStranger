@@ -26,9 +26,11 @@ public class chetRoomViewHolder extends RecyclerView.ViewHolder {
     private static final String KAKAO = "com.kakao.talk";
     private static final String FACEBOOK = "com.facebook.orca";
     private static final String FACEBOOK_REPLY = "com.facebook.katana";
-    private static final String CALL_IN = "com.samsaung.android.incallui"; // 내용1 : 현재통화 ,내용2 : 수신전화
-    private static final String MESSAGE = "com.facebook.orca";
+    private static final String CALL_IN = "CALL_IN"; // 내용1 : 현재통화 ,내용2 : 수신전화
+    private static final String CALL_ON = "CALL_ON"; // 내용1 : 현재통화 ,내용2 : 수신전화
+    private static final String CALL_OUT = "CALL_OUT"; // 내용1 : 현재통화 ,내용2 : 수신전화
     private static final String INSTAGRAM = "com.instagram.android";
+    private static final String MESSAGE = "MESSAGE";
 
     public chetRoomViewHolder(View itemView) {
         super(itemView);
@@ -42,47 +44,32 @@ public class chetRoomViewHolder extends RecyclerView.ViewHolder {
     }
     public void setInfo(aChet chet){
         appName=chet.getAppName();
-        mainTitle = chet.getMainTitle();
-        subText = chet.getSubText();
-        mainText = chet.getMainText();
-        Log.e("appName",appName);
-        String description;
         if(appName.equals(KAKAO)){
             image_logo.setImageResource(R.drawable.logo_kakaotalk);
-            description = chet.getMainTitle() +  "\n" + chet.getMainText()  + "\n" ;
-                   if(chet.getSubText() != null){
-                       description += chet.getSubText();
-                   }
-            text_description.setText(description);
-            appName = "카카오톡";
         }else if(appName.equals(FACEBOOK)){
             image_logo.setImageResource(R.drawable.logo_facebook);
-            appName = "페이스북";
         }else if(appName.equals(FACEBOOK_REPLY)){
             image_logo.setImageResource(R.drawable.logo_facebook);
-            appName = "페이스북 댓글";
         }else if(appName.equals(CALL_IN)){
             image_logo.setImageResource(R.drawable.logo_call);
-            appName = "전화";
+        }else if(appName.equals(CALL_ON)){
+            image_logo.setImageResource(R.drawable.logo_call);
+        }else if(appName.equals(CALL_OUT)){
+            image_logo.setImageResource(R.drawable.logo_call);
         }else if(appName.equals(MESSAGE)){
             image_logo.setImageResource(R.drawable.logo_message);
-            appName = "메세지";
         }else if(appName.equals(INSTAGRAM)){
             image_logo.setImageResource(R.drawable.logo_instagram);
-            appName = "인스타그램";
         }
         Date time = new Date((chet.getTimeStamp()));
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd hh:mm:ss", Locale.KOREA);
+
         sendTime=sdf.format(time);
         userName=chet.getUserName();
-//      appLogo=chet.get();
-//      image=chet.getImage();
-//      profile=chet.getParticipant().getProfile();
-
         text_name.setText(userName);
-        text_appname.setText(appName);
-
         text_time.setText(sendTime);
+        text_appname.setText(chet.getMainTitle());
+        text_description.setText(chet.getMainText());
 
         //image_profile.setImage
     }
