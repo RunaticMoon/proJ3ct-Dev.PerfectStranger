@@ -50,7 +50,7 @@ public class startActivity extends AppCompatActivity {
     private EditText edit_name;
     private Button but_waitingRoom;
     private ImageView but_setprofile;
-
+    private  Animation move_left;
 
 
 
@@ -80,6 +80,10 @@ public class startActivity extends AppCompatActivity {
         transition.setDuration(500);
         transition.setInterpolator(new DecelerateInterpolator());
         con.clone(bg_start);
+
+
+        move_left = AnimationUtils.loadAnimation(startActivity.this, R.anim.fade_right_to_left);
+        move_left.setFillAfter(true);
 
         Log.e("[hash]",kakaoLink.getKeyHash(getApplicationContext()));
 
@@ -123,8 +127,6 @@ public class startActivity extends AppCompatActivity {
                     delayHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            Animation move_left = AnimationUtils.loadAnimation(startActivity.this, R.anim.fade_right_to_left);
-                            move_left.setFillAfter(true);
                             text_title.startAnimation(move_left);
                             layout_profile.startAnimation(move_left);
 
@@ -189,7 +191,7 @@ public class startActivity extends AppCompatActivity {
         con.setVerticalBias(R.id.light,0.3f);
         TransitionManager.beginDelayedTransition(bg_start,transition);
         con.applyTo(bg_start);
-        if(text_title.getAnimation()!=null)
+        if(text_title.getAnimation()==move_left)
         {
             Handler delayHandler = new Handler();
             delayHandler.postDelayed(new Runnable() {

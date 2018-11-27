@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,7 +25,7 @@ public class chetRoom extends AppCompatActivity {
     // View component
     private RecyclerView list_chet;
     private Button but_back;
-    private TextView but_friends,but_rules;
+    private TextView but_friends,but_rules,but_newMessage;
 
     // BroadcasRecevier : service를 감시하여 값을 받아서 firebaseDB 방아온 메세지를 넘겨줌
     // 받아오는 메세지 : 앱이름 / MainText / subText / 시간 / text / 프로필( 예정 ) 정도.
@@ -52,9 +53,9 @@ public class chetRoom extends AppCompatActivity {
         but_friends=(TextView)findViewById(R.id.text_friends);
         but_rules=(TextView)findViewById(R.id.text_rules);
         list_chet = (RecyclerView)findViewById(R.id.listview_chat);
-
+        but_newMessage = (TextView)findViewById(R.id.but_newMessage);
         //fireBaseDB 설정
-        firebaseDB.setList_chet(list_chet,getApplicationContext());
+        firebaseDB.setList_chet(list_chet,getApplicationContext(),but_newMessage);
 
         // callback 함수
         // LocalBroadcastManager( Local를 사용한 이유 : 다른앱의 서비스의 방해를 방지 )
@@ -88,6 +89,13 @@ public class chetRoom extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(chetRoom.this,RulesActivity.class);
                 startActivity(intent);
+            }
+        });
+        but_newMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                list_chet.smoothScrollToPosition(list_chet.getAdapter().getItemCount()-1);
+                but_newMessage.setVisibility(View.GONE);
             }
         });
     }

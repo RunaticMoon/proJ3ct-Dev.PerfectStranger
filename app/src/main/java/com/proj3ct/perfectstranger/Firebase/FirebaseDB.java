@@ -3,9 +3,13 @@ package com.proj3ct.perfectstranger.Firebase;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -38,11 +42,13 @@ public class FirebaseDB {
     // chet Listview
     private RecyclerView list_chet;
     private chetRoomAdapter chetAdapter;
-    private LinearLayoutManager listviewManager;
+    private LinearLayoutManager chetLayoutManager;
+    private TextView butNewMessage;
 
     // rule Listview
     private RecyclerView list_rule;
     private rulesAdapter ruleAdapter;
+    private LinearLayoutManager ruleLayoutManager;
 
     public String getRoomKey() {
         if(roomRef == null)
@@ -51,22 +57,23 @@ public class FirebaseDB {
         return roomRef.getKey();
     }
 
-    public void setList_chet(RecyclerView list_chet, Context context){
+    public void setList_chet(RecyclerView list_chet, Context context,TextView butNewMessage){
         this.list_chet = list_chet;
         Log.e("chetRoomAdapter", "생성");
         chetAdapter = new chetRoomAdapter();
-        listviewManager = new LinearLayoutManager(context);
+        chetLayoutManager = new LinearLayoutManager(context);
         list_chet.setAdapter(chetAdapter);
-        list_chet.setLayoutManager(listviewManager);
+        list_chet.setLayoutManager(chetLayoutManager);
+        this.butNewMessage = butNewMessage;
     }
 
     public void setList_rule(RecyclerView list_rule, Context context){
         this.list_rule = list_rule;
         Log.e("ruleAdapter", "생성");
         ruleAdapter = new rulesAdapter();
-        listviewManager = new LinearLayoutManager(context);
+        ruleLayoutManager = new LinearLayoutManager(context);
         list_rule.setAdapter(ruleAdapter);
-        list_rule.setLayoutManager(listviewManager);
+        list_rule.setLayoutManager(ruleLayoutManager);
     }
 
     public void sendMessage(String userName,String mainTitle, String subTitle, String mainText, String appName ) {
@@ -149,7 +156,7 @@ public class FirebaseDB {
                     Log.e("[LOG] listener", dataSnapshot.toString());
                     Rule rule = dataSnapshot.getValue(Rule.class);
                     //ruleAdapter.add(rule);
-                    list_rule.setAdapter(ruleAdapter);
+                    //list_rule.setAdapter(ruleAdapter);
                 }
             }
             @Override
@@ -179,8 +186,18 @@ public class FirebaseDB {
                     }else{
                         isMe = false;
                     }
-                    chetAdapter.add(achet, isMe);
-                    list_chet.setAdapter(chetAdapter);
+
+                    if((!chetAdapter.isBottomReached())&&chetAdapter.getItemCount()>0)
+                    {
+                        chetAdapter.add(achet, isMe);
+                        butNewMessage.setVisibility(View.VISIBLE);
+                    }else
+                    {
+                        chetAdapter.add(achet, isMe);
+                        list_chet.smoothScrollToPosition(chetAdapter.getItemCount()-1);
+                        butNewMessage.setVisibility(View.GONE);
+                    }
+
                 }
             }
             @Override
