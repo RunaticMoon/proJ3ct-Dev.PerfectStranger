@@ -3,20 +3,15 @@ package com.proj3ct.perfectstranger.Notification;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Notification;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.Settings;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
-import android.telephony.PhoneNumberUtils;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
 // https://www.learn2crack.com/2014/11/reading-notification-using-notificationlistenerservice.html
@@ -28,11 +23,8 @@ public class NotificationService extends NotificationListenerService {
     private static final String KAKAO = "com.kakao.talk";
     private static final String FACEBOOK = "com.facebook.orca";
     private static final String FACEBOOK_REPLY = "com.facebook.katana";
-    private static final String CALL_IN = "com.samsaung.android.incallui"; // 내용1 : 현재통화 ,내용2 : 수신전화
-    private static final String MESSAGE = "com.facebook.orca";
     private static final String INSTAGRAM = "com.instagram.android";
-    private String mLastState;
-    public static final String TAG = "PHONE STATE";
+    private static final String BETEWEEN = "kr.co.vcnc.android.couple";
 
     @Override
     public void onCreate() {
@@ -99,9 +91,26 @@ public class NotificationService extends NotificationListenerService {
                 mainText += extras.getString(Notification.EXTRA_TITLE) + " : ";
                 mainText += extras.getString(Notification.EXTRA_TEXT);
             }
-        } else if (appName.equals(FACEBOOK_REPLY)) {
+        } else if (appName.equals(INSTAGRAM)) {
+            mainTitle = "인스타그램";
+            mainText = extras.getString(Notification.EXTRA_TEXT );
+        }else if (appName.equals(FACEBOOK_REPLY)) {
             mainTitle = "페이스북 알림";
-            mainText = extras.getString(Notification.EXTRA_TEXT);
+            mainText = extras.getString(Notification.EXTRA_TEXT );
+        }
+        else if (appName.equals(BETEWEEN)) {
+            if (extras.getString(Notification.EXTRA_TEXT) != null) {
+                if (extras.getString(Notification.EXTRA_TEXT).equals("Between")) {
+                    mainTitle = "비트윈";
+                    mainText = extras.getString(Notification.EXTRA_TEXT);
+                } else {
+                    mainTitle = extras.getString(Notification.EXTRA_TITLE);
+                    mainText = extras.getString(Notification.EXTRA_TEXT);
+                }
+            }else{
+                mainTitle = "비트윈";
+                mainText = extras.getString(Notification.EXTRA_TITLE);
+            }
         } else {
             return null;
         }
@@ -110,7 +119,6 @@ public class NotificationService extends NotificationListenerService {
         intent.putExtra("mainText", mainText);
         return intent;
     }
-
 
 
     @Override

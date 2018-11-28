@@ -30,7 +30,7 @@ public class IncomingCallBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
 
-        Log.d(TAG, "onReceive()");
+        Log.d("!!!onReceive()",intent.getStringExtra(TelephonyManager.EXTRA_STATE));
         String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 
 
