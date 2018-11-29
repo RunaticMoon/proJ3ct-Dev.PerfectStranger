@@ -1,14 +1,12 @@
 package com.proj3ct.perfectstranger;
 
-import android.media.Image;
-
 /**
  * Created by Administrator on 2018-11-12.
  */
 
 public class aChet {
     private String userName;
-    private String appName, mainText, mainTitle,subTitle;
+    private String appName, mainText, mainTitle;
     private Long timeStamp;
 
     public String getUserName() {
@@ -41,14 +39,6 @@ public class aChet {
 
     public void setMainTitle(String mainTitle) {
         this.mainTitle = mainTitle;
-    }
-
-    public String getSubTitle() {
-        return subTitle;
-    }
-
-    public void setSubTitle(String subTitle) {
-        this.subTitle = subTitle;
     }
 
 

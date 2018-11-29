@@ -1,12 +1,23 @@
 package com.proj3ct.perfectstranger;
 
+import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.AutoTransition;
@@ -27,6 +38,9 @@ import android.widget.Toast;
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
 import com.proj3ct.perfectstranger.Firebase.KakaoLink;
 
+import java.util.List;
+import java.util.Set;
+
 public class startActivity extends AppCompatActivity {
 
     // animator property
@@ -40,19 +54,26 @@ public class startActivity extends AppCompatActivity {
     private KakaoLink kakaoLink = new KakaoLink();
     private boolean byLink = false;
 
+    // notification
+    private  Boolean isPermissionAllowe;
     private Participant participant = new Participant();
 
     // View component
     private TextView text_title;
     private Transition transition;
-    private ConstraintLayout bg_start,layout_profile;
+    private ConstraintLayout bg_start, layout_profile;
     private ConstraintSet con;
     private EditText edit_name;
     private Button but_waitingRoom;
     private ImageView but_setprofile;
+<<<<<<< HEAD
     private  Animation move_left;
 
 
+=======
+
+    private static final int MY_PERMISSION_STORAGE = 1111;
+>>>>>>> feature/notification
 
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -63,15 +84,15 @@ public class startActivity extends AppCompatActivity {
 
 
         // view 설정
-        but_waitingRoom = (Button)findViewById(R.id.but_room);
-        text_title = (TextView)findViewById(R.id.text_title);
-        bg_start = (ConstraintLayout)findViewById(R.id.bg_start);
-        TextView under_light2 = (TextView)findViewById(R.id.under_light2);
-        ImageView under_light1= (ImageView)findViewById(R.id.under_light);
-        but_setprofile=(ImageView)findViewById(R.id.but_profile);
-        layout_profile=(ConstraintLayout)findViewById(R.id.layout_profile);
-        edit_name=(EditText)findViewById(R.id.edit_name);
-        Animation alpha_change = AnimationUtils.loadAnimation(startActivity.this,R.anim.light_alpha);
+        but_waitingRoom = (Button) findViewById(R.id.but_room);
+        text_title = (TextView) findViewById(R.id.text_title);
+        bg_start = (ConstraintLayout) findViewById(R.id.bg_start);
+        TextView under_light2 = (TextView) findViewById(R.id.under_light2);
+        ImageView under_light1 = (ImageView) findViewById(R.id.under_light);
+        but_setprofile = (ImageView) findViewById(R.id.but_profile);
+        layout_profile = (ConstraintLayout) findViewById(R.id.layout_profile);
+        edit_name = (EditText) findViewById(R.id.edit_name);
+        Animation alpha_change = AnimationUtils.loadAnimation(startActivity.this, R.anim.light_alpha);
         alpha_change.setRepeatCount(0);
         under_light1.startAnimation(alpha_change);
         under_light2.startAnimation(alpha_change);
@@ -81,23 +102,38 @@ public class startActivity extends AppCompatActivity {
         transition.setInterpolator(new DecelerateInterpolator());
         con.clone(bg_start);
 
+<<<<<<< HEAD
 
         move_left = AnimationUtils.loadAnimation(startActivity.this, R.anim.fade_right_to_left);
         move_left.setFillAfter(true);
 
         Log.e("[hash]",kakaoLink.getKeyHash(getApplicationContext()));
+=======
+        Log.e("[hash]", kakaoLink.getKeyHash(getApplicationContext()));
+
+
+
+        PackageManager packageName = this.getPackageManager();
+        List<PackageInfo> installList = packageName.getInstalledPackages(0);
+
+        for(int i = 0 ; i < installList.size() ; i++ ){
+            Log.d("PackageManager", installList.get(i).packageName);
+        }
+
+
+        출처: http://taehyun71.tistory.com/23 [코딩하는 블로그]
+>>>>>>> feature/notification
 
         //---------------------------------------------------------------------------------------------------------------------------------------
 
         // 링크를 타고 들어왔는가?
         roomKey = kakaoLink.checkLink(getIntent());
         Log.e("[roomKey]", "카카오톡 링크 확인");
-        if(roomKey != null) {
+        if (roomKey != null) {
             byLink = true;
             but_waitingRoom.setText("게임입장");
             Log.e("[roomKey]", roomKey);
-        }
-        else {
+        } else {
             Log.e("[roomKey]", "roomKey is null");
         }
 
@@ -105,7 +141,7 @@ public class startActivity extends AppCompatActivity {
         but_setprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(startActivity.this,profileSettingActivity.class);
+                Intent intent = new Intent(startActivity.this, profileSettingActivity.class);
                 startActivity(intent);
             }
         });
@@ -113,11 +149,17 @@ public class startActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-                if(edit_name.getText().toString().trim().equals("")){
+                if (edit_name.getText().toString().trim().equals("")) {
                     Toast.makeText(startActivity.this, "이름을 입력해주세요.", Toast.LENGTH_LONG).show();
-                }else if(edit_name.getText().toString().trim().length()>10){
+                } else if (edit_name.getText().toString().trim().length() > 10) {
                     Toast.makeText(startActivity.this, "형식에 맡게 입력해주세요.", Toast.LENGTH_LONG).show();
-                }else {
+                } else  if(!isNotiPermissionAllowed()){
+                // 버튼클릭시 permission not allowed :
+                    Toast.makeText(startActivity.this,"앱 권한이 꺼져있습니다. 설정창으로 넘어갑니다",Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                    startActivity(intent);
+                }
+                else{
                     con.setVerticalBias(R.id.light, 0.1f);
                     TransitionManager.beginDelayedTransition(bg_start, transition);
                     con.applyTo(bg_start);
@@ -149,19 +191,19 @@ public class startActivity extends AppCompatActivity {
                                 firebaseDB.createNewRoom();
                                 roomKey = firebaseDB.getRoomKey();
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
-                                intent.putExtra("roomkey",roomKey);
-                                intent.putExtra("participant",participant);
+                                intent.putExtra("roomkey", roomKey);
+                                intent.putExtra("participant", participant);
                                 startActivity(intent);
                             }
                         }, 800);
-                    }else{
+                    } else {
                         delayHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 participant.setName(edit_name.getText().toString().trim());
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
-                                intent.putExtra("roomkey",roomKey);
-                                intent.putExtra("participant",participant);
+                                intent.putExtra("roomkey", roomKey);
+                                intent.putExtra("participant", participant);
                                 startActivity(intent);
                             }
                         }, 800);
@@ -188,31 +230,51 @@ public class startActivity extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onResume() {
-        con.setVerticalBias(R.id.light,0.3f);
-        TransitionManager.beginDelayedTransition(bg_start,transition);
+        con.setVerticalBias(R.id.light, 0.3f);
+        TransitionManager.beginDelayedTransition(bg_start, transition);
         con.applyTo(bg_start);
+<<<<<<< HEAD
         if(text_title.getAnimation()==move_left)
         {
+=======
+        if (text_title.getAnimation() != null) {
+>>>>>>> feature/notification
             Handler delayHandler = new Handler();
             delayHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Animation move_right = AnimationUtils.loadAnimation(startActivity.this,R.anim.fade_left_to_right);
+                    Animation move_right = AnimationUtils.loadAnimation(startActivity.this, R.anim.fade_left_to_right);
                     move_right.setFillBefore(true);
                     move_right.setFillAfter(true);
                     text_title.startAnimation(move_right);
                     layout_profile.startAnimation(move_right);
                 }
-            },500);
+            }, 500);
             delayHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     but_setprofile.setEnabled(true);
                     but_waitingRoom.setEnabled(true);
                 }
-            },800);
+            }, 800);
         }
 
         super.onResume();
+    }
+
+    private boolean isNotiPermissionAllowed() {
+        Set<String> notiListenerSet = NotificationManagerCompat.getEnabledListenerPackages(this);
+        String myPackageName = getPackageName();
+
+        for (String packageName : notiListenerSet) {
+            if (packageName == null) {
+                continue;
+            }
+            if (packageName.equals(myPackageName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
