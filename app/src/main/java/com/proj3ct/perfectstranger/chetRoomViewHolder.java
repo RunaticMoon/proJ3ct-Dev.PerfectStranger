@@ -2,7 +2,6 @@ package com.proj3ct.perfectstranger;
 
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -63,7 +62,7 @@ public class chetRoomViewHolder extends RecyclerView.ViewHolder {
         }else if(appName.equals(INSTAGRAM)){
             image_logo.setImageResource(R.drawable.logo_instagram);
         }else if(appName.equals(BETEWEEN)){
-            image_logo.setImageResource(R.drawable.logo_BETWEEN);
+            image_logo.setImageResource(R.drawable.logo_between);
         }
         Date time = new Date((chet.getTimeStamp()));
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd hh:mm:ss", Locale.KOREA);
