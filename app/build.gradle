@@ -38,5 +38,8 @@ dependencies {
     // 디자인
     implementation 'com.android.support:recyclerview-v7:27.0.1'
     implementation 'com.google.code.gson:gson:2.3.1'
+
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 }
 apply plugin: 'com.google.gms.google-services'

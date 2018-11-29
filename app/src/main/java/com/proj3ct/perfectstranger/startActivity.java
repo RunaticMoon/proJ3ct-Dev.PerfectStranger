@@ -1,5 +1,9 @@
 package com.proj3ct.perfectstranger;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
@@ -67,18 +71,48 @@ public class startActivity extends AppCompatActivity {
 
 
         // view 설정
-        but_chetRoom = (Button) findViewById(R.id.but_room);
-        text_title = (TextView) findViewById(R.id.text_title);
-        bg_start = (ConstraintLayout) findViewById(R.id.bg_start);
-        TextView under_light2 = (TextView) findViewById(R.id.under_light2);
-        ImageView under_light1 = (ImageView) findViewById(R.id.under_light);
-        but_setprofile = (ImageView) findViewById(R.id.but_profile);
-        layout_profile = (ConstraintLayout) findViewById(R.id.layout_profile);
-        edit_name = (EditText) findViewById(R.id.edit_name);
-        Animation alpha_change = AnimationUtils.loadAnimation(startActivity.this, R.anim.light_alpha);
-        alpha_change.setRepeatCount(0);
-        under_light1.startAnimation(alpha_change);
-        under_light2.startAnimation(alpha_change);
+
+        but_chetRoom = (Button)findViewById(R.id.but_room);
+        text_title = (TextView)findViewById(R.id.text_title);
+        bg_start = (ConstraintLayout)findViewById(R.id.bg_start);
+        TextView under_light2 = (TextView)findViewById(R.id.under_light2);
+        ImageView under_light1= (ImageView)findViewById(R.id.under_light);
+        but_setprofile=(ImageView)findViewById(R.id.but_profile);
+        layout_profile=(ConstraintLayout)findViewById(R.id.layout_profile);
+        edit_name=(EditText)findViewById(R.id.edit_name);
+        //Animation alpha_change = AnimationUtils.loadAnimation(startActivity.this,R.anim.light_alpha);
+        //alpha_change.setRepeatCount(0);
+        //under_light1.startAnimation(alpha_change);
+        //under_light2.startAnimation(alpha_change);
+        final AnimatorSet animatorSet = (AnimatorSet)AnimatorInflater.loadAnimator(startActivity.this,R.animator.light_alpha);
+        final AnimatorSet animatorSet2 = (AnimatorSet)AnimatorInflater.loadAnimator(startActivity.this,R.animator.light_alpha);
+        final AnimatorSet animatorSet3 = (AnimatorSet)AnimatorInflater.loadAnimator(startActivity.this,R.animator.title_alpha);
+        animatorSet.setTarget(under_light1);
+        animatorSet2.setTarget(under_light2);
+        animatorSet3.setTarget(text_title);
+        animatorSet.start();
+        animatorSet2.start();
+        animatorSet3.start();
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                animatorSet.start();
+            }
+        });
+        animatorSet2.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                animatorSet2.start();
+            }
+        });
+        animatorSet3.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                animatorSet3.start();
+            }
+        });
+
+
         con = new ConstraintSet();
         transition = new AutoTransition();
         transition.setDuration(500);
@@ -106,7 +140,7 @@ public class startActivity extends AppCompatActivity {
             Log.e("[roomKey]", "roomKey is null");
         }
 
-        // 방입장(방생성) 버튼 클릭
+
         but_setprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,6 +148,7 @@ public class startActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         but_chetRoom.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
@@ -123,7 +158,7 @@ public class startActivity extends AppCompatActivity {
                 } else if (edit_name.getText().toString().trim().length() > 10) {
                     Toast.makeText(startActivity.this, "형식에 맡게 입력해주세요.", Toast.LENGTH_LONG).show();
                 } else  if(!isNotiPermissionAllowed()){
-                // 버튼클릭시 permission not allowed :
+                    // 버튼클릭시 permission not allowed :
                     Toast.makeText(startActivity.this,"앱 권한이 꺼져있습니다. 설정창으로 넘어갑니다",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
                     startActivity(intent);

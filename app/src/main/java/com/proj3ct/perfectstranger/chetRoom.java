@@ -8,30 +8,43 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+
+import android.support.constraint.ConstraintLayout;
+
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
+
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextThemeWrapper;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
+
+import org.w3c.dom.Text;
+
 public class chetRoom extends AppCompatActivity {
     private String roomkey;
     private FirebaseDB firebaseDB = new FirebaseDB();
 
     // View component
     private RecyclerView list_chet;
-
-    private Button but_back, btn_startService, btn_stopService, btn_checkStatus, btn_setNoti;
-    private TextView but_friends, but_rules,but_newMessage;
+    private Button but_back,btn_startService, btn_stopService, btn_checkStatus, btn_setNoti;;
+    private TextView but_friends,but_rules,but_newMessage;
+    private ImageView image_siren;
+    private ConstraintLayout alarm_layout,alarm;
 
 
     // BroadcasRecevier : service를 감시하여 값을 받아서 firebaseDB 방아온 메세지를 넘겨줌
@@ -68,6 +81,21 @@ public class chetRoom extends AppCompatActivity {
         btn_checkStatus = (Button) findViewById(R.id.btn_checkStatus);
         btn_setNoti = (Button) findViewById(R.id.btn_setNoti);
         but_newMessage = (TextView)findViewById(R.id.but_newMessage);
+        image_siren=(ImageView)findViewById(R.id.image_siren);
+        alarm=(ConstraintLayout)findViewById(R.id.alarm);
+        alarm_layout=(ConstraintLayout)findViewById(R.id.alarm_layout);
+
+        DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(image_siren);
+        Glide.with(chetRoom.this).load(R.raw.alarm_red).into(imageViewTarget);
+        Animation animation = AnimationUtils.loadAnimation(chetRoom.this,R.anim.vibrate);
+        alarm_layout.startAnimation(animation);
+        alarm_layout.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         //fireBaseDB 설정
         firebaseDB.setList_chet(list_chet, getApplicationContext(),but_newMessage);
 
