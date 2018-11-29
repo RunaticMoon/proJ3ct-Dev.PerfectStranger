@@ -1,23 +1,13 @@
 package com.proj3ct.perfectstranger;
 
-import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.AutoTransition;
@@ -31,14 +21,12 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
 import com.proj3ct.perfectstranger.Firebase.KakaoLink;
 
-import java.util.List;
 import java.util.Set;
 
 public class startActivity extends AppCompatActivity {
@@ -64,16 +52,11 @@ public class startActivity extends AppCompatActivity {
     private ConstraintLayout bg_start, layout_profile;
     private ConstraintSet con;
     private EditText edit_name;
-    private Button but_waitingRoom;
+    private Button but_chetRoom;
     private ImageView but_setprofile;
-<<<<<<< HEAD
     private  Animation move_left;
-
-
-=======
-
     private static final int MY_PERMISSION_STORAGE = 1111;
->>>>>>> feature/notification
+
 
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -84,7 +67,7 @@ public class startActivity extends AppCompatActivity {
 
 
         // view 설정
-        but_waitingRoom = (Button) findViewById(R.id.but_room);
+        but_chetRoom = (Button) findViewById(R.id.but_room);
         text_title = (TextView) findViewById(R.id.text_title);
         bg_start = (ConstraintLayout) findViewById(R.id.bg_start);
         TextView under_light2 = (TextView) findViewById(R.id.under_light2);
@@ -102,27 +85,13 @@ public class startActivity extends AppCompatActivity {
         transition.setInterpolator(new DecelerateInterpolator());
         con.clone(bg_start);
 
-<<<<<<< HEAD
 
         move_left = AnimationUtils.loadAnimation(startActivity.this, R.anim.fade_right_to_left);
         move_left.setFillAfter(true);
 
         Log.e("[hash]",kakaoLink.getKeyHash(getApplicationContext()));
-=======
-        Log.e("[hash]", kakaoLink.getKeyHash(getApplicationContext()));
 
 
-
-        PackageManager packageName = this.getPackageManager();
-        List<PackageInfo> installList = packageName.getInstalledPackages(0);
-
-        for(int i = 0 ; i < installList.size() ; i++ ){
-            Log.d("PackageManager", installList.get(i).packageName);
-        }
-
-
-        출처: http://taehyun71.tistory.com/23 [코딩하는 블로그]
->>>>>>> feature/notification
 
         //---------------------------------------------------------------------------------------------------------------------------------------
 
@@ -131,7 +100,7 @@ public class startActivity extends AppCompatActivity {
         Log.e("[roomKey]", "카카오톡 링크 확인");
         if (roomKey != null) {
             byLink = true;
-            but_waitingRoom.setText("게임입장");
+            but_chetRoom.setText("게임입장");
             Log.e("[roomKey]", roomKey);
         } else {
             Log.e("[roomKey]", "roomKey is null");
@@ -145,7 +114,7 @@ public class startActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        but_waitingRoom.setOnClickListener(new View.OnClickListener() {
+        but_chetRoom.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
@@ -163,7 +132,7 @@ public class startActivity extends AppCompatActivity {
                     con.setVerticalBias(R.id.light, 0.1f);
                     TransitionManager.beginDelayedTransition(bg_start, transition);
                     con.applyTo(bg_start);
-                    but_waitingRoom.setEnabled(false);
+                    but_chetRoom.setEnabled(false);
                     but_setprofile.setEnabled(false);
                     Handler delayHandler = new Handler();
                     delayHandler.postDelayed(new Runnable() {
@@ -233,12 +202,8 @@ public class startActivity extends AppCompatActivity {
         con.setVerticalBias(R.id.light, 0.3f);
         TransitionManager.beginDelayedTransition(bg_start, transition);
         con.applyTo(bg_start);
-<<<<<<< HEAD
         if(text_title.getAnimation()==move_left)
         {
-=======
-        if (text_title.getAnimation() != null) {
->>>>>>> feature/notification
             Handler delayHandler = new Handler();
             delayHandler.postDelayed(new Runnable() {
                 @Override
@@ -254,7 +219,7 @@ public class startActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     but_setprofile.setEnabled(true);
-                    but_waitingRoom.setEnabled(true);
+                    but_chetRoom.setEnabled(true);
                 }
             }, 800);
         }

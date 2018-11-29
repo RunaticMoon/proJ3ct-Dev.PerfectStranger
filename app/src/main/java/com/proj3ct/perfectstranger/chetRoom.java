@@ -29,13 +29,10 @@ public class chetRoom extends AppCompatActivity {
 
     // View component
     private RecyclerView list_chet;
-<<<<<<< HEAD
-    private Button but_back;
-    private TextView but_friends,but_rules,but_newMessage;
-=======
+
     private Button but_back, btn_startService, btn_stopService, btn_checkStatus, btn_setNoti;
-    private TextView but_friends, but_rules;
->>>>>>> feature/notification
+    private TextView but_friends, but_rules,but_newMessage;
+
 
     // BroadcasRecevier : service를 감시하여 값을 받아서 firebaseDB 방아온 메세지를 넘겨줌
     // 받아오는 메세지 : 앱이름 / MainText / subText / 시간 / text / 프로필( 예정 ) 정도.
@@ -61,15 +58,7 @@ public class chetRoom extends AppCompatActivity {
         setContentView(R.layout.activity_chet_room);
         Intent intent = getIntent();
 
-<<<<<<< HEAD
-        but_back=(Button)findViewById(R.id.but_back);
-        but_friends=(TextView)findViewById(R.id.text_friends);
-        but_rules=(TextView)findViewById(R.id.text_rules);
-        list_chet = (RecyclerView)findViewById(R.id.listview_chat);
-        but_newMessage = (TextView)findViewById(R.id.but_newMessage);
-        //fireBaseDB 설정
-        firebaseDB.setList_chet(list_chet,getApplicationContext(),but_newMessage);
-=======
+
         but_back = (Button) findViewById(R.id.but_back);
         but_friends = (TextView) findViewById(R.id.text_friends);
         but_rules = (TextView) findViewById(R.id.text_rules);
@@ -78,9 +67,9 @@ public class chetRoom extends AppCompatActivity {
         btn_stopService = (Button) findViewById(R.id.btn_stopService);
         btn_checkStatus = (Button) findViewById(R.id.btn_checkStatus);
         btn_setNoti = (Button) findViewById(R.id.btn_setNoti);
+        but_newMessage = (TextView)findViewById(R.id.but_newMessage);
         //fireBaseDB 설정
-        firebaseDB.setList_chet(list_chet, getApplicationContext());
->>>>>>> feature/notification
+        firebaseDB.setList_chet(list_chet, getApplicationContext(),but_newMessage);
 
         // callback 함수
         // LocalBroadcastManager( Local를 사용한 이유 : 다른앱의 서비스의 방해를 방지 )
