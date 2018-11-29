@@ -1,19 +1,25 @@
 package com.proj3ct.perfectstranger;
 
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
 public class chetRoom extends AppCompatActivity {
@@ -24,7 +30,6 @@ public class chetRoom extends AppCompatActivity {
     private RecyclerView list_chet;
     private Button but_back, btn_startService, btn_stopService, btn_checkStatus, btn_setNoti;
     private TextView but_friends, but_rules;
-
 
     // BroadcasRecevier : service를 감시하여 값을 받아서 firebaseDB 방아온 메세지를 넘겨줌
     // 받아오는 메세지 : 앱이름 / MainText / subText / 시간 / text / 프로필( 예정 ) 정도.
@@ -99,6 +104,8 @@ public class chetRoom extends AppCompatActivity {
         btn_startService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // http://kwongyo.tistory.com/4 (Notification.Builder > NotificationCompat.Builder)
+
             }
         });
 

@@ -31,6 +31,7 @@ public class chetRoomViewHolder extends RecyclerView.ViewHolder {
     private static final String CALL_OUT = "CALL_OUT"; // 내용1 : 현재통화 ,내용2 : 수신전화
     private static final String INSTAGRAM = "com.instagram.android";
     private static final String MESSAGE = "MESSAGE";
+    private static final String BETEWEEN = "kr.co.vcnc.android.couple";
 
     public chetRoomViewHolder(View itemView) {
         super(itemView);
@@ -41,6 +42,7 @@ public class chetRoomViewHolder extends RecyclerView.ViewHolder {
         image_logo=(ImageView)itemView.findViewById(R.id.image_applogo);
         image_profile=(ImageView)itemView.findViewById(R.id.image_profile);
         image_image=(ImageView)itemView.findViewById(R.id.image_image);
+
     }
     public void setInfo(aChet chet){
         appName=chet.getAppName();
@@ -60,6 +62,8 @@ public class chetRoomViewHolder extends RecyclerView.ViewHolder {
             image_logo.setImageResource(R.drawable.logo_message);
         }else if(appName.equals(INSTAGRAM)){
             image_logo.setImageResource(R.drawable.logo_instagram);
+        }else if(appName.equals(BETEWEEN)){
+            image_logo.setImageResource(R.drawable.logo_BETWEEN);
         }
         Date time = new Date((chet.getTimeStamp()));
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd hh:mm:ss", Locale.KOREA);
