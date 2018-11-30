@@ -93,14 +93,13 @@ public class rulesViewHolder extends RecyclerView.ViewHolder {
                 {
                     case 1:
                     case 2:
-                    case 5:
+                    case 4:
                         rule.detail_i=3;
                         break;
                     case 3:
-                    case 4:
                         rule.detail_s="";
                         break;
-                    case 6:
+                    case 5:
                         rule.detail_s="카카오톡";
                         rule.detail_i=1;
                         break;
@@ -115,10 +114,9 @@ public class rulesViewHolder extends RecyclerView.ViewHolder {
     /**
      * ruleType=1 : n번째 메세지 온 사람 벌칙, detail_i
      * ruleType=2 : 연속으로 n번 온 사람 벌칙, detail_i
-     * ruleType=3 : s에게 연락 온 사람 벌칙,detail_s
-     * ruleType=4 : 금지어 포함 메세지 벌칙, detail_s
-     * ruleType=5 : n분동안 연락 안 온사람 벌칙, detail_i
-     * ruleType=6 : 일정 앱 알림 시 벌칙, detail_s
+     * ruleType=3 : 금지어 포함 메세지 벌칙, detail_s
+     * ruleType=4 : n분동안 연락 안 온사람 벌칙, detail_i
+     * ruleType=5 : 일정 앱 알림 시 벌칙, detail_s
      */
     public void initiallizeSetting(Rule rule){
         this.rule=rule;
@@ -137,20 +135,15 @@ public class rulesViewHolder extends RecyclerView.ViewHolder {
                 change_setdetail(1);
                 break;
             case 3:
-                text_rule.setText("\""+rule.detail_s +"\"에게 연락 온 사람 벌칙");
-                edit_text.setHint("상대방의 이름");
-                change_setdetail(2);
-                break;
-            case 4:
                 text_rule.setText("\""+rule.detail_s +"\" 포함 메세지 온 사람 벌칙");
                 edit_text.setHint("금지어");
                 change_setdetail(2);
                 break;
-            case 5:
+            case 4:
                 text_rule.setText(rule.detail_i+"분동안 연락 안 온사람 벌칙");
                 change_setdetail(1);
                 break;
-            case 6:
+            case 5:
                 text_rule.setText(rule.detail_s+" 알림 시 벌칙");
                 change_setdetail(3);
                 break;
@@ -210,8 +203,8 @@ public class rulesViewHolder extends RecyclerView.ViewHolder {
     }
     public interface OnListItemClickListener{
         public void onEditButtonClick(int position);
-        public void onDeleteButtonClick(int position);
         public void onNewButtonClick(int position);
+        public void onDeleteButtonClick(int position);
         public void onRuleChanged(int position,Rule rule);
     }
 }

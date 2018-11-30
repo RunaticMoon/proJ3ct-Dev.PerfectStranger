@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.proj3ct.perfectstranger.AppVariables;
 import com.proj3ct.perfectstranger.Participant;
 import com.proj3ct.perfectstranger.Rule;
 import com.proj3ct.perfectstranger.aChet;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 public class FirebaseDB {
     // Firebase
@@ -38,12 +40,16 @@ public class FirebaseDB {
 
     private Participant participant;
     private Boolean isMe = false;
+    private AppVariables appVariables;
 
     // chet Listview
     private RecyclerView list_chet;
     private chetRoomAdapter chetAdapter;
     private LinearLayoutManager chetLayoutManager;
     private TextView butNewMessage;
+    private onAlarmListener alarmListener;
+    private int lastusercount=0;
+    private String lastuser="";
 
     // rule Listview
     private RecyclerView list_rule;
@@ -57,6 +63,9 @@ public class FirebaseDB {
         return roomRef.getKey();
     }
 
+    public void setAppVariables(AppVariables av){
+        appVariables=av;
+    }
     public void setList_chet(RecyclerView list_chet, Context context,TextView butNewMessage){
         this.list_chet = list_chet;
         Log.e("chetRoomAdapter", "생성");
@@ -67,10 +76,10 @@ public class FirebaseDB {
         this.butNewMessage = butNewMessage;
     }
 
-    public void setList_rule(RecyclerView list_rule, Context context){
+    public void setList_rule(RecyclerView list_rule, Context context,rulesAdapter r){
         this.list_rule = list_rule;
         Log.e("ruleAdapter", "생성");
-        ruleAdapter = new rulesAdapter();
+        ruleAdapter = r;
         ruleLayoutManager = new LinearLayoutManager(context);
         list_rule.setAdapter(ruleAdapter);
         list_rule.setLayoutManager(ruleLayoutManager);
@@ -181,14 +190,24 @@ public class FirebaseDB {
                     }else{
                         isMe = false;
                     }
+                        if( lastuser == achet.getUserName())
+                        {
+                            lastusercount++;
+                        }else
+                        {
+                            if(lastuser.equals(""))lastusercount=-1;
+                            lastuser=achet.getUserName();
+                            lastusercount=0;
+                        }
 
+                     boolean wrong_rule=ruleChecker(achet);
                     if((!chetAdapter.isBottomReached())&&chetAdapter.getItemCount()>0)
                     {
-                        chetAdapter.add(achet, isMe);
+                        chetAdapter.add(achet, isMe,wrong_rule);
                         butNewMessage.setVisibility(View.VISIBLE);
                     }else
                     {
-                        chetAdapter.add(achet, isMe);
+                        chetAdapter.add(achet, isMe,wrong_rule);
                         list_chet.smoothScrollToPosition(chetAdapter.getItemCount()-1);
                         butNewMessage.setVisibility(View.GONE);
                     }
@@ -209,11 +228,59 @@ public class FirebaseDB {
         });
     }
 
+    public boolean ruleChecker(aChet chet){
+        Vector<Rule> rules = appVariables.getRules();
+        boolean detected=false;
+        /**
+         * ruleType=1 : n번째 메세지 온 사람 벌칙, detail_i
+         * ruleType=2 : 연속으로 n번 온 사람 벌칙, detail_i
+         * ruleType=3 : 금지어 포함 메세지 벌칙, detail_s
+         * ruleType=4 : n분동안 연락 안 온사람 벌칙, detail_i
+         * ruleType=5 : 일정 앱 알림 시 벌칙, detail_s
+         */
+        if(chet!=null&& chet.getMainText()!=null)
+        {
+            for(Rule rule:rules){
+                if(rule.getRuleType()==1 && chetAdapter.getItemCount()%rule.getDetail_i()==0){
+                    alarmListener.onAlarm(chet.getUserName(),rule.getDetail_i()+"번째 메세지 온 사람 벌칙");
+                    detected=true;
+                    break;
+                }else if(rule.getRuleType()==2 && lastusercount%rule.getDetail_i()==0)
+                {
+                    alarmListener.onAlarm(chet.getUserName(),"연속으로 "+rule.getDetail_i()+"번 온 사람 벌칙");
+                    if(lastusercount==-1) lastusercount=0;
+                    detected=true;
+                    break;
+                }else if(rule.getRuleType()==3 && chet.getMainText().contains(rule.getDetail_s()))
+                {
+                    alarmListener.onAlarm(chet.getUserName(),"\""+rule.getDetail_s()+"\" 포함 메세지 벌칙");
+                    detected=true;
+                    break;
+                }else if(rule.getRuleType()==4)
+                {
+
+                }else if(rule.getRuleType()==5&&chet.getAppName().contains(rule.getDetail_s()))
+                {
+                    alarmListener.onAlarm(chet.getUserName(),rule.getDetail_s()+" 알림 시 벌칙");
+                    detected=true;
+                    break;
+                }
+            }
+        }
+        return detected;
+    }
+
     public Participant getParticipant() {
         return participant;
     }
 
     public void setParticipant(Participant participant) {
         this.participant = participant;
+    }
+    public void setOnAlarmListener(FirebaseDB.onAlarmListener alarmListener){
+        this.alarmListener=alarmListener;
+    }
+    public interface onAlarmListener{
+        public void onAlarm(String name, String rule);
     }
 }

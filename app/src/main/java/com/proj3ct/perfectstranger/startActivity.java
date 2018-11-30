@@ -32,6 +32,7 @@ import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
 import com.proj3ct.perfectstranger.Firebase.KakaoLink;
 
 import java.util.Set;
+import java.util.Vector;
 
 public class startActivity extends AppCompatActivity {
 
@@ -59,6 +60,7 @@ public class startActivity extends AppCompatActivity {
     private Button but_chetRoom;
     private ImageView but_setprofile;
     private  Animation move_left;
+    private AppVariables appVariables;
     private static final int MY_PERMISSION_STORAGE = 1111;
 
 
@@ -75,40 +77,24 @@ public class startActivity extends AppCompatActivity {
         but_chetRoom = (Button)findViewById(R.id.but_room);
         text_title = (TextView)findViewById(R.id.text_title);
         bg_start = (ConstraintLayout)findViewById(R.id.bg_start);
-        TextView under_light2 = (TextView)findViewById(R.id.under_light2);
-        ImageView under_light1= (ImageView)findViewById(R.id.under_light);
         but_setprofile=(ImageView)findViewById(R.id.but_profile);
         layout_profile=(ConstraintLayout)findViewById(R.id.layout_profile);
         edit_name=(EditText)findViewById(R.id.edit_name);
 
-        final AnimatorSet animatorSet = (AnimatorSet)AnimatorInflater.loadAnimator(startActivity.this,R.animator.light_alpha);
-        final AnimatorSet animatorSet2 = (AnimatorSet)AnimatorInflater.loadAnimator(startActivity.this,R.animator.light_alpha);
-        final AnimatorSet animatorSet3 = (AnimatorSet)AnimatorInflater.loadAnimator(startActivity.this,R.animator.title_alpha);
-        animatorSet.setTarget(under_light1);
-        animatorSet2.setTarget(under_light2);
-        animatorSet3.setTarget(text_title);
-        animatorSet.start();
-        animatorSet2.start();
-        animatorSet3.start();
-        animatorSet.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                animatorSet.start();
-            }
-        });
-        animatorSet2.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                animatorSet2.start();
-            }
-        });
-        animatorSet3.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                animatorSet3.start();
-            }
-        });
+        appVariables = (AppVariables)getApplication();
+        //벌칙 실행 확인용
 
+        Vector<Rule> rules = new Vector<Rule>();
+        rules.add(new Rule(1,5));
+        rules.add(new Rule(2,3));
+        rules.add(new Rule(3, "ㅋㅋ"));
+        rules.add(new Rule(4,2));
+        Rule rule = new Rule(5,1);
+        rule.setforType();
+        rules.add(rule);
+        appVariables.setRules(rules);
+
+        setAnimations();
 
         con = new ConstraintSet();
         transition = new AutoTransition();
@@ -214,6 +200,38 @@ public class startActivity extends AppCompatActivity {
         });
     }
 
+    private void setAnimations(){
+        TextView under_light2 = (TextView)findViewById(R.id.under_light2);
+        ImageView under_light1= (ImageView)findViewById(R.id.under_light);
+        final AnimatorSet animatorSet = (AnimatorSet)AnimatorInflater.loadAnimator(startActivity.this,R.animator.light_alpha);
+        final AnimatorSet animatorSet2 = (AnimatorSet)AnimatorInflater.loadAnimator(startActivity.this,R.animator.light_alpha);
+        final AnimatorSet animatorSet3 = (AnimatorSet)AnimatorInflater.loadAnimator(startActivity.this,R.animator.title_alpha);
+        animatorSet.setTarget(under_light1);
+        animatorSet2.setTarget(under_light2);
+        animatorSet3.setTarget(text_title);
+        animatorSet.start();
+        animatorSet2.start();
+        animatorSet3.start();
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                animatorSet.start();
+            }
+        });
+        animatorSet2.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                animatorSet2.start();
+            }
+        });
+        animatorSet3.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                animatorSet3.start();
+            }
+        });
+    }
+
     // 뒤로가기
     @Override
     public void onBackPressed() {
@@ -254,6 +272,18 @@ public class startActivity extends AppCompatActivity {
                     but_chetRoom.setEnabled(true);
                 }
             }, 800);
+        }
+
+        if(appVariables.getMyProfile()==null)
+        {
+            Profile profile = new Profile();
+            appVariables.setMyProfile(profile);
+            profile.setProfile(but_setprofile,startActivity.this);
+        }else
+        {
+            Profile profile = appVariables.getMyProfile();
+            profile.setProfile(but_setprofile,startActivity.this);
+
         }
 
         super.onResume();

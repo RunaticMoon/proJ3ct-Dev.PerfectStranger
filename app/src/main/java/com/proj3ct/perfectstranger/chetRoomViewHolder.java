@@ -1,7 +1,20 @@
 package com.proj3ct.perfectstranger;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.graphics.LightingColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.media.Image;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
+import android.support.v7.graphics.drawable.DrawableWrapper;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +33,7 @@ public class chetRoomViewHolder extends RecyclerView.ViewHolder {
     private Image appLogo,image,profile;
     private TextView text_name,text_time,text_description,text_appname;
     private ImageView image_logo,image_profile,image_image;
+    private ConstraintLayout bg;
 
 
     private static final String KAKAO = "com.kakao.talk";
@@ -41,9 +55,11 @@ public class chetRoomViewHolder extends RecyclerView.ViewHolder {
         image_logo=(ImageView)itemView.findViewById(R.id.image_applogo);
         image_profile=(ImageView)itemView.findViewById(R.id.image_profile);
         image_image=(ImageView)itemView.findViewById(R.id.image_image);
+        bg=(ConstraintLayout)itemView.findViewById(R.id.listview_chet_bg);
 
     }
-    public void setInfo(aChet chet){
+
+    public void setInfo(aChet chet, boolean wrong,boolean me){
         appName=chet.getAppName();
         if(appName.equals(KAKAO)){
             image_logo.setImageResource(R.drawable.logo_kakaotalk);
@@ -70,10 +86,17 @@ public class chetRoomViewHolder extends RecyclerView.ViewHolder {
         sendTime=sdf.format(time);
         userName=chet.getUserName();
         text_name.setText(userName);
-        text_time.setText(sendTime);
+        text_time.setText(sendTime.substring(0,sendTime.lastIndexOf(':')));
         text_appname.setText(chet.getMainTitle());
         text_description.setText(chet.getMainText());
 
-        //image_profile.setImage
+        //에러난 뷰 빨갛게 표시, 다른것도 같이 표시되는 이유 모름
+        /*if(wrong) {
+            if(me){
+                bg.setBackground(itemView.getResources().getDrawable(R.drawable.bg_chet_me_red));
+            }else{
+                bg.setBackground(itemView.getResources().getDrawable(R.drawable.bg_chet_red));
+            }
+        }*/
     }
 }

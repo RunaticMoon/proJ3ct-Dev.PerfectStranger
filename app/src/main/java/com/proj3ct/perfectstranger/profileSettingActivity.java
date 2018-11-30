@@ -1,5 +1,6 @@
 package com.proj3ct.perfectstranger;
 
+import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -36,17 +37,20 @@ public class profileSettingActivity extends AppCompatActivity{
     int colors[] = {Color.RED,Color.rgb(255,165,0),Color.YELLOW,Color.GREEN,Color.BLUE,Color.rgb(128,0,128),Color.WHITE, Color.BLACK};
     Profile profile;
     int nowChanging;
+    AppVariables appVariables;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_setting);
-        profile = new Profile();
         nowChanging=-1;
+        appVariables = (AppVariables)getApplication();
+        profile = appVariables.getMyProfile();
         initViews();
 
         but_done.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                appVariables.setMyProfile(profile);
                 finish();
             }
         });
