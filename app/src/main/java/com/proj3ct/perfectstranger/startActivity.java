@@ -50,12 +50,13 @@ public class startActivity extends AppCompatActivity {
     // firebase
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseDB firebaseDB = new FirebaseDB();
-    private String roomKey;
+    private String roomKey, userKey;
     private User user = new User();
 
     // KakaoLink
     private KakaoLink kakaoLink = new KakaoLink();
     private boolean byLink = false;
+    private boolean fromLink = false;
 
     // notification
     private  Boolean isPermissionAllowe;
@@ -146,6 +147,7 @@ public class startActivity extends AppCompatActivity {
 
         // SharedPreferences에 룸키가 있는가?
         roomKey = SharedPref.getRoomKey(this);
+        userKey = SharedPref.getUserKey(this);
         if(roomKey != null) {
             Log.e("[Shared roomKey]", roomKey);
             user = SharedPref.getUser(this);
@@ -181,14 +183,15 @@ public class startActivity extends AppCompatActivity {
             AlertDialog dialog = builder.create();
             dialog.show();
         }
+        else if(roomKey == null && tempKey != null) {
+            roomKey = tempKey;
+            fromLink = true;
+        }
 
         if (roomKey != null) {
             byLink = true;
             but_chetRoom.setText("게임입장");
             Log.e("[roomKey]", roomKey);
-
-            // SharedPreference에 저장
-            SharedPref.setPref(this, roomKey, user);
         } else {
             Log.e("[roomKey]", "roomKey is null");
         }
@@ -244,26 +247,29 @@ public class startActivity extends AppCompatActivity {
                     bundle.putString(FirebaseAnalytics.Param.GROUP_ID, roomKey);
                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.JOIN_GROUP, bundle);
 
+                    participant.setName(edit_name.getText().toString().trim());
+
                     if (byLink == false) {
                         delayHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                participant.setName(edit_name.getText().toString().trim());
                                 // 임시로 participant를 user로 변환해서 set하게 해놓음
                                 user = new User(participant.getName());
                                 firebaseDB.setUser(user);
                                 firebaseDB.createNewRoom();
                                 firebaseDB.addUser(user);
                                 roomKey = firebaseDB.getRoomKey();
+                                userKey = firebaseDB.getUserKey();
 
                                 byLink = true;
                                 but_chetRoom.setText("게임입장");
 
                                 // SharedPreference에 저장
-                                SharedPref.setPref(getApplicationContext(), roomKey, user);
+                                SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
 
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
                                 intent.putExtra("roomkey", roomKey);
+                                intent.putExtra("userkey", userKey);
                                 intent.putExtra("participant", participant);
                                 startActivity(intent);
                             }
@@ -272,9 +278,28 @@ public class startActivity extends AppCompatActivity {
                         delayHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                participant.setName(edit_name.getText().toString().trim());
+                                // 임시로 participant를 user로 변환해서 set하게 해놓음
+                                if(user == null) {
+                                    user = new User(participant.getName());
+                                }
+                                firebaseDB.setUser(user);
+                                firebaseDB.enterRoom(roomKey);
+
+                                if(fromLink) {
+                                    firebaseDB.addUser(user);
+                                }
+                                else {
+                                    firebaseDB.setUserKey(userKey);
+                                    firebaseDB.updateUser();
+                                }
+                                userKey = firebaseDB.getUserKey();
+
+                                // SharedPreference에 저장
+                                SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
+
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
                                 intent.putExtra("roomkey", roomKey);
+                                intent.putExtra("userkey", userKey);
                                 intent.putExtra("participant", participant);
                                 startActivity(intent);
                             }

@@ -1,6 +1,7 @@
 package com.proj3ct.perfectstranger.Firebase;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.proj3ct.perfectstranger.Participant;
 import com.proj3ct.perfectstranger.Rule.Rule;
 import com.proj3ct.perfectstranger.Chet.aChet;
@@ -32,10 +34,12 @@ public class FirebaseDB {
     private DatabaseReference dbRef = db.getReference("talks");
     private DatabaseReference roomRef;
     private DatabaseReference setRef, chetRef, ruleRef, userRef;
+    private DatabaseReference myRef;
 
     // User
     private User user;
     private Boolean isMe = false;
+    private String userName;
 
     // chet Listview
     private RecyclerView list_chet;
@@ -69,6 +73,17 @@ public class FirebaseDB {
         return roomRef.getKey();
     }
 
+    public String getUserKey() {
+        if(myRef == null)
+            return null;
+
+        return myRef.getKey();
+    }
+
+    public waitingRoomAdapter getUserAdapter() {
+        return this.userAdapter;
+    }
+
     // Set Listview
     public void setList_chet(RecyclerView list_chet, Context context,TextView butNewMessage){
         this.list_chet = list_chet;
@@ -97,7 +112,7 @@ public class FirebaseDB {
         userAdapter = new waitingRoomAdapter();
         userLayoutManager = new LinearLayoutManager(context);
 
-        this.list_user.setAdapter(ruleAdapter);
+        this.list_user.setAdapter(userAdapter);
         this.list_user.setLayoutManager(userLayoutManager);
     }
 
@@ -122,13 +137,53 @@ public class FirebaseDB {
     }
 
     public void addUser(User user) {
-        userRef.push().setValue(user);
+        myRef = userRef.push();
+        myRef.setValue(user);
     }
 
     public void setSetting(int maxNum) {
         Map<String, Object> setting = new HashMap<>();
         setting.put("maxNum", maxNum);
         setRef.setValue(setting);
+    }
+
+    // User Function
+    public void setUserKey(String userKey) {
+        myRef = userRef.child(userKey);
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void removeUser(String name) {
+        userName = name;
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if(userName.equals(snapshot.child("name").getValue(String.class))) {
+                        snapshot.getRef().removeValue();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void updateUser() {
+        myRef.setValue(user);
     }
 
     // Room Function
@@ -147,6 +202,8 @@ public class FirebaseDB {
             setMessageListener();
         if(list_rule != null)
             setRuleListener();
+        if(list_user != null)
+            setUserListener();
     }
 
     public void enterRoom(String roomKey) {
@@ -155,10 +212,13 @@ public class FirebaseDB {
         setRef = roomRef.child("setList");
         ruleRef = roomRef.child("ruleList");
         userRef = roomRef.child("userList");
+
         if(list_chet != null)
             setMessageListener();
         if(list_rule != null)
             setRuleListener();
+        if(list_user != null)
+            setUserListener();
     }
 
     public void exitRoom(String roomKey) {
@@ -174,7 +234,6 @@ public class FirebaseDB {
                     Log.e("[LOG] listener", dataSnapshot.toString());
                     Rule rule = dataSnapshot.getValue(Rule.class);
                     //ruleAdapter.add(rule);
-                    //list_rule.setAdapter(ruleAdapter);
                 }
             }
             @Override
@@ -237,7 +296,10 @@ public class FirebaseDB {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if(userAdapter != null) {
-
+                    Log.e("[LOG] listener", dataSnapshot.toString());
+                    User user = dataSnapshot.getValue(User.class);
+                    Log.e("[LOG] user", user.getName());
+                    userAdapter.add(user);
                 }
             }
             @Override

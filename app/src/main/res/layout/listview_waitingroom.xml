@@ -29,6 +29,7 @@
             android:layout_height="48dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
+            android:tag="small"
             android:background="@drawable/bg_profile_me"
             app:srcCompat="@drawable/face1"
             tools:layout_editor_absoluteY="1dp" />
