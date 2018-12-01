@@ -15,6 +15,7 @@ public class Rule {
     int detail_i;
     String detail_s;
     String[] apps={"카카오톡","페이스북","인스타그램","유튜브","비트윈","메세지","전화"};
+    public Rule() { }
     public Rule(int ruleType, int detail_i) {
         this.ruleType = ruleType;
         this.detail_i = detail_i;
@@ -28,4 +29,17 @@ public class Rule {
         if(detail_i>=7) detail_i=0;
         detail_s=apps[detail_i];
     }
+
+    public int getRuleType() {
+        return ruleType;
+    }
+
+    public int getDetail_i() {
+        return detail_i;
+    }
+
+    public String getDetail_s() {
+        return detail_s;
+    }
+
 }

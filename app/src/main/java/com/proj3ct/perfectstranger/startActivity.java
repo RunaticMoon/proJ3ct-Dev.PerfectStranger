@@ -196,10 +196,17 @@ public class startActivity extends AppCompatActivity {
             Log.e("[roomKey]", "roomKey is null");
         }
 
+        Log.e("[byLink]", Boolean.toString(byLink));
+        Log.e("[fromLink]", Boolean.toString(fromLink));
+
         but_setprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(startActivity.this, profileSettingActivity.class);
+                intent.putExtra("vectorType", user.getVectorType());
+                intent.putExtra("backgroundColor", user.getBackgroundColor());
+                intent.putExtra("outlineColor", user.getOutlineColor());
+                intent.putExtra("vectorColor", user.getVectorColor());
                 startActivityForResult(intent, 1);
             }
         });
@@ -248,13 +255,12 @@ public class startActivity extends AppCompatActivity {
                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.JOIN_GROUP, bundle);
 
                     participant.setName(edit_name.getText().toString().trim());
+                    user.setName(edit_name.getText().toString().trim());
 
                     if (byLink == false) {
                         delayHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                // 임시로 participant를 user로 변환해서 set하게 해놓음
-                                user = new User(participant.getName());
                                 firebaseDB.setUser(user);
                                 firebaseDB.createNewRoom();
                                 firebaseDB.addUser(user);
@@ -279,9 +285,6 @@ public class startActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 // 임시로 participant를 user로 변환해서 set하게 해놓음
-                                if(user == null) {
-                                    user = new User(participant.getName());
-                                }
                                 firebaseDB.setUser(user);
                                 firebaseDB.enterRoom(roomKey);
 
@@ -289,6 +292,7 @@ public class startActivity extends AppCompatActivity {
                                     firebaseDB.addUser(user);
                                 }
                                 else {
+                                    Log.e("[userKey]", userKey);
                                     firebaseDB.setUserKey(userKey);
                                     firebaseDB.updateUser();
                                 }

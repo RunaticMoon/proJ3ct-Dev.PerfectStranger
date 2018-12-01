@@ -126,6 +126,7 @@ public class chetRoom extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(chetRoom.this, RulesActivity.class);
+                intent.putExtra("roomKey", firebaseDB.getRoomKey());
                 startActivity(intent);
             }
         });

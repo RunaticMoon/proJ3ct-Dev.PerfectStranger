@@ -15,7 +15,6 @@ import com.proj3ct.perfectstranger.Firebase.KakaoLink;
 import com.proj3ct.perfectstranger.R;
 
 public class waitingRoom extends AppCompatActivity {
-
     private FirebaseDB firebaseDB = new FirebaseDB();
 
     RecyclerView list_user;

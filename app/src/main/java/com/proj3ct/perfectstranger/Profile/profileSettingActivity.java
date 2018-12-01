@@ -29,6 +29,17 @@ public class profileSettingActivity extends AppCompatActivity{
         setContentView(R.layout.activity_profile_setting);
         profile = new Profile();
         nowChanging = -1;
+
+        Intent intent = getIntent();
+        int vectorType = intent.getIntExtra("vectorType", -1);
+        int backgroundColor = intent.getIntExtra("backgroundColor", -1);
+        int outlineColor = intent.getIntExtra("outlineColor", -1);
+        int vectorColor = intent.getIntExtra("vectorColor", -1);
+
+        if(vectorType != -1) {
+            profile.setVectorType(vectorType);
+            profile.setColor(backgroundColor, outlineColor, vectorColor);
+        }
         initViews();
 
         but_done.setOnClickListener(new OnClickListener() {
@@ -137,7 +148,6 @@ public class profileSettingActivity extends AppCompatActivity{
         profile_f6.setOnClickListener(onClickListener);
         profile_f7.setOnClickListener(onClickListener);
         profile_f8.setOnClickListener(onClickListener);
-
     }
 
     private Drawable getColoredCircle( int SolidColor,int StrokeColor) { //원 색 변경용

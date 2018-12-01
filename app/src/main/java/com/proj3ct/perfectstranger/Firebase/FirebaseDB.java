@@ -24,6 +24,7 @@ import com.proj3ct.perfectstranger.User;
 import com.proj3ct.perfectstranger.Waiting.waitingRoomAdapter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -80,8 +81,17 @@ public class FirebaseDB {
         return myRef.getKey();
     }
 
+    // Get Adapter
     public waitingRoomAdapter getUserAdapter() {
         return this.userAdapter;
+    }
+
+    public rulesAdapter getRuleAdapter() {
+        return this.ruleAdapter;
+    }
+
+    public chetRoomAdapter getChetAdapter() {
+        return this.chetAdapter;
     }
 
     // Set Listview
@@ -133,6 +143,7 @@ public class FirebaseDB {
         rule.put("ruleType", ruleType);
         rule.put("detail_i", detail_i);
         rule.put("detail_s", detail_s);
+
         ruleRef.push().setValue(rule);
     }
 
@@ -145,6 +156,17 @@ public class FirebaseDB {
         Map<String, Object> setting = new HashMap<>();
         setting.put("maxNum", maxNum);
         setRef.setValue(setting);
+    }
+
+    public void setRule() {
+        ruleRef.removeValue();
+        ruleRef = roomRef.child("ruleList");
+        List<Rule> rules = ruleAdapter.getRules();
+
+        for(int i = 0; i < rules.size(); i++) {
+            Rule rule = rules.get(i);
+            addRule(rule.getRuleType(), rule.getDetail_i(), rule.getDetail_s());
+        }
     }
 
     // User Function
@@ -233,7 +255,7 @@ public class FirebaseDB {
                 if(ruleAdapter != null) {
                     Log.e("[LOG] listener", dataSnapshot.toString());
                     Rule rule = dataSnapshot.getValue(Rule.class);
-                    //ruleAdapter.add(rule);
+                    ruleAdapter.add(rule);
                 }
             }
             @Override
