@@ -1,8 +1,10 @@
-package com.proj3ct.perfectstranger;
+package com.proj3ct.perfectstranger.Rule;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import com.proj3ct.perfectstranger.R;
+
 /**
  * Created by Administrator on 2018-11-14.
  */

@@ -1,19 +1,22 @@
-package com.proj3ct.perfectstranger;
+package com.proj3ct.perfectstranger.Waiting;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
 import com.proj3ct.perfectstranger.Firebase.KakaoLink;
+import com.proj3ct.perfectstranger.R;
 
 public class waitingRoom extends AppCompatActivity {
+
+    private FirebaseDB firebaseDB = new FirebaseDB();
 
     RecyclerView list_participant;
     waitingRoomAdapter adapter;
@@ -46,6 +49,8 @@ public class waitingRoom extends AppCompatActivity {
         adapter.add(new Participant(null,"이기상"));
         adapter.add(new Participant(null,"허말순"));*/
 
+        //fireBaseDB 설정
+        firebaseDB.setList_user(list_participant, getApplicationContext());
 
         Intent intent = getIntent();
         if(intent!=null){

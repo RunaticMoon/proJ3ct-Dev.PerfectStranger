@@ -1,9 +1,6 @@
-package com.proj3ct.perfectstranger;
+package com.proj3ct.perfectstranger.Chet;
 
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,29 +8,28 @@ import android.content.IntentFilter;
 
 import android.support.constraint.ConstraintLayout;
 
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.NotificationCompat;
 
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import static android.app.PendingIntent.FLAG_UPDATE_CURRENT;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
-
-import org.w3c.dom.Text;
+import com.proj3ct.perfectstranger.Participant;
+import com.proj3ct.perfectstranger.R;
+import com.proj3ct.perfectstranger.Rule.RulesActivity;
+import com.proj3ct.perfectstranger.User;
+import com.proj3ct.perfectstranger.Waiting.waitingRoom;
 
 public class chetRoom extends AppCompatActivity {
     private String roomkey;
@@ -109,7 +105,7 @@ public class chetRoom extends AppCompatActivity {
             roomkey = intent.getStringExtra("roomkey");
             participant = (Participant) intent.getSerializableExtra("participant");
             firebaseDB.enterRoom(roomkey);
-            firebaseDB.setParticipant(participant);
+            firebaseDB.setUser(new User(participant.getName()));
         }
 
         but_back.setOnClickListener(new View.OnClickListener() {

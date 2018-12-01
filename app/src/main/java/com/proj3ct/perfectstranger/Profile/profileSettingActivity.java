@@ -1,23 +1,11 @@
-package com.proj3ct.perfectstranger;
+package com.proj3ct.perfectstranger.Profile;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
+import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.VectorDrawable;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,8 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.ParseException;
-import java.util.Collections;
+import com.proj3ct.perfectstranger.R;
 
 public class profileSettingActivity extends AppCompatActivity{
     ImageView col_red,col_org,col_yel,col_grn,col_blu,col_pur,col_blk,col_wht,profile_f1,profile_f2,profile_f3,profile_f4,profile_f5,profile_f6,profile_f7,profile_f8,image_profile;
@@ -41,17 +28,21 @@ public class profileSettingActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_setting);
         profile = new Profile();
-        nowChanging=-1;
+        nowChanging = -1;
         initViews();
 
         but_done.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+            Intent intent = new Intent();
+            intent.putExtra("vectorType", profile.vectorType);
+            intent.putExtra("backgroundColor", profile.bg);
+            intent.putExtra("outlineColor", profile.outline);
+            intent.putExtra("vectorColor", profile.vector);
+            setResult(RESULT_OK, intent);
+            finish();
             }
         });
-
-
     }
 
     //버튼 통합관리

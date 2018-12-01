@@ -1,10 +1,13 @@
-package com.proj3ct.perfectstranger;
+package com.proj3ct.perfectstranger.Waiting;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.proj3ct.perfectstranger.Participant;
+import com.proj3ct.perfectstranger.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +33,7 @@ public class waitingRoomAdapter extends RecyclerView.Adapter<waitingRoomViewHold
     @Override
     public void onBindViewHolder(waitingRoomViewHolder holder, int position) {
         if(participants.size()>0){
-            String name = participants.get(position).name;
+            String name = participants.get(position).getName();
             holder.text_name.setText(name);
             holder.setBackgoundColor(clicked.get(position));
         }

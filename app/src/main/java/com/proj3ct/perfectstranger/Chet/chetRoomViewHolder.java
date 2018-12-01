@@ -1,10 +1,12 @@
-package com.proj3ct.perfectstranger;
+package com.proj3ct.perfectstranger.Chet;
 
 import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.proj3ct.perfectstranger.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

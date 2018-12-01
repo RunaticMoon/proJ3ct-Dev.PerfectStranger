@@ -1,4 +1,4 @@
-package com.proj3ct.perfectstranger;
+package com.proj3ct.perfectstranger.Rule;
 /**
  * Created by Administrator on 2018-11-14.
  */

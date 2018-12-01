@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#33000000"
-    tools:context="com.proj3ct.perfectstranger.chetRoom">
+    tools:context="com.proj3ct.perfectstranger.Chet.chetRoom">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/alarm"

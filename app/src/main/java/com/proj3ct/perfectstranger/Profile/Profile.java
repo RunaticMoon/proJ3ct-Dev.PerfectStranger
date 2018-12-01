@@ -1,4 +1,4 @@
-package com.proj3ct.perfectstranger;
+package com.proj3ct.perfectstranger.Profile;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,6 +9,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Log;
 import android.widget.ImageView;
+
+import com.proj3ct.perfectstranger.R;
 
 /**
  * Created by Administrator on 2018-11-19.

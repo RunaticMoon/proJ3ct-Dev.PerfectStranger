@@ -1,6 +1,4 @@
-package com.proj3ct.perfectstranger;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+package com.proj3ct.perfectstranger.Rule;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -11,6 +9,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.proj3ct.perfectstranger.R;
+
 /**
  * Created by Administrator on 2018-11-14.
  */

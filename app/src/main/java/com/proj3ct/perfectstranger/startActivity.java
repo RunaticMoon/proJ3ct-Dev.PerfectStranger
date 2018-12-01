@@ -5,13 +5,17 @@ import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.AutoTransition;
@@ -28,20 +32,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
 import com.proj3ct.perfectstranger.Firebase.KakaoLink;
+import com.proj3ct.perfectstranger.Chet.chetRoom;
+import com.proj3ct.perfectstranger.Profile.profileSettingActivity;
 
 import java.util.Set;
 
 public class startActivity extends AppCompatActivity {
-
     // animator property
     private final long FINISH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
 
-    //firebase
+    // firebase
+    private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseDB firebaseDB = new FirebaseDB();
     private String roomKey;
+    private User user = new User();
+
     // KakaoLink
     private KakaoLink kakaoLink = new KakaoLink();
     private boolean byLink = false;
@@ -49,6 +60,9 @@ public class startActivity extends AppCompatActivity {
     // notification
     private  Boolean isPermissionAllowe;
     private Participant participant = new Participant();
+
+    // SharedPreferences
+    private SharedPreferences pref;
 
     // View component
     private TextView text_title;
@@ -58,10 +72,8 @@ public class startActivity extends AppCompatActivity {
     private EditText edit_name;
     private Button but_chetRoom;
     private ImageView but_setprofile;
-    private  Animation move_left;
+    private Animation move_left;
     private static final int MY_PERMISSION_STORAGE = 1111;
-
-
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
@@ -69,9 +81,7 @@ public class startActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-
         // view 설정
-
         but_chetRoom = (Button)findViewById(R.id.but_room);
         text_title = (TextView)findViewById(R.id.text_title);
         bg_start = (ConstraintLayout)findViewById(R.id.bg_start);
@@ -125,27 +135,69 @@ public class startActivity extends AppCompatActivity {
 
         Log.e("[hash]",kakaoLink.getKeyHash(getApplicationContext()));
 
+        // firebase analytics
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+        // [분석] : 어플이 켜진것을 분석
+        Bundle bundle = new Bundle();
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
 
         //---------------------------------------------------------------------------------------------------------------------------------------
 
+        // SharedPreferences에 룸키가 있는가?
+        roomKey = SharedPref.getRoomKey(this);
+        if(roomKey != null) {
+            Log.e("[Shared roomKey]", roomKey);
+            user = SharedPref.getUser(this);
+            edit_name.setText(user.getName());
+            user.setProfile(but_setprofile, this);
+        }
+        else {
+            Log.e("[Shared roomKey]", "null");
+        }
+
         // 링크를 타고 들어왔는가?
-        roomKey = kakaoLink.checkLink(getIntent());
+        final String tempKey = kakaoLink.checkLink(getIntent());
         Log.e("[roomKey]", "카카오톡 링크 확인");
+
+        if(roomKey != null && tempKey != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("방 입장")
+                    .setMessage("링크로 들어온 방으로 입장하시겠습니까?")
+                    .setIcon(android.R.drawable.ic_menu_save)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            // 확인시 처리 로직
+                            if(roomKey != tempKey) {
+                                firebaseDB.exitRoom(roomKey);
+                            }
+                            roomKey = tempKey;
+                        }})
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            // 취소시 처리 로직
+
+                    }});
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
         if (roomKey != null) {
             byLink = true;
             but_chetRoom.setText("게임입장");
             Log.e("[roomKey]", roomKey);
+
+            // SharedPreference에 저장
+            SharedPref.setPref(this, roomKey, user);
         } else {
             Log.e("[roomKey]", "roomKey is null");
         }
-
 
         but_setprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(startActivity.this, profileSettingActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -186,14 +238,30 @@ public class startActivity extends AppCompatActivity {
                     // ## 링크를 타고 들어오면 byLink = true
                     // 링크를 타고 들어온상태면 초대된방의 roomkey를 가지고 있는 상태
                     // intent에 roomkey 넣어서 액티비티 이동
+
+                    // [분석] : 어떤 룸키로 들어오는지 분석
+                    Bundle bundle = new Bundle();
+                    bundle.putString(FirebaseAnalytics.Param.GROUP_ID, roomKey);
+                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.JOIN_GROUP, bundle);
+
                     if (byLink == false) {
                         delayHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 participant.setName(edit_name.getText().toString().trim());
-                                firebaseDB.setParticipant(participant);
+                                // 임시로 participant를 user로 변환해서 set하게 해놓음
+                                user = new User(participant.getName());
+                                firebaseDB.setUser(user);
                                 firebaseDB.createNewRoom();
+                                firebaseDB.addUser(user);
                                 roomKey = firebaseDB.getRoomKey();
+
+                                byLink = true;
+                                but_chetRoom.setText("게임입장");
+
+                                // SharedPreference에 저장
+                                SharedPref.setPref(getApplicationContext(), roomKey, user);
+
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
                                 intent.putExtra("roomkey", roomKey);
                                 intent.putExtra("participant", participant);
@@ -215,6 +283,23 @@ public class startActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            switch(requestCode) {
+                // profile setting
+                case 1:
+                    user.setVectorType(data.getIntExtra("vectorType", 1));
+                    user.setBackgroundColor(data.getIntExtra("backgroundColor", Color.WHITE));
+                    user.setOutlineColor(data.getIntExtra("outlineColor", Color.YELLOW));
+                    user.setVectorColor(data.getIntExtra("vectorColor", Color.BLACK));
+                    user.setProfile(but_setprofile, getApplicationContext());
+                    SharedPref.updateUser(getApplicationContext(), user);
+                    break;
+            }
+        }
     }
 
     // 뒤로가기
