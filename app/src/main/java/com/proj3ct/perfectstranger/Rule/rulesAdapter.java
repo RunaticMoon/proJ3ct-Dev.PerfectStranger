@@ -16,12 +16,17 @@ import java.util.Vector;
  * Created by Administrator on 2018-11-14.
  */
 public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implements rulesViewHolder.OnListItemClickListener{
-    List<Rule> rules = new ArrayList<>();
+    Vector<Rule> rules = new Vector<>();
     Vector<Boolean> editing = new Vector<>();
     boolean newRule=false;
     ViewGroup con;
+
+    public rulesAdapter() {
+    }
+
     @NonNull
     @Override
+
     public rulesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v;
         con=parent;
@@ -56,6 +61,7 @@ public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implemen
         }
         Toast.makeText(con.getContext(),"선택된 규칙이 없습니다",Toast.LENGTH_SHORT).show();
     }
+
 
     public List<Rule> getRules() {
         return this.rules;

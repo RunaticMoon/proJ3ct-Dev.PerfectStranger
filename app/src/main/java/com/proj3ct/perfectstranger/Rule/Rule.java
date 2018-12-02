@@ -5,15 +5,40 @@ package com.proj3ct.perfectstranger.Rule;
 /**
  * ruleType=1 : n번째 메세지 온 사람 벌칙, detail_i
  * ruleType=2 : 연속으로 n번 온 사람 벌칙, detail_i
- * ruleType=3 : s에게 연락 온 사람 벌칙,detail_s
- * ruleType=4 : 금지어 포함 메세지 벌칙, detail_s
- * ruleType=5 : n분동안 연락 안 온사람 벌칙, detail_i
- * ruleType=6 : 일정 앱 알림 시 벌칙, detail_s
+ * ruleType=3 : 금지어 포함 메세지 벌칙, detail_s
+ * ruleType=4 : n분동안 연락 안 온사람 벌칙, detail_i
+ * ruleType=5 : 일정 앱 알림 시 벌칙, detail_s
  */
 public class Rule {
     int ruleType;
     int detail_i;
     String detail_s;
+
+    public void setRuleType(int ruleType) {
+        this.ruleType = ruleType;
+    }
+
+    public void setDetail_i(int detail_i) {
+        this.detail_i = detail_i;
+    }
+
+    public void setDetail_s(String detail_s) {
+        this.detail_s = detail_s;
+    }
+
+    public int getRuleType() {
+        return ruleType;
+    }
+
+    public int getDetail_i() {
+        return detail_i;
+    }
+
+    public String getDetail_s() {
+        return detail_s;
+    }
+
+
     String[] apps={"카카오톡","페이스북","인스타그램","유튜브","비트윈","메세지","전화"};
     public Rule() { }
     public Rule(int ruleType, int detail_i) {
@@ -28,18 +53,6 @@ public class Rule {
         detail_i++;
         if(detail_i>=7) detail_i=0;
         detail_s=apps[detail_i];
-    }
-
-    public int getRuleType() {
-        return ruleType;
-    }
-
-    public int getDetail_i() {
-        return detail_i;
-    }
-
-    public String getDetail_s() {
-        return detail_s;
     }
 
 }

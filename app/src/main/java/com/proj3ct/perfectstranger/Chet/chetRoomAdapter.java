@@ -17,6 +17,7 @@ import java.util.Vector;
 
 public class chetRoomAdapter extends RecyclerView.Adapter<chetRoomViewHolder> {
     Vector<Boolean> me = new Vector<>();
+    Vector<Boolean> wrong = new Vector<>();
     List<aChet> chet= new ArrayList<>();
     private boolean BottomReached;
     @Override
@@ -33,7 +34,7 @@ public class chetRoomAdapter extends RecyclerView.Adapter<chetRoomViewHolder> {
     @Override
     public void onBindViewHolder(chetRoomViewHolder holder, int position) {
         if(chet.size()>0){
-            holder.setInfo(chet.get(position));
+            holder.setInfo(chet.get(position),wrong.get(position),me.get(position));
         }
         if(position==chet.size()-1){
             BottomReached=true;
@@ -49,9 +50,10 @@ public class chetRoomAdapter extends RecyclerView.Adapter<chetRoomViewHolder> {
         else return 0;
     }
 
-    public void add(aChet chet, boolean me){
+    public void add(aChet chet, boolean me, boolean wrong){
         this.chet.add(chet);
         this.me.add(me);
+        this.wrong.add(wrong);
         notifyDataSetChanged();
     }
 

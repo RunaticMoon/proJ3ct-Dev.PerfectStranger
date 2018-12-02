@@ -9,7 +9,7 @@
     android:paddingTop="2dp">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout2"
+        android:id="@+id/listview_chet_bg"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
@@ -99,7 +99,7 @@
         android:text="12:00"
         android:textColor="#D3D3D3"
         android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="@+id/constraintLayout2"
+        app:layout_constraintEnd_toEndOf="@+id/listview_chet_bg"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/text_name"
         app:layout_constraintTop_toTopOf="@+id/text_name" />

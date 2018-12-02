@@ -5,7 +5,7 @@ package com.proj3ct.perfectstranger.Chet;
  */
 
 public class aChet {
-    private String userName;
+    private String userName, userKey;
     private String appName, mainText, mainTitle;
     private Long timeStamp;
 
@@ -48,5 +48,13 @@ public class aChet {
 
     public void setTimeStamp(Long timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public String getUserKey() {
+        return userKey;
+    }
+
+    public void setUserKey(String userKey) {
+        this.userKey = userKey;
     }
 }

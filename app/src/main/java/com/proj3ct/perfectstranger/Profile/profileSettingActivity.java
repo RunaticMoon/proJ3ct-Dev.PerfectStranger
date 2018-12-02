@@ -1,6 +1,7 @@
 package com.proj3ct.perfectstranger.Profile;
 
 import android.content.Intent;
+
 import android.graphics.Color;
 import android.graphics.LightingColorFilter;
 import android.graphics.Typeface;

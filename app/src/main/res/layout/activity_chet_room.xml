@@ -7,15 +7,33 @@
     android:background="#33000000"
     tools:context="com.proj3ct.perfectstranger.Chet.chetRoom">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/listview_chat"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:fadeScrollbars="false"
+        android:scrollbarSize="5dp"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbarThumbVertical="@android:color/darker_gray"
+        android:scrollbars="vertical"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll"
+        app:layout_constraintBottom_toTopOf="@+id/layout_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_top" />
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/alarm"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/redrectangle"
-        app:layout_constraintBottom_toTopOf="@+id/but_newMessage"
+        app:layout_constraintBottom_toBottomOf="@+id/listview_chat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_top">
+        app:layout_constraintTop_toTopOf="@+id/listview_chat">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/alarm_layout"
@@ -95,24 +113,6 @@
         </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/listview_chat"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:scrollbars="vertical"
-        android:fadeScrollbars="false"
-        android:scrollbarThumbVertical="@android:color/darker_gray"
-        android:scrollbarSize="5dp"
-        android:scrollbarStyle="outsideOverlay"
-        android:transcriptMode="alwaysScroll"
-        android:stackFromBottom="true"
-        app:layout_constraintBottom_toTopOf="@+id/layout_bottom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_top" />
-
     <LinearLayout
         android:id="@+id/layout_bottom"
         android:layout_width="0dp"
@@ -166,37 +166,49 @@
             android:id="@+id/btn_setNoti"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
             android:layout_marginEnd="5dp"
             android:text="set"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_startService"
-            tools:layout_editor_absoluteY="0dp" />
+            app:layout_constraintStart_toEndOf="@+id/but_back"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btn_startService"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:text="On"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_stopService"
-            tools:layout_editor_absoluteY="0dp" />
+            app:layout_constraintStart_toEndOf="@+id/btn_setNoti"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btn_stopService"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
             android:layout_marginEnd="5dp"
             android:text="OFF"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_checkStatus"
-            tools:layout_editor_absoluteY="0dp" />
+            app:layout_constraintStart_toEndOf="@+id/btn_startService"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btn_checkStatus"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
             android:layout_marginEnd="5dp"
             android:text="상태확인"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="0dp" />
+            app:layout_constraintStart_toEndOf="@+id/btn_stopService"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 

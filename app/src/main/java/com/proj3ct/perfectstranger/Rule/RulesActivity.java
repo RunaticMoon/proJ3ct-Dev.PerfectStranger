@@ -34,6 +34,7 @@ public class RulesActivity extends AppCompatActivity {
         firebaseDB.setList_rule(list_rules, this);
         firebaseDB.enterRoom(roomKey);
 
+
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getApplicationContext(),new LinearLayoutManager(this).getOrientation());
         list_rules.addItemDecoration(dividerItemDecoration);
         but_del.setOnClickListener(new View.OnClickListener() {
@@ -46,7 +47,10 @@ public class RulesActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
         firebaseDB.setRule();
+
+
         super.onBackPressed();
     }
 }
