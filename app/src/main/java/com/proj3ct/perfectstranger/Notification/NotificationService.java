@@ -18,6 +18,7 @@ import android.util.Log;
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class NotificationService extends NotificationListenerService {
     Context context;
+
     private boolean On = true;
 
     private static final String KAKAO = "com.kakao.talk";
@@ -30,6 +31,7 @@ public class NotificationService extends NotificationListenerService {
     public void onCreate() {
         super.onCreate();
         Log.e("NOTIFICATION_LISTENER_", "onCreate");
+
         context = getApplicationContext();
     }
 
@@ -123,7 +125,13 @@ public class NotificationService extends NotificationListenerService {
         return intent;
     }
 
+    void setOn(boolean on){
+        this.On = on;
+    }
 
+    Boolean getOn(){
+        return  this.On;
+    }
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
         Log.i("Msg", "Notification Removed");

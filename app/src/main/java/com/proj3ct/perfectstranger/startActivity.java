@@ -62,6 +62,8 @@ public class startActivity extends AppCompatActivity {
     private boolean byLink = false;
     private boolean fromLink = false;
 
+    private Boolean newGame = false;
+
     // notification
     private Boolean isPermissionAllowe;
     private Participant participant = new Participant();
@@ -156,6 +158,7 @@ public class startActivity extends AppCompatActivity {
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
                                 intent.putExtra("roomKey", roomKey);
                                 intent.putExtra("userKey", userKey);
+                                intent.putExtra("newGame", newGame);
                                 intent.putExtra("participant", participant);
                                 startActivity(intent);
                                 finish();
@@ -213,6 +216,7 @@ public class startActivity extends AppCompatActivity {
                                     Intent intent = new Intent(startActivity.this, chetRoom.class);
                                     intent.putExtra("roomKey", roomKey);
                                     intent.putExtra("userKey", userKey);
+                                    intent.putExtra("newGame", newGame);
                                     intent.putExtra("participant", participant);
                                     startActivity(intent);
                                     finish();
@@ -246,6 +250,7 @@ public class startActivity extends AppCompatActivity {
                                     intent.putExtra("roomKey", roomKey);
                                     intent.putExtra("userKey", userKey);
                                     intent.putExtra("participant", participant);
+                                    intent.putExtra("newGame", newGame);
                                     startActivity(intent);
                                     Toast.makeText(startActivity.this,"참여중인 방으로 입장합니다",Toast.LENGTH_SHORT).show();
                                     finish();
@@ -370,9 +375,11 @@ public class startActivity extends AppCompatActivity {
                                 SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
 
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
+                                newGame = true;
                                 intent.putExtra("roomKey", roomKey);
                                 intent.putExtra("userKey", userKey);
                                 intent.putExtra("participant", participant);
+                                intent.putExtra("newGame", newGame);
                                 startActivity(intent);
                                 finish();
                             }
@@ -398,8 +405,11 @@ public class startActivity extends AppCompatActivity {
                                 SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
 
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
+                                newGame = true;
+                                intent.putExtra("newGame",newGame);
                                 intent.putExtra("roomKey", roomKey);
                                 intent.putExtra("userKey", userKey);
+                                intent.putExtra("newGame", newGame);
                                 intent.putExtra("participant", participant);
                                 startActivity(intent);
 

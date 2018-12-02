@@ -17,6 +17,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -37,11 +38,11 @@ import com.proj3ct.perfectstranger.Waiting.waitingRoom;
 public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmListener {
     private String roomKey;
     private FirebaseDB firebaseDB = new FirebaseDB();
-    private      String userKey;
+    private String userKey;
     // View component
     private RecyclerView list_chet;
     private Button but_back, btn_startService, btn_stopService, btn_checkStatus, btn_setNoti;
-    ;
+    private Boolean newGame = false;
     private TextView but_friends, but_rules, but_newMessage, alarm_name, alarm_rule;
     private ImageView image_siren;
     private ConstraintLayout alarm_layout, alarm;
@@ -60,7 +61,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
             String mainTitle = intent.getStringExtra("mainTitle");
             String mainText = intent.getStringExtra("mainText");
             String appName = intent.getStringExtra("appName");
-            firebaseDB.sendMessage(participant.getName(),userKey, appName, mainTitle, mainText);
+            firebaseDB.sendMessage(participant.getName(), userKey, appName, mainTitle, mainText);
         }
     };
 
@@ -70,7 +71,6 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chet_room);
         Intent intent = getIntent();
@@ -110,17 +110,19 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         // callback 함수
         // LocalBroadcastManager( Local를 사용한 이유 : 다른앱의 서비스의 방해를 방지 )
         // 값을 받아오면 onNotice함수를 실행( "Msg"태그의 intent를 함께 전달 )
-        LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("Msg"));
-
-        // intent에 roomKey 저장되어 있음.
 
         if (intent != null) {
             roomKey = intent.getStringExtra("roomKey");
             userKey = intent.getStringExtra("userKey");
+            newGame = intent.getBooleanExtra("newGame",false);
             participant = (Participant) intent.getSerializableExtra("participant");
             firebaseDB.enterRoom(roomKey);
             firebaseDB.setUser(new User(participant.getName()));
             firebaseDB.setMyKey(userKey);
+            Log.e("!!!newGame",Boolean.toString(newGame));
+            if (newGame) {
+                LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("Msg"));
+            }
         }
 
         but_back.setOnClickListener(new View.OnClickListener() {
