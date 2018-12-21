@@ -1,7 +1,9 @@
 package com.proj3ct.perfectstranger.Profile;
 
+import android.app.Application;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.content.Intent;
-
 import android.graphics.Color;
 import android.graphics.LightingColorFilter;
 import android.graphics.Typeface;
@@ -16,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.proj3ct.perfectstranger.AppVariables;
 import com.proj3ct.perfectstranger.R;
 
 public class profileSettingActivity extends AppCompatActivity{
@@ -28,6 +31,10 @@ public class profileSettingActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_setting);
+        nowChanging=-1;
+        appVariables = (AppVariables)getApplication();
+        profile = appVariables.getMyProfile();
+
         profile = new Profile();
         nowChanging = -1;
 
@@ -46,13 +53,8 @@ public class profileSettingActivity extends AppCompatActivity{
         but_done.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.putExtra("vectorType", profile.vectorType);
-            intent.putExtra("backgroundColor", profile.bg);
-            intent.putExtra("outlineColor", profile.outline);
-            intent.putExtra("vectorColor", profile.vector);
-            setResult(RESULT_OK, intent);
-            finish();
+                appVariables.setMyProfile(profile);
+                finish();
             }
         });
     }

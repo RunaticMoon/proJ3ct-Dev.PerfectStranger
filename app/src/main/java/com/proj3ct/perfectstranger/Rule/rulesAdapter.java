@@ -21,7 +21,10 @@ public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implemen
     boolean newRule=false;
     ViewGroup con;
 
-    public rulesAdapter() {
+    public rulesAdapter(Vector<Rule> v) {
+        //rules = v;
+        rules= new Vector<Rule>();
+        //for(int i=0;i<v.size();i++)editing.add(false);
     }
 
     @NonNull
@@ -63,9 +66,6 @@ public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implemen
     }
 
 
-    public List<Rule> getRules() {
-        return this.rules;
-    }
 
     @Override
     public int getItemViewType(int position) {

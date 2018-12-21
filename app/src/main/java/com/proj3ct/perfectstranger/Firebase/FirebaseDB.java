@@ -40,7 +40,7 @@ public class FirebaseDB {
     private User user;
     private String myKey;
     private Boolean isMe = false;
-
+    private AppVariables appVariables;
     private String userName;
 
     // chet Listview
@@ -78,7 +78,9 @@ public class FirebaseDB {
         return roomRef.getKey();
     }
 
-
+    public void setAppVariables(AppVariables av){
+        appVariables=av;
+    }
     public String getUserKey() {
         if(myRef == null)
             return null;
@@ -99,7 +101,7 @@ public class FirebaseDB {
         return this.chetAdapter;
     }
 
-
+    // Set Listview
     public void setList_chet(RecyclerView list_chet, Context context,TextView butNewMessage){
         this.list_chet = list_chet;
         Log.e("chetRoomAdapter", "생성");
@@ -165,16 +167,18 @@ public class FirebaseDB {
         setRef.setValue(setting);
     }
 
+
     public void setRule() {
         ruleRef.removeValue();
         ruleRef = roomRef.child("ruleList");
-        List<Rule> rules = ruleAdapter.getRules();
+        Vector<Rule> rules = appVariables.getRules();
 
         for(int i = 0; i < rules.size(); i++) {
-            Rule rule = rules.get(i);
+           Rule rule = rules.get(i);
             addRule(rule.getRuleType(), rule.getDetail_i(), rule.getDetail_s());
         }
     }
+
 
     // User Function
     public void setUserKey(String userKey) {
@@ -330,6 +334,51 @@ public class FirebaseDB {
         });
     }
 
+    public boolean ruleChecker(aChet chet){
+        Vector<Rule> rules = appVariables.getRules();
+        boolean detected=false;
+        /**
+         * ruleType=1 : n번째 메세지 온 사람 벌칙, detail_i
+         * ruleType=2 : 연속으로 n번 온 사람 벌칙, detail_i
+         * ruleType=3 : 금지어 포함 메세지 벌칙, detail_s
+         * ruleType=4 : n분동안 연락 안 온사람 벌칙, detail_i
+         * ruleType=5 : 일정 앱 알림 시 벌칙, detail_s
+         */
+        if(chet!=null&& chet.getMainText()!=null)
+        {
+            for(Rule rule:rules){
+                if(rule.getRuleType()==1 && chetAdapter.getItemCount()%rule.getDetail_i()==0){
+                    alarmListener.onAlarm(chet.getUserName(),rule.getDetail_i()+"번째 메세지 온 사람 벌칙");
+                    detected=true;
+                    break;
+                }else if(rule.getRuleType()==2 && lastusercount%rule.getDetail_i()==0)
+                {
+                    alarmListener.onAlarm(chet.getUserName(),"연속으로 "+rule.getDetail_i()+"번 온 사람 벌칙");
+                    if(lastusercount==-1) lastusercount=0;
+                    detected=true;
+                    break;
+                }else if(rule.getRuleType()==3 && chet.getMainText().contains(rule.getDetail_s()))
+                {
+                    alarmListener.onAlarm(chet.getUserName(),"\""+rule.getDetail_s()+"\" 포함 메세지 벌칙");
+                    detected=true;
+                    break;
+                }else if(rule.getRuleType()==4)
+                {
+
+                }else if(rule.getRuleType()==5&&chet.getAppName().contains(rule.getDetail_s()))
+                {
+                    alarmListener.onAlarm(chet.getUserName(),rule.getDetail_s()+" 알림 시 벌칙");
+                    detected=true;
+                    break;
+                }
+            }
+        }
+        return detected;
+    }
+
+   // public Participant getParticipant() {
+     //   return particpiant;
+    //}
 
     private void setUserListener() {
         userRef.addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.

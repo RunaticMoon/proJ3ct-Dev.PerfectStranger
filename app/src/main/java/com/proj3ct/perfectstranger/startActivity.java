@@ -38,7 +38,8 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.proj3ct.perfectstranger.Chet.chetRoom;
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
 import com.proj3ct.perfectstranger.Firebase.KakaoLink;
-import com.proj3ct.perfectstranger.Notification.NotificationService;
+import com.proj3ct.perfectstranger.Chet.chetRoom;
+import com.proj3ct.perfectstranger.Profile.Profile;
 import com.proj3ct.perfectstranger.Profile.profileSettingActivity;
 import com.proj3ct.perfectstranger.Rule.Rule;
 
@@ -79,8 +80,8 @@ public class startActivity extends AppCompatActivity {
     private EditText edit_name;
     private Button but_chetRoom;
     private ImageView but_setprofile;
-
-    private Animation move_left;
+    private  Animation move_left;
+    private AppVariables appVariables;
     private static final int MY_PERMISSION_STORAGE = 1111;
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -421,24 +422,6 @@ public class startActivity extends AppCompatActivity {
         });
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                // profile setting
-                case 1:
-                    user.setVectorType(data.getIntExtra("vectorType", 1));
-                    user.setBackgroundColor(data.getIntExtra("backgroundColor", Color.WHITE));
-                    user.setOutlineColor(data.getIntExtra("outlineColor", Color.YELLOW));
-                    user.setVectorColor(data.getIntExtra("vectorColor", Color.BLACK));
-                    user.setProfile(but_setprofile, getApplicationContext());
-                    SharedPref.updateUser(getApplicationContext(), user);
-                    break;
-            }
-        }
-    }
-
     private void setAnimations() {
         TextView under_light2 = (TextView) findViewById(R.id.under_light2);
         ImageView under_light1 = (ImageView) findViewById(R.id.under_light);
@@ -469,10 +452,10 @@ public class startActivity extends AppCompatActivity {
                 animatorSet3.start();
             }
         });
-
     }
 
     // 뒤로가기
+
     @Override
     public void onBackPressed() {
         long tempTime = System.currentTimeMillis();
