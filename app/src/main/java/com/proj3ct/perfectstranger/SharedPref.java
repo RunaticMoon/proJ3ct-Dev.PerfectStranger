@@ -49,12 +49,4 @@ public class SharedPref {
         editor.putString("user", strUser);
         editor.apply();
     }
-
-    public static void clearPref(Context context){
-        SharedPreferences pref = context.getSharedPreferences("room", context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = pref.edit();
-        editor.clear();
-        editor.apply();
-    }
 }

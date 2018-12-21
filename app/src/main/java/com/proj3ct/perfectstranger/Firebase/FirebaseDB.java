@@ -15,11 +15,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.proj3ct.perfectstranger.AppVariables;
+import com.proj3ct.perfectstranger.Participant;
+import com.proj3ct.perfectstranger.Rule.Rule;
 import com.proj3ct.perfectstranger.Chet.aChet;
 import com.proj3ct.perfectstranger.Chet.chetRoomAdapter;
-import com.proj3ct.perfectstranger.Rule.Rule;
 import com.proj3ct.perfectstranger.Rule.rulesAdapter;
-import com.proj3ct.perfectstranger.SharedPref;
 import com.proj3ct.perfectstranger.User;
 import com.proj3ct.perfectstranger.Waiting.waitingRoomAdapter;
 
@@ -27,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class FirebaseDB {
     // Firebase
@@ -38,7 +41,6 @@ public class FirebaseDB {
 
     // User
     private User user;
-    private String myKey;
     private Boolean isMe = false;
     private AppVariables appVariables;
     private String userName;
@@ -113,10 +115,10 @@ public class FirebaseDB {
         this.butNewMessage = butNewMessage;
     }
 
-    public void setList_rule(RecyclerView list_rule, Context context){
+    public void setList_rule(RecyclerView list_rule, Context context,rulesAdapter r){
         this.list_rule = list_rule;
         Log.e("ruleAdapter", "생성");
-        ruleAdapter = new rulesAdapter();
+        ruleAdapter = r;
         ruleLayoutManager = new LinearLayoutManager(context);
 
         this.list_rule.setAdapter(ruleAdapter);
@@ -134,15 +136,13 @@ public class FirebaseDB {
     }
 
     // Firebase Function
-    public void sendMessage(String userName, String userKey, String appName, String mainTitle, String mainText) {
+    public void sendMessage(String userName,String appName, String mainTitle, String mainText) {
         Map<String, Object> welcomMessage = new HashMap<>();
         welcomMessage.put("userName", userName);
         welcomMessage.put("mainTitle", mainTitle);
         welcomMessage.put("mainText", mainText);
         welcomMessage.put("appName", appName);
-        welcomMessage.put("userKey", userKey);
         welcomMessage.put("timeStamp", ServerValue.TIMESTAMP);
-        Log.e("!!!sendMessage" , userKey);
 
         chetRef.push().setValue(welcomMessage);
     }
@@ -291,7 +291,7 @@ public class FirebaseDB {
                     Log.e("[LOG] listener", dataSnapshot.toString());
                     aChet achet = dataSnapshot.getValue(aChet.class);
                     Log.e("[LOG] message", achet.toString());
-                    if(achet.getUserKey().equals(getMyKey())){
+                    if(achet.getUserName() == user.getName()){
                         isMe = true;
                     }else{
                         isMe = false;
@@ -306,14 +306,14 @@ public class FirebaseDB {
                             lastusercount=0;
                         }
 
-
+                     boolean wrong_rule=ruleChecker(achet);
                     if((!chetAdapter.isBottomReached())&&chetAdapter.getItemCount()>0)
                     {
-                        chetAdapter.add(achet, isMe,false);
+                        chetAdapter.add(achet, isMe,wrong_rule);
                         butNewMessage.setVisibility(View.VISIBLE);
                     }else
                     {
-                        chetAdapter.add(achet, isMe,false);
+                        chetAdapter.add(achet, isMe,wrong_rule);
                         list_chet.smoothScrollToPosition(chetAdapter.getItemCount()-1);
                         butNewMessage.setVisibility(View.GONE);
                     }
@@ -404,66 +404,9 @@ public class FirebaseDB {
             public void onCancelled(DatabaseError databaseError) { }
         });
     }
-//    public boolean ruleChecker(aChet chet){
-//        List<Rule> rules;
-//        if(ruleAdapter != null) {
-//            rules  = ruleAdapter.getRules();
-//            return false;
-//
-//        boolean detected=false;
-//        /**
-//         * ruleType=1 : n번째 메세지 온 사람 벌칙, detail_i
-//         * ruleType=2 : 연속으로 n번 온 사람 벌칙, detail_i
-//         * ruleType=3 : 금지어 포함 메세지 벌칙, detail_s
-//         * ruleType=4 : n분동안 연락 안 온사람 벌칙, detail_i
-//         * ruleType=5 : 일정 앱 알림 시 벌칙, detail_s
-//         */
-//        if(chet!=null&& chet.getMainText()!=null)
-//        {
-//            for(Rule rule:rules){
-//                if(rule.getRuleType()==1 && chetAdapter.getItemCount()%rule.getDetail_i()==0){
-////                    alarmListener.onAlarm(chet.getUserName(),rule.getDetail_i()+"번째 메세지 온 사람 벌칙");
-//                    detected=true;
-//                    break;
-//                }else if(rule.getRuleType()==2 && lastusercount%rule.getDetail_i()==0)
-//                {
-////                    alarmListener.onAlarm(chet.getUserName(),"연속으로 "+rule.getDetail_i()+"번 온 사람 벌칙");
-//                    if(lastusercount==-1) lastusercount=0;
-//                    detected=true;
-//                    break;
-//                }else if(rule.getRuleType()==3 && chet.getMainText().contains(rule.getDetail_s()))
-//                {
-//                    alarmListener.onAlarm(chet.getUserName(),"\""+rule.getDetail_s()+"\" 포함 메세지 벌칙");
-//                    detected=true;
-//                    break;
-//                }else if(rule.getRuleType()==4)
-//                {
-//
-//                }else if(rule.getRuleType()==5&&chet.getAppName().contains(rule.getDetail_s()))
-//                {
-//                    alarmListener.onAlarm(chet.getUserName(),rule.getDetail_s()+" 알림 시 벌칙");
-//                    detected=true;
-//                    break;
-//                }
-//            }
-//        }
-//
-//        return detected;
-//
-//    }
-
     public void setOnAlarmListener(FirebaseDB.onAlarmListener alarmListener){
         this.alarmListener=alarmListener;
     }
-
-    public String getMyKey() {
-        return myKey;
-    }
-
-    public void setMyKey(String myKey) {
-        this.myKey = myKey;
-    }
-
     public interface onAlarmListener{
         public void onAlarm(String name, String rule);
     }

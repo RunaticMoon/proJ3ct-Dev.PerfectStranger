@@ -64,7 +64,9 @@ public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implemen
         }
         Toast.makeText(con.getContext(),"선택된 규칙이 없습니다",Toast.LENGTH_SHORT).show();
     }
-
+    public Vector<Rule> getRules(){
+        return rules;
+    }
 
 
     @Override

@@ -27,6 +27,7 @@ public class profileSettingActivity extends AppCompatActivity{
     int colors[] = {Color.RED,Color.rgb(255,165,0),Color.YELLOW,Color.GREEN,Color.BLUE,Color.rgb(128,0,128),Color.WHITE, Color.BLACK};
     Profile profile;
     int nowChanging;
+    AppVariables appVariables;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
