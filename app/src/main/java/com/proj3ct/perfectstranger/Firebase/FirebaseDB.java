@@ -314,13 +314,16 @@ public class FirebaseDB {
                     if((!chetAdapter.isBottomReached())&&chetAdapter.getItemCount()>0)
                     {
                         chetAdapter.add(achet, isMe,wrong_rule);
-                        butNewMessage.setVisibility(View.VISIBLE);
+                        if(list_chet != null) {
+                            butNewMessage.setVisibility(View.VISIBLE);
+                        }
                     }else
                     {
                         chetAdapter.add(achet, isMe,wrong_rule);
-                        if(list_chet != null)
-                            list_chet.smoothScrollToPosition(chetAdapter.getItemCount()-1);
-                        butNewMessage.setVisibility(View.GONE);
+                        if(list_chet != null) {
+                            list_chet.smoothScrollToPosition(chetAdapter.getItemCount() - 1);
+                            butNewMessage.setVisibility(View.GONE);
+                        }
                     }
 
                 }
