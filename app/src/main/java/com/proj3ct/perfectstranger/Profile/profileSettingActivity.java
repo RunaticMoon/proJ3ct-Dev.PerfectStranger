@@ -32,7 +32,7 @@ public class profileSettingActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_setting);
-        nowChanging=-1;
+        nowChanging = -1;
         appVariables = (AppVariables)getApplication();
         profile = appVariables.getMyProfile();
 

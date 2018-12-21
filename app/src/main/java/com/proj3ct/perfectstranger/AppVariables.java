@@ -11,6 +11,7 @@ public class AppVariables extends Application {
     Profile myProfile;
     Vector<Rule> rules;
     Vector<Profile> friends;
+    User user;
 
     public Profile getMyProfile() {
         return myProfile;
@@ -32,6 +33,8 @@ public class AppVariables extends Application {
         return friends;
     }
 
+    public User getUser() { return user; }
+
     public void setFriends(Vector<Profile> friends) {
         this.friends = friends;
     }
@@ -41,4 +44,5 @@ public class AppVariables extends Application {
     public void addFriend(Profile p){
         friends.add(p);
     }
+    public void setUser(User user) { this.user = user; }
 }

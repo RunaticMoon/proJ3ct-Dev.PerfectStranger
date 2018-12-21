@@ -6,6 +6,8 @@ import android.widget.ImageView;
 
 import com.proj3ct.perfectstranger.Profile.Profile;
 
+import java.io.Serializable;
+
 public class User {
     private String name;
     private int vectorType, vectorColor, backgroundColor, outlineColor;
@@ -18,7 +20,6 @@ public class User {
         this.vectorColor = Color.BLACK;
         this.backgroundColor = Color.WHITE;
         this.outlineColor = Color.YELLOW;
-
     }
 
     public User(String name, int vectorType, int vectorColor, int backgroundColor, int outlineColor) {
@@ -34,6 +35,13 @@ public class User {
         profile.setVectorType(this.vectorType);
         profile.setColor(this.backgroundColor, this.outlineColor, this.vectorColor);
         profile.setProfile(img, context);
+    }
+
+    public void setWithProfile(Profile profile) {
+        this.vectorType = profile.getVectorType();
+        this.vectorColor = profile.getVector();
+        this.backgroundColor = profile.getOutline();
+        this.outlineColor = profile.getOutline();
     }
 
     public String getName() {

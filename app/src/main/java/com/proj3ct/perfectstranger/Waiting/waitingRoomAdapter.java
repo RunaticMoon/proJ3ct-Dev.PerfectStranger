@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.proj3ct.perfectstranger.Participant;
 import com.proj3ct.perfectstranger.R;
 import com.proj3ct.perfectstranger.User;
 
@@ -19,7 +18,7 @@ import java.util.Vector;
  */
 
 public class waitingRoomAdapter extends RecyclerView.Adapter<waitingRoomViewHolder> implements waitingRoomViewHolder.OnItemClickListener{
-    List<User> users= new ArrayList<>();
+    List<User> users = new ArrayList<>();
     Vector<Boolean> clicked = new Vector<>();
     View con;
     @Override

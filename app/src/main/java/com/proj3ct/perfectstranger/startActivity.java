@@ -63,7 +63,6 @@ public class startActivity extends AppCompatActivity {
 
     // notification
     private  Boolean isPermissionAllowe;
-    private Participant participant = new Participant();
 
     // SharedPreferences
     private SharedPreferences pref;
@@ -239,7 +238,6 @@ public class startActivity extends AppCompatActivity {
                     bundle.putString(FirebaseAnalytics.Param.GROUP_ID, roomKey);
                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.JOIN_GROUP, bundle);
 
-                    participant.setName(edit_name.getText().toString().trim());
                     user.setName(edit_name.getText().toString().trim());
 
                     if (byLink == false) {
@@ -251,6 +249,7 @@ public class startActivity extends AppCompatActivity {
                                 firebaseDB.addUser(user);
                                 roomKey = firebaseDB.getRoomKey();
                                 userKey = firebaseDB.getUserKey();
+                                appVariables.setUser(user);
 
                                 byLink = true;
                                 but_chetRoom.setText("게임입장");
@@ -261,7 +260,6 @@ public class startActivity extends AppCompatActivity {
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
                                 intent.putExtra("roomkey", roomKey);
                                 intent.putExtra("userkey", userKey);
-                                intent.putExtra("participant", participant);
                                 startActivity(intent);
                             }
                         }, 800);
@@ -272,6 +270,7 @@ public class startActivity extends AppCompatActivity {
                                 // 임시로 participant를 user로 변환해서 set하게 해놓음
                                 firebaseDB.setUser(user);
                                 firebaseDB.enterRoom(roomKey);
+                                appVariables.setUser(user);
 
                                 if(fromLink) {
                                     firebaseDB.addUser(user);
@@ -289,7 +288,6 @@ public class startActivity extends AppCompatActivity {
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
                                 intent.putExtra("roomkey", roomKey);
                                 intent.putExtra("userkey", userKey);
-                                intent.putExtra("participant", participant);
                                 startActivity(intent);
                             }
                         }, 800);
@@ -379,11 +377,12 @@ public class startActivity extends AppCompatActivity {
             Profile profile = new Profile();
             appVariables.setMyProfile(profile);
             profile.setProfile(but_setprofile,startActivity.this);
+            user.setWithProfile(profile);
         }else
         {
             Profile profile = appVariables.getMyProfile();
             profile.setProfile(but_setprofile,startActivity.this);
-
+            user.setWithProfile(profile);
         }
 
         super.onResume();

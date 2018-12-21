@@ -17,8 +17,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -30,7 +28,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.proj3ct.perfectstranger.AppVariables;
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
-import com.proj3ct.perfectstranger.Participant;
 import com.proj3ct.perfectstranger.R;
 import com.proj3ct.perfectstranger.Rule.RulesActivity;
 import com.proj3ct.perfectstranger.User;
@@ -62,11 +59,11 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
             String mainTitle = intent.getStringExtra("mainTitle");
             String mainText = intent.getStringExtra("mainText");
             String appName = intent.getStringExtra("appName");
-            firebaseDB.sendMessage(participant.getName(), appName, mainTitle, mainText);
+            firebaseDB.sendMessage(user.getName(), appName, mainTitle, mainText);
         }
     };
 
-    private Participant participant = new Participant();
+    private User user;
 
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -78,6 +75,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         appVariables = (AppVariables)getApplication();
         Intent intent = getIntent();
         firebaseDB.setAppVariables(appVariables);
+        user = appVariables.getUser();
 
         but_back = (Button) findViewById(R.id.but_back);
         but_friends = (TextView) findViewById(R.id.text_friends);
@@ -119,9 +117,8 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         // intent에 roomkey 저장되어 있음.
         if (intent != null) {
             roomkey = intent.getStringExtra("roomkey");
-            participant = (Participant) intent.getSerializableExtra("participant");
             firebaseDB.enterRoom(roomkey);
-            firebaseDB.setUser(new User(participant.getName()));
+            firebaseDB.setUser(user);
         }
 
         but_back.setOnClickListener(new View.OnClickListener() {
