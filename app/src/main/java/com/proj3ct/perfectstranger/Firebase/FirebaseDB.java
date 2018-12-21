@@ -235,7 +235,7 @@ public class FirebaseDB {
 
         setSetting(10);
 
-        addRule(0, 0, "모든 알람 공유하기");
+       // addRule(0, 0, "모든 알람 공유하기");
 
         setMessageListener();
         setRuleListener();
@@ -365,10 +365,11 @@ public class FirebaseDB {
         });
     }
 
+
     // Rule Checker
-    public boolean ruleChecker(aChet chet){
+    public boolean ruleChecker(aChet chet) {
         Vector<Rule> rules = ruleAdapter.getRules();
-        boolean detected=false;
+        boolean detected = false;
         /**
          * ruleType=1 : n번째 메세지 온 사람 벌칙, detail_i
          * ruleType=2 : 연속으로 n번 온 사람 벌칙, detail_i
@@ -376,38 +377,32 @@ public class FirebaseDB {
          * ruleType=4 : n분동안 연락 안 온사람 벌칙, detail_i
          * ruleType=5 : 일정 앱 알림 시 벌칙, detail_s
          */
-        if(chet!=null&& chet.getMainText()!=null)
-        {
-            for(Rule rule:rules){
-                if(rule.getRuleType()==1 && chetAdapter.getItemCount()%rule.getDetail_i()==0){
-                    alarmListener.onAlarm(chet.getUserName(),rule.getDetail_i()+"번째 메세지 온 사람 벌칙");
-                    detected=true;
+        if (chet != null && chet.getMainText() != null) {
+            for (Rule rule : rules) {
+                if (rule.getRuleType() == 1 && chetAdapter.getItemCount() % rule.getDetail_i() == 0) {
+                    alarmListener.onAlarm(chet.getUserName(), rule.getDetail_i() + "번째 메세지 온 사람 벌칙");
+                    detected = true;
                     break;
-                }else if(rule.getRuleType()==2 && lastusercount%rule.getDetail_i()==0)
-                {
-                    alarmListener.onAlarm(chet.getUserName(),"연속으로 "+rule.getDetail_i()+"번 온 사람 벌칙");
-                    if(lastusercount==-1) lastusercount=0;
-                    detected=true;
+                } else if (rule.getRuleType() == 2 && lastusercount % rule.getDetail_i() == 0) {
+                    alarmListener.onAlarm(chet.getUserName(), "연속으로 " + rule.getDetail_i() + "번 온 사람 벌칙");
+                    if (lastusercount == -1) lastusercount = 0;
+                    detected = true;
                     break;
-                }else if(rule.getRuleType()==3 && chet.getMainText().contains(rule.getDetail_s()))
-                {
-                    alarmListener.onAlarm(chet.getUserName(),"\""+rule.getDetail_s()+"\" 포함 메세지 벌칙");
-                    detected=true;
+                } else if (rule.getRuleType() == 3 && chet.getMainText().contains(rule.getDetail_s())) {
+                    alarmListener.onAlarm(chet.getUserName(), "\"" + rule.getDetail_s() + "\" 포함 메세지 벌칙");
+                    detected = true;
                     break;
-                }else if(rule.getRuleType()==4)
-                {
+                } else if (rule.getRuleType() == 4) {
 
-                }else if(rule.getRuleType()==5&&chet.getAppName().contains(rule.getDetail_s()))
-                {
-                    alarmListener.onAlarm(chet.getUserName(),rule.getDetail_s()+" 알림 시 벌칙");
-                    detected=true;
+                } else if (rule.getRuleType() == 5 && chet.getAppName().contains(rule.getDetail_s())) {
+                    alarmListener.onAlarm(chet.getUserName(), rule.getDetail_s() + " 알림 시 벌칙");
+                    detected = true;
                     break;
                 }
             }
         }
         return detected;
     }
-
     public void setOnAlarmListener(FirebaseDB.onAlarmListener alarmListener){
         this.alarmListener=alarmListener;
     }
