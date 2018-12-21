@@ -34,6 +34,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.proj3ct.perfectstranger.Chet.chetRoom;
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
@@ -120,6 +124,9 @@ public class startActivity extends AppCompatActivity {
 
         // getHahs for kakao API
         Log.e("[hash]", kakaoLink.getKeyHash(getApplicationContext()));
+
+        // AdMob
+        AdMob.initialize(this);
 
         // firebase analytics
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -380,6 +387,7 @@ public class startActivity extends AppCompatActivity {
                                 intent.putExtra("userKey", userKey);
                                 intent.putExtra("participant", participant);
                                 intent.putExtra("newGame", newGame);
+                                intent.putExtra("created", true);
                                 startActivity(intent);
                                 finish();
                             }
