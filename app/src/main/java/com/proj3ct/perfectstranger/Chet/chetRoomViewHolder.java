@@ -1,4 +1,4 @@
-package com.proj3ct.perfectstranger;
+package com.proj3ct.perfectstranger.Chet;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.proj3ct.perfectstranger.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

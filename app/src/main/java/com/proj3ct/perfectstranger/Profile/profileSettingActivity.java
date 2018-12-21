@@ -1,24 +1,14 @@
-package com.proj3ct.perfectstranger;
+package com.proj3ct.perfectstranger.Profile;
 
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.VectorDrawable;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,8 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.ParseException;
-import java.util.Collections;
+import com.proj3ct.perfectstranger.AppVariables;
+import com.proj3ct.perfectstranger.R;
 
 public class profileSettingActivity extends AppCompatActivity{
     ImageView col_red,col_org,col_yel,col_grn,col_blu,col_pur,col_blk,col_wht,profile_f1,profile_f2,profile_f3,profile_f4,profile_f5,profile_f6,profile_f7,profile_f8,image_profile;
@@ -45,6 +35,20 @@ public class profileSettingActivity extends AppCompatActivity{
         nowChanging=-1;
         appVariables = (AppVariables)getApplication();
         profile = appVariables.getMyProfile();
+
+        profile = new Profile();
+        nowChanging = -1;
+
+        Intent intent = getIntent();
+        int vectorType = intent.getIntExtra("vectorType", -1);
+        int backgroundColor = intent.getIntExtra("backgroundColor", -1);
+        int outlineColor = intent.getIntExtra("outlineColor", -1);
+        int vectorColor = intent.getIntExtra("vectorColor", -1);
+
+        if(vectorType != -1) {
+            profile.setVectorType(vectorType);
+            profile.setColor(backgroundColor, outlineColor, vectorColor);
+        }
         initViews();
 
         but_done.setOnClickListener(new OnClickListener() {
@@ -54,8 +58,6 @@ public class profileSettingActivity extends AppCompatActivity{
                 finish();
             }
         });
-
-
     }
 
     //버튼 통합관리
@@ -150,7 +152,6 @@ public class profileSettingActivity extends AppCompatActivity{
         profile_f6.setOnClickListener(onClickListener);
         profile_f7.setOnClickListener(onClickListener);
         profile_f8.setOnClickListener(onClickListener);
-
     }
 
     private Drawable getColoredCircle( int SolidColor,int StrokeColor) { //원 색 변경용

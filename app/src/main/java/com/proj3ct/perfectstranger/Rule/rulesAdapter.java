@@ -1,4 +1,4 @@
-package com.proj3ct.perfectstranger;
+package com.proj3ct.perfectstranger.Rule;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.proj3ct.perfectstranger.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +22,9 @@ public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implemen
     ViewGroup con;
 
     public rulesAdapter(Vector<Rule> v) {
-        rules = v;
-        for(int i=0;i<v.size();i++)editing.add(false);
+        //rules = v;
+        rules= new Vector<Rule>();
+        //for(int i=0;i<v.size();i++)editing.add(false);
     }
 
     @NonNull
@@ -43,6 +46,11 @@ public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implemen
         }
         return holder;
     }
+    public void add(Rule rule){
+        rules.add(rule);
+        editing.add(false);
+        notifyDataSetChanged();
+    }
     public void delete(){
         for(int i=0;i<editing.size();i++)
         {
@@ -59,6 +67,7 @@ public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implemen
     public Vector<Rule> getRules(){
         return rules;
     }
+
 
     @Override
     public int getItemViewType(int position) {

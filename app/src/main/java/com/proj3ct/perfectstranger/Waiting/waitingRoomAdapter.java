@@ -1,10 +1,14 @@
-package com.proj3ct.perfectstranger;
+package com.proj3ct.perfectstranger.Waiting;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.proj3ct.perfectstranger.Participant;
+import com.proj3ct.perfectstranger.R;
+import com.proj3ct.perfectstranger.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +19,7 @@ import java.util.Vector;
  */
 
 public class waitingRoomAdapter extends RecyclerView.Adapter<waitingRoomViewHolder> implements waitingRoomViewHolder.OnItemClickListener{
-    List<Participant> participants= new ArrayList<>();
+    List<User> users= new ArrayList<>();
     Vector<Boolean> clicked = new Vector<>();
     View con;
     @Override
@@ -29,14 +33,16 @@ public class waitingRoomAdapter extends RecyclerView.Adapter<waitingRoomViewHold
 
     @Override
     public void onBindViewHolder(waitingRoomViewHolder holder, int position) {
-        if(participants.size()>0){
-            String name = participants.get(position).name;
+        if(users.size()>0){
+            User user = users.get(position);
+            String name = user.getName();
             holder.text_name.setText(name);
+            user.setProfile(holder.image_profile, con.getContext());
             holder.setBackgoundColor(clicked.get(position));
         }
     }
-    public void add(Participant p){
-        participants.add(p);
+    public void add(User user){
+        users.add(user);
         clicked.add(false);
         notifyDataSetChanged();
     }
@@ -45,7 +51,7 @@ public class waitingRoomAdapter extends RecyclerView.Adapter<waitingRoomViewHold
         {
             if(clicked.get(i))
             {
-                participants.remove(i);
+                users.remove(i);
                 clicked.remove(i);
                 notifyDataSetChanged();
                 return;
@@ -53,9 +59,19 @@ public class waitingRoomAdapter extends RecyclerView.Adapter<waitingRoomViewHold
         }
         Toast.makeText(con.getContext(),"선택된 참가자가 없습니다",Toast.LENGTH_SHORT).show();
     }
+    public String getUserName() {
+        for(int i=0;i<clicked.size();i++)
+        {
+            if(clicked.get(i))
+            {
+                return users.get(i).getName();
+            }
+        }
+        return null;
+    }
     @Override
     public int getItemCount() {
-        return participants.size();
+        return users.size();
     }
 
     @Override

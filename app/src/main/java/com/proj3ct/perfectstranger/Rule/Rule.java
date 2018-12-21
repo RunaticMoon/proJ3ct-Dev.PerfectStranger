@@ -1,4 +1,4 @@
-package com.proj3ct.perfectstranger;
+package com.proj3ct.perfectstranger.Rule;
 /**
  * Created by Administrator on 2018-11-14.
  */
@@ -40,6 +40,7 @@ public class Rule {
 
 
     String[] apps={"카카오톡","페이스북","인스타그램","유튜브","비트윈","메세지","전화"};
+    public Rule() { }
     public Rule(int ruleType, int detail_i) {
         this.ruleType = ruleType;
         this.detail_i = detail_i;
@@ -53,4 +54,5 @@ public class Rule {
         if(detail_i>=7) detail_i=0;
         detail_s=apps[detail_i];
     }
+
 }

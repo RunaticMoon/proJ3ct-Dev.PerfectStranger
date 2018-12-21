@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#00000000"
     android:orientation="vertical"
-    tools:context="com.proj3ct.perfectstranger.profileSettingActivity">
+    tools:context="com.proj3ct.perfectstranger.Profile.profileSettingActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="wrap_content"

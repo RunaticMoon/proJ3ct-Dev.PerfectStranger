@@ -2,6 +2,9 @@ package com.proj3ct.perfectstranger;
 
 import android.app.Application;
 
+import com.proj3ct.perfectstranger.Profile.Profile;
+import com.proj3ct.perfectstranger.Rule.Rule;
+
 import java.util.Vector;
 
 public class AppVariables extends Application {
