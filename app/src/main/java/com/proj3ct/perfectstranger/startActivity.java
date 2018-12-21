@@ -32,6 +32,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -119,6 +123,9 @@ public class startActivity extends AppCompatActivity {
         move_left.setFillAfter(true);
 
         Log.e("[hash]",kakaoLink.getKeyHash(getApplicationContext()));
+
+        // AdMob
+        AdMob.initialize(this);
 
         // firebase analytics
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -260,6 +267,7 @@ public class startActivity extends AppCompatActivity {
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
                                 intent.putExtra("roomkey", roomKey);
                                 intent.putExtra("userkey", userKey);
+                                intent.putExtra("created", true);
                                 startActivity(intent);
                             }
                         }, 800);

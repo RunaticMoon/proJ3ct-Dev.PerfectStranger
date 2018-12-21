@@ -1,6 +1,5 @@
 package com.proj3ct.perfectstranger.Chet;
 
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +26,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.proj3ct.perfectstranger.AppVariables;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.proj3ct.perfectstranger.AdMob;
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
 import com.proj3ct.perfectstranger.R;
 import com.proj3ct.perfectstranger.Rule.RulesActivity;
@@ -49,6 +52,9 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
     private int soundId;
     private boolean alarmsound;
 
+    // AdMob
+    private AdMob adMob = new AdMob();
+    private boolean created;
 
     // BroadcasRecevier : service를 감시하여 값을 받아서 firebaseDB 방아온 메세지를 넘겨줌
     // 받아오는 메세지 : 앱이름 / MainText / subText / 시간 / text / 프로필( 예정 ) 정도.
@@ -119,6 +125,16 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
             roomkey = intent.getStringExtra("roomkey");
             firebaseDB.enterRoom(roomkey);
             firebaseDB.setUser(user);
+            created = intent.getBooleanExtra("created",false);
+        }
+
+        // 전면 광고
+        adMob.setTestDevice("3D5BFF3A93A8D14EFF77FDC4E69BED78");
+        if(created) {
+            adMob.TestRewardedVide(this);
+        }
+        else {
+            adMob.TestInterstitial(this);
         }
 
         but_back.setOnClickListener(new View.OnClickListener() {
