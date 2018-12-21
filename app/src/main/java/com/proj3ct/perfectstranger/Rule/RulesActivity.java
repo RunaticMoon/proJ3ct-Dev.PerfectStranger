@@ -15,11 +15,10 @@ import com.proj3ct.perfectstranger.R;
 
 public class RulesActivity extends AppCompatActivity {
     private FirebaseDB firebaseDB = new FirebaseDB();
-    private String roomKey;
+    private AppVariables appVariables;
 
     RecyclerView list_rules;
     LinearLayout but_del;
-    AppVariables appVariables;
     rulesAdapter adapter;
     LinearLayoutManager listviewManager;
     @Override
@@ -30,21 +29,8 @@ public class RulesActivity extends AppCompatActivity {
         but_del = (LinearLayout) findViewById(R.id.but_add);
 
         appVariables = (AppVariables)getApplication();
-        adapter = new rulesAdapter(appVariables.getRules());
-        listviewManager = new LinearLayoutManager(this);
-
-        list_rules.setAdapter(adapter);
-        list_rules.setLayoutManager(listviewManager);
-
-        // roomKey 가져오기
-        Intent intent = getIntent();
-        if(intent!=null){
-            roomKey = intent.getStringExtra("roomKey");
-        }
-
-        firebaseDB.setList_rule(list_rules, this,adapter);
-        firebaseDB.enterRoom(roomKey);
-        firebaseDB.setAppVariables(appVariables);
+        firebaseDB = appVariables.getFirebaseDB();
+        firebaseDB.setList_rule(list_rules, this);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getApplicationContext(),new LinearLayoutManager(this).getOrientation());
         list_rules.addItemDecoration(dividerItemDecoration);
@@ -58,9 +44,10 @@ public class RulesActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        appVariables.setRules(adapter.getRules());
-        firebaseDB.setRule();
-        //파베에 바뀐 룰 넣는 함수;
+        if(firebaseDB.isMaster()) {
+            firebaseDB.setRule();
+        }
+        // 파베에 바뀐 룰 넣는 함수;
         super.onBackPressed();
     }
 }

@@ -2,6 +2,7 @@ package com.proj3ct.perfectstranger;
 
 import android.app.Application;
 
+import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
 import com.proj3ct.perfectstranger.Profile.Profile;
 import com.proj3ct.perfectstranger.Rule.Rule;
 
@@ -9,9 +10,14 @@ import java.util.Vector;
 
 public class AppVariables extends Application {
     Profile myProfile;
-    Vector<Rule> rules;
-    Vector<Profile> friends;
-    User user;
+    FirebaseDB firebaseDB;
+
+    public FirebaseDB getFirebaseDB() {
+        return firebaseDB;
+    }
+    public void setFirebaseDB(FirebaseDB firebaseDB) {
+        this.firebaseDB = firebaseDB;
+    }
 
     public Profile getMyProfile() {
         return myProfile;
@@ -22,27 +28,14 @@ public class AppVariables extends Application {
     }
 
     public Vector<Rule> getRules() {
-        return rules;
+        return firebaseDB.getRuleAdapter().getRules();
     }
 
-    public void setRules(Vector<Rule> rules) {
-        this.rules = rules;
+    public Vector<User> getFriends() {
+        return firebaseDB.getUserAdapter().getUsers();
     }
 
-    public Vector<Profile> getFriends() {
-        return friends;
-    }
+    public User getUser() { return firebaseDB.getUser(); }
 
-    public User getUser() { return user; }
-
-    public void setFriends(Vector<Profile> friends) {
-        this.friends = friends;
-    }
-    public void addRule(Rule rule){
-        rules.add(rule);
-    }
-    public void addFriend(Profile p){
-        friends.add(p);
-    }
-    public void setUser(User user) { this.user = user; }
+    public void setUser(User user) { this.firebaseDB.setUser(user); }
 }

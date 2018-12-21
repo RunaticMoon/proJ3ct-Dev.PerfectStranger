@@ -40,7 +40,7 @@ public class User {
     public void setWithProfile(Profile profile) {
         this.vectorType = profile.getVectorType();
         this.vectorColor = profile.getVector();
-        this.backgroundColor = profile.getOutline();
+        this.backgroundColor = profile.getBg();
         this.outlineColor = profile.getOutline();
     }
 

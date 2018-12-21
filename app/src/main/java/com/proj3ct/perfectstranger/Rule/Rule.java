@@ -52,7 +52,7 @@ public class Rule {
     public void setforType(){
         detail_i++;
         if(detail_i>=7) detail_i=0;
-        detail_s=apps[detail_i];
+        detail_s = apps[detail_i];
     }
 
 }

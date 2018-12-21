@@ -18,7 +18,7 @@ import java.util.Vector;
  */
 
 public class waitingRoomAdapter extends RecyclerView.Adapter<waitingRoomViewHolder> implements waitingRoomViewHolder.OnItemClickListener{
-    List<User> users = new ArrayList<>();
+    Vector<User> users = new Vector<>();
     Vector<Boolean> clicked = new Vector<>();
     View con;
     @Override
@@ -84,5 +84,9 @@ public class waitingRoomAdapter extends RecyclerView.Adapter<waitingRoomViewHold
             clicked.set(position,true);
         }
         notifyDataSetChanged();
+    }
+
+    public Vector<User> getUsers() {
+        return this.users;
     }
 }

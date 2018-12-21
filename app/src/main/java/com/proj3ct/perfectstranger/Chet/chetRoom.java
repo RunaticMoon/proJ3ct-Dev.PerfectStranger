@@ -38,7 +38,7 @@ import com.proj3ct.perfectstranger.Waiting.waitingRoom;
 
 public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmListener{
     private String roomkey;
-    private FirebaseDB firebaseDB = new FirebaseDB();
+    private FirebaseDB firebaseDB;
     private AppVariables appVariables;
 
     // View component
@@ -75,12 +75,11 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chet_room);
         appVariables = (AppVariables)getApplication();
         Intent intent = getIntent();
-        firebaseDB.setAppVariables(appVariables);
+        firebaseDB = appVariables.getFirebaseDB();
         user = appVariables.getUser();
 
         but_back = (Button) findViewById(R.id.but_back);
@@ -112,19 +111,18 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
                 sound.stop(soundId);
             }
         });
-        //fireBaseDB 설정
-        firebaseDB.setList_chet(list_chet, getApplicationContext(),but_newMessage);
+
+        // fireBaseDB 설정
+        firebaseDB.setList_chet(list_chet, getApplicationContext(), but_newMessage);
         firebaseDB.setOnAlarmListener(this);
+
         // callback 함수
         // LocalBroadcastManager( Local를 사용한 이유 : 다른앱의 서비스의 방해를 방지 )
         // 값을 받아오면 onNotice함수를 실행( "Msg"태그의 intent를 함께 전달 )
         LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("Msg"));
 
-        // intent에 roomkey 저장되어 있음.
+        // intent에 created 저장되어 있음.
         if (intent != null) {
-            roomkey = intent.getStringExtra("roomkey");
-            firebaseDB.enterRoom(roomkey);
-            firebaseDB.setUser(user);
             created = intent.getBooleanExtra("created",false);
         }
 
@@ -137,6 +135,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
             adMob.TestInterstitial(this);
         }
 
+        // 버튼 설정
         but_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,7 +146,6 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(chetRoom.this, waitingRoom.class);
-                intent.putExtra("roomKey", firebaseDB.getRoomKey());
                 startActivity(intent);
             }
         });

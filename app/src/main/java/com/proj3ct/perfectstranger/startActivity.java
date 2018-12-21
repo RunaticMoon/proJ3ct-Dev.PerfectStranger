@@ -98,17 +98,7 @@ public class startActivity extends AppCompatActivity {
         edit_name=(EditText)findViewById(R.id.edit_name);
 
         appVariables = (AppVariables)getApplication();
-        //벌칙 실행 확인용
-
-        Vector<Rule> rules = new Vector<Rule>();
-        rules.add(new Rule(1,5));
-        rules.add(new Rule(2,3));
-        rules.add(new Rule(3, "ㅋㅋ"));
-        rules.add(new Rule(4,2));
-        Rule rule = new Rule(5,1);
-        rule.setforType();
-        rules.add(rule);
-        appVariables.setRules(rules);
+        appVariables.setFirebaseDB(firebaseDB);
 
         setAnimations();
 
@@ -117,7 +107,6 @@ public class startActivity extends AppCompatActivity {
         transition.setDuration(500);
         transition.setInterpolator(new DecelerateInterpolator());
         con.clone(bg_start);
-
 
         move_left = AnimationUtils.loadAnimation(startActivity.this, R.anim.fade_right_to_left);
         move_left.setFillAfter(true);
@@ -254,9 +243,6 @@ public class startActivity extends AppCompatActivity {
                                 firebaseDB.setUser(user);
                                 firebaseDB.createNewRoom();
                                 firebaseDB.addUser(user);
-                                roomKey = firebaseDB.getRoomKey();
-                                userKey = firebaseDB.getUserKey();
-                                appVariables.setUser(user);
 
                                 byLink = true;
                                 but_chetRoom.setText("게임입장");
@@ -265,8 +251,6 @@ public class startActivity extends AppCompatActivity {
                                 SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
 
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
-                                intent.putExtra("roomkey", roomKey);
-                                intent.putExtra("userkey", userKey);
                                 intent.putExtra("created", true);
                                 startActivity(intent);
                             }
@@ -278,7 +262,6 @@ public class startActivity extends AppCompatActivity {
                                 // 임시로 participant를 user로 변환해서 set하게 해놓음
                                 firebaseDB.setUser(user);
                                 firebaseDB.enterRoom(roomKey);
-                                appVariables.setUser(user);
 
                                 if(fromLink) {
                                     firebaseDB.addUser(user);
@@ -288,14 +271,12 @@ public class startActivity extends AppCompatActivity {
                                     firebaseDB.setUserKey(userKey);
                                     firebaseDB.updateUser();
                                 }
-                                userKey = firebaseDB.getUserKey();
 
                                 // SharedPreference에 저장
                                 SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
 
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
-                                intent.putExtra("roomkey", roomKey);
-                                intent.putExtra("userkey", userKey);
+                                intent.putExtra("created", false);
                                 startActivity(intent);
                             }
                         }, 800);
@@ -380,7 +361,7 @@ public class startActivity extends AppCompatActivity {
             }, 800);
         }
 
-        if(appVariables.getMyProfile()==null)
+        if(appVariables.getMyProfile() == null)
         {
             Profile profile = new Profile();
             appVariables.setMyProfile(profile);

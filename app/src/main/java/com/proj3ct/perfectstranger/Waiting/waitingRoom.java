@@ -10,19 +10,20 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.proj3ct.perfectstranger.AppVariables;
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
 import com.proj3ct.perfectstranger.Firebase.KakaoLink;
 import com.proj3ct.perfectstranger.R;
 
 public class waitingRoom extends AppCompatActivity {
-    private FirebaseDB firebaseDB = new FirebaseDB();
+    private FirebaseDB firebaseDB;
+    private AppVariables appVariables;
 
     RecyclerView list_user;
     Button but_done;
 
     // KakaoLink
     private KakaoLink kakaoLink = new KakaoLink();
-    private String roomKey;
 
     LinearLayout but_del,but_add;
     TextView text_count;
@@ -36,20 +37,16 @@ public class waitingRoom extends AppCompatActivity {
         but_add=(LinearLayout)findViewById(R.id.but_add);
         text_count=(TextView)findViewById(R.id.text_count);
 
-        // roomKey 가져오기
-        Intent intent = getIntent();
-        if(intent!=null){
-            roomKey = intent.getStringExtra("roomKey");
-        }
+        appVariables = (AppVariables)getApplication();
+        firebaseDB = appVariables.getFirebaseDB();
 
         // FirebaseDB에 리스트뷰 연결
         firebaseDB.setList_user(list_user, this);
-        firebaseDB.enterRoom(roomKey);
 
         but_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                kakaoLink.sendLink(getApplicationContext(), roomKey);
+                kakaoLink.sendLink(getApplicationContext(), firebaseDB.getRoomKey());
             }
         });
 
@@ -60,5 +57,11 @@ public class waitingRoom extends AppCompatActivity {
                 firebaseDB.getUserAdapter().del();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        firebaseDB.resetList_user();
     }
 }

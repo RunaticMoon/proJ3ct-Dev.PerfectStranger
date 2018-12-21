@@ -38,7 +38,6 @@ public class FirebaseDB {
     // User
     private User user;
     private Boolean isMe = false;
-    private AppVariables appVariables;
     private String userName;
 
     // chet Listview
@@ -76,9 +75,6 @@ public class FirebaseDB {
         return roomRef.getKey();
     }
 
-    public void setAppVariables(AppVariables av){
-        appVariables=av;
-    }
     public String getUserKey() {
         if(myRef == null)
             return null;
@@ -102,20 +98,16 @@ public class FirebaseDB {
     // Set Listview
     public void setList_chet(RecyclerView list_chet, Context context,TextView butNewMessage){
         this.list_chet = list_chet;
-        Log.e("chetRoomAdapter", "생성");
-        chetAdapter = new chetRoomAdapter();
-        chetLayoutManager = new LinearLayoutManager(context);
+        this.chetLayoutManager = new LinearLayoutManager(context);
 
         this.list_chet.setAdapter(chetAdapter);
         this.list_chet.setLayoutManager(chetLayoutManager);
         this.butNewMessage = butNewMessage;
     }
 
-    public void setList_rule(RecyclerView list_rule, Context context,rulesAdapter r){
+    public void setList_rule(RecyclerView list_rule, Context context){
         this.list_rule = list_rule;
-        Log.e("ruleAdapter", "생성");
-        ruleAdapter = r;
-        ruleLayoutManager = new LinearLayoutManager(context);
+        this.ruleLayoutManager = new LinearLayoutManager(context);
 
         this.list_rule.setAdapter(ruleAdapter);
         this.list_rule.setLayoutManager(ruleLayoutManager);
@@ -123,12 +115,26 @@ public class FirebaseDB {
 
     public void setList_user(RecyclerView list_user, Context context){
         this.list_user = list_user;
-        Log.e("userAdapter", "생성");
-        userAdapter = new waitingRoomAdapter();
-        userLayoutManager = new LinearLayoutManager(context);
+        this.userLayoutManager = new LinearLayoutManager(context);
 
         this.list_user.setAdapter(userAdapter);
         this.list_user.setLayoutManager(userLayoutManager);
+    }
+
+    // reset Listview
+    public void resetList_chet() {
+        this.list_chet = null;
+        this.chetLayoutManager = null;
+    }
+
+    public void resetList_rule() {
+        this.list_rule = null;
+        this.ruleLayoutManager = null;
+    }
+
+    public void resetList_user() {
+        this.list_user = null;
+        this.userLayoutManager = null;
     }
 
     // Firebase Function
@@ -167,11 +173,11 @@ public class FirebaseDB {
     public void setRule() {
         ruleRef.removeValue();
         ruleRef = roomRef.child("ruleList");
-        Vector<Rule> rules = appVariables.getRules();
+        Vector<Rule> rules = ruleAdapter.getRules();
 
         for(int i = 0; i < rules.size(); i++) {
            Rule rule = rules.get(i);
-            addRule(rule.getRuleType(), rule.getDetail_i(), rule.getDetail_s());
+           addRule(rule.getRuleType(), rule.getDetail_i(), rule.getDetail_s());
         }
     }
 
@@ -215,6 +221,10 @@ public class FirebaseDB {
         myRef.setValue(user);
     }
 
+    public boolean isMaster() {
+        return user.getName().equals(userAdapter.getUsers().get(0).getName());
+    }
+
     // Room Function
     public void createNewRoom() {
         roomRef = dbRef.push();
@@ -227,12 +237,9 @@ public class FirebaseDB {
 
         addRule(0, 0, "모든 알람 공유하기");
 
-        if(list_chet != null)
-            setMessageListener();
-        if(list_rule != null)
-            setRuleListener();
-        if(list_user != null)
-            setUserListener();
+        setMessageListener();
+        setRuleListener();
+        setUserListener();
     }
 
     public void enterRoom(String roomKey) {
@@ -242,12 +249,9 @@ public class FirebaseDB {
         ruleRef = roomRef.child("ruleList");
         userRef = roomRef.child("userList");
 
-        if(list_chet != null)
-            setMessageListener();
-        if(list_rule != null)
-            setRuleListener();
-        if(list_user != null)
-            setUserListener();
+        setMessageListener();
+        setRuleListener();
+        setUserListener();
     }
 
     public void exitRoom(String roomKey) {
@@ -256,6 +260,7 @@ public class FirebaseDB {
 
     // Set Listener
     private void setRuleListener() {
+        ruleAdapter = new rulesAdapter();
         ruleRef.addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -269,7 +274,9 @@ public class FirebaseDB {
             public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
 
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) { }
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                ruleAdapter = new rulesAdapter();
+            }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
@@ -280,6 +287,7 @@ public class FirebaseDB {
     }
 
     private void setMessageListener() {
+        chetAdapter = new chetRoomAdapter();
         chetRef.addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -292,17 +300,17 @@ public class FirebaseDB {
                     }else{
                         isMe = false;
                     }
-                        if( lastuser == achet.getUserName())
-                        {
-                            lastusercount++;
-                        }else
-                        {
-                            if(lastuser.equals(""))lastusercount=-1;
-                            lastuser=achet.getUserName();
-                            lastusercount=0;
-                        }
+                    if( lastuser == achet.getUserName())
+                    {
+                        lastusercount++;
+                    }else
+                    {
+                        if(lastuser.equals(""))lastusercount=-1;
+                        lastuser=achet.getUserName();
+                        lastusercount=0;
+                    }
 
-                     boolean wrong_rule=ruleChecker(achet);
+                     boolean wrong_rule = ruleChecker(achet);
                     if((!chetAdapter.isBottomReached())&&chetAdapter.getItemCount()>0)
                     {
                         chetAdapter.add(achet, isMe,wrong_rule);
@@ -310,7 +318,8 @@ public class FirebaseDB {
                     }else
                     {
                         chetAdapter.add(achet, isMe,wrong_rule);
-                        list_chet.smoothScrollToPosition(chetAdapter.getItemCount()-1);
+                        if(list_chet != null)
+                            list_chet.smoothScrollToPosition(chetAdapter.getItemCount()-1);
                         butNewMessage.setVisibility(View.GONE);
                     }
 
@@ -330,8 +339,35 @@ public class FirebaseDB {
         });
     }
 
+    private void setUserListener() {
+        userAdapter = new waitingRoomAdapter();
+        userRef.addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if(userAdapter != null) {
+                    Log.e("[LOG] listener", dataSnapshot.toString());
+                    User user = dataSnapshot.getValue(User.class);
+                    Log.e("[LOG] user", user.getName());
+                    userAdapter.add(user);
+                }
+            }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) { }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) { }
+        });
+    }
+
+    // Rule Checker
     public boolean ruleChecker(aChet chet){
-        Vector<Rule> rules = appVariables.getRules();
+        Vector<Rule> rules = ruleAdapter.getRules();
         boolean detected=false;
         /**
          * ruleType=1 : n번째 메세지 온 사람 벌칙, detail_i
@@ -372,37 +408,10 @@ public class FirebaseDB {
         return detected;
     }
 
-   // public Participant getParticipant() {
-     //   return particpiant;
-    //}
-
-    private void setUserListener() {
-        userRef.addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if(userAdapter != null) {
-                    Log.e("[LOG] listener", dataSnapshot.toString());
-                    User user = dataSnapshot.getValue(User.class);
-                    Log.e("[LOG] user", user.getName());
-                    userAdapter.add(user);
-                }
-            }
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) { }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) { }
-        });
-    }
     public void setOnAlarmListener(FirebaseDB.onAlarmListener alarmListener){
         this.alarmListener=alarmListener;
     }
+
     public interface onAlarmListener{
         public void onAlarm(String name, String rule);
     }

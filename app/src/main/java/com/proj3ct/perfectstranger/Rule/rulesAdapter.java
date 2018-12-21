@@ -21,12 +21,6 @@ public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implemen
     boolean newRule=false;
     ViewGroup con;
 
-    public rulesAdapter(Vector<Rule> v) {
-        //rules = v;
-        rules= new Vector<Rule>();
-        //for(int i=0;i<v.size();i++)editing.add(false);
-    }
-
     @NonNull
     @Override
 
