@@ -229,7 +229,7 @@ public class FirebaseDB {
 
         setSetting(10);
 
-        addRule(0, 0, "모든 알람 공유하기");
+       // addRule(0, 0, "모든 알람 공유하기");
 
         if(list_chet != null)
             setMessageListener();
@@ -388,7 +388,7 @@ public class FirebaseDB {
                     Log.e("[LOG] listener", dataSnapshot.toString());
                     User user = dataSnapshot.getValue(User.class);
                     Log.e("[LOG] user", user.getName());
-                    userAdapter.add(user);
+                    //userAdapter.add(user);
                 }
             }
             @Override

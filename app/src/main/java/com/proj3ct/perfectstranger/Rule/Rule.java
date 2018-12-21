@@ -55,4 +55,20 @@ public class Rule {
         detail_s=apps[detail_i];
     }
 
+    public boolean isEqual(Rule r){
+        if(r.ruleType!=ruleType) return false;
+        switch(r.ruleType) {
+            case 1:
+            case 2:
+            case 4:
+                if (r.detail_i != this.detail_i) return false;
+                break;
+            case 3:
+            case 5:
+                if (r.detail_s != this.detail_s) return false;
+                break;
+        }
+        return true;
+    }
+
 }

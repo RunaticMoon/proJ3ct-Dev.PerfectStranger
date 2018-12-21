@@ -47,9 +47,17 @@ public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implemen
         return holder;
     }
     public void add(Rule rule){
-        rules.add(rule);
-        editing.add(false);
-        notifyDataSetChanged();
+        boolean doubled=false;
+        for(Rule r:rules){
+            doubled = r.isEqual(rule);
+            if(doubled) return;
+        }
+        if(!doubled){
+
+            rules.add(rule);
+            editing.add(false);
+            notifyDataSetChanged();
+        }
     }
     public void delete(){
         for(int i=0;i<editing.size();i++)

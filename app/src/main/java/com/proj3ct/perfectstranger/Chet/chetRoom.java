@@ -43,7 +43,6 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
 
     // View component
     private RecyclerView list_chet;
-    private Button but_back,btn_startService, btn_stopService, btn_checkStatus, btn_setNoti;;
     private TextView but_friends,but_rules,but_newMessage,alarm_name,alarm_rule;
     private ImageView image_siren;
     private ConstraintLayout alarm_layout,alarm;
@@ -79,14 +78,9 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         Intent intent = getIntent();
         firebaseDB.setAppVariables(appVariables);
 
-        but_back = (Button) findViewById(R.id.but_back);
         but_friends = (TextView) findViewById(R.id.text_friends);
         but_rules = (TextView) findViewById(R.id.text_rules);
         list_chet = (RecyclerView) findViewById(R.id.listview_chat);
-        btn_startService = (Button) findViewById(R.id.btn_startService);
-        btn_stopService = (Button) findViewById(R.id.btn_stopService);
-        btn_checkStatus = (Button) findViewById(R.id.btn_checkStatus);
-        btn_setNoti = (Button) findViewById(R.id.btn_setNoti);
         but_newMessage = (TextView)findViewById(R.id.but_newMessage);
         image_siren=(ImageView)findViewById(R.id.image_siren);
         alarm=(ConstraintLayout)findViewById(R.id.alarm);
@@ -95,7 +89,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         alarm_rule=(TextView)findViewById(R.id.text_rule_wrong);
         alarm.setVisibility(View.GONE);
 
-        sound = new SoundPool(1,AudioManager.STREAM_ALARM,0);
+        sound = new SoundPool(1,AudioManager.STREAM_RING,0);
         soundId=sound.load(this,R.raw.air_horn,1);
         DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(image_siren);
         Glide.with(chetRoom.this).load(R.raw.alarm_red).into(imageViewTarget);
@@ -123,13 +117,6 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
             firebaseDB.enterRoom(roomkey);
             firebaseDB.setUser(new User(participant.getName()));
         }
-
-        but_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         but_friends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,36 +134,6 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
             }
         });
 
-        btn_startService.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // http://kwongyo.tistory.com/4 (Notification.Builder > NotificationCompat.Builder)
-                if(alarmsound)alarmsound=false;
-                else alarmsound=true;
-            }
-        });
-
-        btn_stopService.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-        });
-
-        btn_checkStatus.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-        btn_setNoti.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-                startActivity(intent);
-            }
-        });
         but_newMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

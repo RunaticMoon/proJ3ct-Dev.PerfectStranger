@@ -95,16 +95,16 @@ public class startActivity extends AppCompatActivity {
         edit_name=(EditText)findViewById(R.id.edit_name);
 
         appVariables = (AppVariables)getApplication();
-        //벌칙 실행 확인용
 
+        //벌칙 실행 확인용
         Vector<Rule> rules = new Vector<Rule>();
-        rules.add(new Rule(1,5));
+/*        rules.add(new Rule(1,5));
         rules.add(new Rule(2,3));
         rules.add(new Rule(3, "ㅋㅋ"));
         rules.add(new Rule(4,2));
         Rule rule = new Rule(5,1);
         rule.setforType();
-        rules.add(rule);
+        rules.add(rule);*/
         appVariables.setRules(rules);
 
         setAnimations();
