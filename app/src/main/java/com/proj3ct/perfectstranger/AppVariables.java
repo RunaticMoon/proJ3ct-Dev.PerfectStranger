@@ -14,15 +14,24 @@ public class AppVariables extends Application implements FirebaseDB.OnUsersChang
     Profile myProfile;
     FirebaseDB firebaseDB;
     HashMap<String,User> users;
-
+    AdMob adMob;
 
     public FirebaseDB getFirebaseDB() {
         return firebaseDB;
     }
+
     public void setFirebaseDB(FirebaseDB firebaseDB) {
         this.firebaseDB = firebaseDB;
         this.firebaseDB.setOnUsersChanged(this);
         users = new HashMap<String,User>();
+    }
+
+    public void setAdMob(AdMob adMob) {
+        this.adMob = adMob;
+    }
+
+    public AdMob getAdMob() {
+        return adMob;
     }
 
     public Profile getMyProfile() {

@@ -46,13 +46,14 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
     private TextView but_friends,but_rules,but_newMessage,alarm_name,alarm_rule;
     private ImageView image_siren;
     private ConstraintLayout alarm_layout,alarm;
+    private Button bt_exitRoom, bt_destroyRoom;
 
     private SoundPool sound;
     private int soundId;
     private boolean alarmsound;
 
     // AdMob
-    private AdMob adMob = new AdMob();
+    private AdMob adMob;
     private boolean created;
 
     // BroadcasRecevier : service를 감시하여 값을 받아서 firebaseDB 방아온 메세지를 넘겨줌
@@ -69,7 +70,6 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
     };
 
     private User user;
-
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
@@ -91,6 +91,9 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         alarm_name=(TextView)findViewById(R.id.text_name_alarm);
         alarm_rule=(TextView)findViewById(R.id.text_rule_wrong);
         alarm.setVisibility(View.GONE);
+
+        bt_exitRoom = findViewById(R.id.bt_exitRoom);
+        bt_destroyRoom = findViewById(R.id.bt_destoryRoom);
 
         sound = new SoundPool(1,AudioManager.STREAM_RING,0);
         soundId=sound.load(this,R.raw.air_horn,1);
@@ -120,15 +123,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
             created = intent.getBooleanExtra("created",false);
         }
 
-        // 전면 광고
-        adMob.setTestDevice("3D5BFF3A93A8D14EFF77FDC4E69BED78");
-        if(created) {
-            adMob.TestRewardedVide(this);
-        }
-        else {
-            adMob.TestInterstitial(this);
-        }
-
+        adMob = appVariables.getAdMob();
 
         but_friends.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,6 +146,22 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
             public void onClick(View v) {
                 list_chet.smoothScrollToPosition(list_chet.getAdapter().getItemCount()-1);
                 but_newMessage.setVisibility(View.GONE);
+            }
+        });
+
+        bt_exitRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseDB.exitRoom(getApplicationContext());
+                finish();
+            }
+        });
+
+        bt_destroyRoom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseDB.destroyRoom(getApplicationContext());
+                finish();
             }
         });
     }

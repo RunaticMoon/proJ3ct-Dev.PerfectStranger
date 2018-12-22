@@ -7,7 +7,6 @@ import android.animation.AnimatorSet;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Handler;
@@ -66,8 +65,8 @@ public class startActivity extends AppCompatActivity {
     // notification
     private  Boolean isPermissionAllowe;
 
-    // SharedPreferences
-    private SharedPreferences pref;
+    // AdMob
+    private AdMob adMob = new AdMob();
 
     // View component
     private TextView text_title;
@@ -117,6 +116,11 @@ public class startActivity extends AppCompatActivity {
 
         // AdMob
         AdMob.initialize(this);
+        appVariables.setAdMob(adMob);
+
+        adMob.setTestDevice("3D5BFF3A93A8D14EFF77FDC4E69BED78");
+        adMob.RewardedVideo(this);
+        adMob.Interstitial(this);
 
         // firebase analytics
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -233,49 +237,59 @@ public class startActivity extends AppCompatActivity {
                         delayHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                firebaseDB.setUser(user);
-                                firebaseDB.createNewRoom();
-                                firebaseDB.addUser(user);
+                                adMob.showRewardedVideo(new Callback() {
+                                    @Override
+                                    public void callback() {
+                                        firebaseDB.setUser(user);
+                                        firebaseDB.createNewRoom();
+                                        firebaseDB.addUser(user);
 
-                                roomKey = firebaseDB.getRoomKey();
-                                userKey = firebaseDB.getUserKey();
+                                        roomKey = firebaseDB.getRoomKey();
+                                        userKey = firebaseDB.getUserKey();
 
-                                byLink = true;
-                                but_chetRoom.setText("게임입장");
-                                Log.e("!!!!", userKey);
+                                        byLink = true;
+                                        but_chetRoom.setText("게임입장");
+                                        Log.e("!!!!", userKey);
 
-                                // SharedPreference에 저장
-                                SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
+                                        // SharedPreference에 저장
+                                        SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
 
-                                Intent intent = new Intent(startActivity.this, chetRoom.class);
-                                intent.putExtra("newGame", true);
-                                startActivity(intent);
+                                        Intent intent = new Intent(startActivity.this, chetRoom.class);
+                                        intent.putExtra("newGame", true);
+                                        startActivity(intent);
+                                    }
+                                });
                             }
                         }, 800);
                     } else {
                         delayHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                // 임시로 participant를 user로 변환해서 set하게 해놓음
-                                firebaseDB.setUser(user);
-                                firebaseDB.enterRoom(roomKey);
+                                adMob.showInterstitial(new Callback() {
+                                    @Override
+                                    public void callback() {
+                                        // 임시로 participant를 user로 변환해서 set하게 해놓음
+                                        firebaseDB.setUser(user);
+                                        firebaseDB.enterRoom(roomKey);
 
-                                if(fromLink) {
-                                    firebaseDB.addUser(user);
-                                    userKey = firebaseDB.getUserKey();
-                                }
-                                else {
-                                    Log.e("[userKey]", userKey);
-                                    firebaseDB.setUserKey(userKey);
-                                    firebaseDB.updateUser();
-                                }
+                                        if(fromLink) {
+                                            firebaseDB.addUser(user);
+                                            userKey = firebaseDB.getUserKey();
+                                        }
+                                        else {
+                                            Log.e("[userKey]", userKey);
+                                            firebaseDB.setUserKey(userKey);
+                                            firebaseDB.updateUser();
+                                        }
 
-                                // SharedPreference에 저장
-                                SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
+                                        // SharedPreference에 저장
+                                        SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
 
-                                Intent intent = new Intent(startActivity.this, chetRoom.class);
-                                intent.putExtra("newGame", true);
-                                startActivity(intent);
+                                        Intent intent = new Intent(startActivity.this, chetRoom.class);
+                                        intent.putExtra("newGame", true);
+                                        startActivity(intent);
+                                    }
+                                });
                             }
                         }, 800);
                     }
@@ -372,6 +386,13 @@ public class startActivity extends AppCompatActivity {
             user.setWithProfile(profile);
         }
 
+        if(SharedPref.getRoomKey(this) != null) {
+            but_chetRoom.setText("게임입장");
+        }
+        else {
+            but_chetRoom.setText("방 만들기");
+        }
+
         super.onResume();
     }
 
@@ -402,18 +423,22 @@ public class startActivity extends AppCompatActivity {
     }
 
     public void startIntentByShared() {
-        user = SharedPref.getUser(this);
-        edit_name.setText(user.getName());
-        user.setProfile(but_setprofile, this);
+        adMob.showInterstitial(new Callback() {
+            @Override
+            public void callback() {
+                user = SharedPref.getUser(getApplicationContext());
+                edit_name.setText(user.getName());
+                user.setProfile(but_setprofile, getApplicationContext());
 
-        firebaseDB.setUser(user);
-        firebaseDB.enterRoom(roomKey);
-        firebaseDB.setUserKey(userKey);
-        firebaseDB.updateUser();
-        Intent intent = new Intent(startActivity.this, chetRoom.class);
-        newGame = false;
-        intent.putExtra("newGame", newGame);
-        startActivity(intent);
-        finish();
+                firebaseDB.setUser(user);
+                firebaseDB.enterRoom(roomKey);
+                firebaseDB.setUserKey(userKey);
+                firebaseDB.updateUser();
+                Intent intent = new Intent(startActivity.this, chetRoom.class);
+                newGame = false;
+                intent.putExtra("newGame", newGame);
+                startActivity(intent);
+            }
+        });
     }
 }
