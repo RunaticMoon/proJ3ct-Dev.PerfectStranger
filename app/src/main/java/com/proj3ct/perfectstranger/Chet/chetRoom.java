@@ -160,8 +160,10 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         bt_destroyRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firebaseDB.destroyRoom(getApplicationContext());
-                finish();
+                if(firebaseDB.isMaster()) {
+                    firebaseDB.destroyRoom(getApplicationContext());
+                    finish();
+                }
             }
         });
     }
@@ -175,5 +177,17 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         if(alarmsound) {
             int streamId = sound.play(soundId,0.5F,0.5F,1,0,1.2F);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        firebaseDB.exitRoom(getApplicationContext());
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        firebaseDB.exitRoom(getApplicationContext());
+        super.onDestroy();
     }
 }

@@ -60,7 +60,6 @@ public class startActivity extends AppCompatActivity {
     // KakaoLink
     private KakaoLink kakaoLink = new KakaoLink();
     private boolean byLink = false;
-    private boolean fromLink = false;
 
     // notification
     private  Boolean isPermissionAllowe;
@@ -82,7 +81,6 @@ public class startActivity extends AppCompatActivity {
     private Boolean Yes;
     private boolean newGame;
     private String dialogStr;
-    private boolean byShared;
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
@@ -133,7 +131,6 @@ public class startActivity extends AppCompatActivity {
 
         // SharedPreferences에 룸키가 있는가?
         roomKey = SharedPref.getRoomKey(this);
-        userKey = SharedPref.getUserKey(this);
         if(roomKey != null) {
             Log.e("[Shared roomKey]", roomKey);
             user = SharedPref.getUser(this);
@@ -147,42 +144,54 @@ public class startActivity extends AppCompatActivity {
         // 링크를 타고 들어왔는가?
         final String tempKey = kakaoLink.checkLink(getIntent());
         Log.e("[roomKey]", "카카오톡 링크 확인");
+        if(tempKey != null) {
+            Log.e("[roomKey]", tempKey);
+        }
 
         Yes = false;
         dialogStr = "default String";
 
-        // 1. 그냥 킨경우
-        // 1.1 쉐어드에 저장되있는경우 vs 아닌경우
-        // 2. 링크를 타고들어온경우
-        // 2.1 처음 임장하는경우 vs 들어왔던 방이였던경우
-        // 2.2 처음 입장하는경우 vs 다른방에서 이미 게임중이였던경우
+        /*
+            1. 그냥 킨 경우
+            2. 쉐어드에 저장되어 있고, 링크에 없는 경우
+            3. 쉐어드에 없고, 링크에 있는 경우
+            4. 쉐어드와 링크 둘다 있는경우
+            4-1. 두개가 같은 경우
+            4-2. 두개가 다른 경우
+         */
 
         if (roomKey == null && tempKey == null) {
+            Log.e("[분기점]", "1");
             byLink = false;
         } else if (roomKey != null && tempKey == null) {
+            Log.e("[분기점]", "2");
             dialogStr = "이미 참여중인 방이있습니다.";
             showComfirmDialog(dialogStr, "기존 방 입장","새로운 방 입장");
+
+            // 새로운방 입장 누를시 활성화
             byLink = false;
-            byShared = false;
+            but_chetRoom.setText("방 만들기");
         } else if (roomKey == null && tempKey != null) {
+            Log.e("[분기점]", "3");
             but_chetRoom.setText("게임입장");
             roomKey = tempKey;
             byLink = true;
-            byShared = false;
         } else {
-            if( tempKey.equals(roomKey)){
+            if(tempKey.equals(roomKey)){
+                Log.e("[분기점]", "4-1");
                 Toast.makeText(this, "이미 참여중인 방입니다", Toast.LENGTH_SHORT).show();
                 startIntentByShared();
-            }else{
+            } else{
+                Log.e("[분기점]", "4-2");
                 dialogStr = "이미 참여중인 방이 있습니다";
                 showComfirmDialog(dialogStr, "기존 방 입장","새로운 방 입장");
+
+                // 쉐어드가 아닌 링크로 들어가는 조건
                 byLink = true;
                 roomKey = tempKey;
                 but_chetRoom.setText("게임입장");
             }
         }
-
-
 
         but_setprofile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,19 +249,18 @@ public class startActivity extends AppCompatActivity {
                                 adMob.showRewardedVideo(new Callback() {
                                     @Override
                                     public void callback() {
+                                        Log.e("[콜백]", "byLink false 방 만들기");
                                         firebaseDB.setUser(user);
                                         firebaseDB.createNewRoom();
                                         firebaseDB.addUser(user);
 
                                         roomKey = firebaseDB.getRoomKey();
-                                        userKey = firebaseDB.getUserKey();
 
                                         byLink = true;
                                         but_chetRoom.setText("게임입장");
-                                        Log.e("!!!!", userKey);
 
                                         // SharedPreference에 저장
-                                        SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
+                                        SharedPref.setPref(getApplicationContext(), roomKey, user);
 
                                         Intent intent = new Intent(startActivity.this, chetRoom.class);
                                         intent.putExtra("newGame", true);
@@ -268,22 +276,14 @@ public class startActivity extends AppCompatActivity {
                                 adMob.showInterstitial(new Callback() {
                                     @Override
                                     public void callback() {
+                                        Log.e("[콜백]", "byLink true 방 들어가기");
                                         // 임시로 participant를 user로 변환해서 set하게 해놓음
                                         firebaseDB.setUser(user);
                                         firebaseDB.enterRoom(roomKey);
-
-                                        if(fromLink) {
-                                            firebaseDB.addUser(user);
-                                            userKey = firebaseDB.getUserKey();
-                                        }
-                                        else {
-                                            Log.e("[userKey]", userKey);
-                                            firebaseDB.setUserKey(userKey);
-                                            firebaseDB.updateUser();
-                                        }
+                                        firebaseDB.addUser(user);
 
                                         // SharedPreference에 저장
-                                        SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
+                                        SharedPref.setPref(getApplicationContext(), roomKey, user);
 
                                         Intent intent = new Intent(startActivity.this, chetRoom.class);
                                         intent.putExtra("newGame", true);
@@ -386,13 +386,6 @@ public class startActivity extends AppCompatActivity {
             user.setWithProfile(profile);
         }
 
-        if(SharedPref.getRoomKey(this) != null) {
-            but_chetRoom.setText("게임입장");
-        }
-        else {
-            but_chetRoom.setText("방 만들기");
-        }
-
         super.onResume();
     }
 
@@ -411,7 +404,8 @@ public class startActivity extends AppCompatActivity {
 
         return false;
     }
-    public void showComfirmDialog(String comfirmStr,String okStr, String noStr) {
+
+    public void showComfirmDialog(String comfirmStr, String okStr, String noStr) {
         ComfirmDialog customDialog = new ComfirmDialog(startActivity.this, comfirmStr,okStr,noStr);
         // 커스텀 다이얼로그를 호출한다.
         // 커스텀 다이얼로그의 결과를 출력할 TextView를 매개변수로 같이 넘겨준다.
@@ -422,23 +416,51 @@ public class startActivity extends AppCompatActivity {
         this.Yes = Yes;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void startIntentByShared() {
-        adMob.showInterstitial(new Callback() {
+        con.setVerticalBias(R.id.light, 0.1f);
+        TransitionManager.beginDelayedTransition(bg_start, transition);
+        con.applyTo(bg_start);
+        but_chetRoom.setEnabled(false);
+        but_setprofile.setEnabled(false);
+        Handler delayHandler = new Handler();
+        delayHandler.postDelayed(new Runnable() {
             @Override
-            public void callback() {
-                user = SharedPref.getUser(getApplicationContext());
-                edit_name.setText(user.getName());
-                user.setProfile(but_setprofile, getApplicationContext());
+            public void run() {
+                text_title.startAnimation(move_left);
+                layout_profile.startAnimation(move_left);
 
-                firebaseDB.setUser(user);
-                firebaseDB.enterRoom(roomKey);
-                firebaseDB.setUserKey(userKey);
-                firebaseDB.updateUser();
-                Intent intent = new Intent(startActivity.this, chetRoom.class);
-                newGame = false;
-                intent.putExtra("newGame", newGame);
-                startActivity(intent);
             }
-        });
+        }, 500);
+
+
+        // [분석] : 어떤 룸키로 들어오는지 분석
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.GROUP_ID, roomKey);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.JOIN_GROUP, bundle);
+        delayHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                adMob.showInterstitial(new Callback() {
+                    @Override
+                    public void callback() {
+                        Log.e("[콜백]", "startIntent 함수");
+                        user = SharedPref.getUser(getApplicationContext());
+                        edit_name.setText(user.getName());
+                        user.setProfile(but_setprofile, getApplicationContext());
+
+                        roomKey = SharedPref.getRoomKey(getApplicationContext());
+
+                        firebaseDB.setUser(user);
+                        firebaseDB.enterRoom(roomKey);
+                        firebaseDB.addUser(user);
+                        Intent intent = new Intent(startActivity.this, chetRoom.class);
+                        newGame = false;
+                        intent.putExtra("newGame", newGame);
+                        startActivity(intent);
+                    }
+                });
+            }
+        }, 800);
     }
 }

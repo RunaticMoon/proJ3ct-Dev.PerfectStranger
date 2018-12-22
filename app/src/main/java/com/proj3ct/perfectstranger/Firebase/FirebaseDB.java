@@ -41,6 +41,7 @@ public class FirebaseDB {
     private User user;
     private Boolean isMe = false;
     private String userName;
+
     // chet Listview
     private RecyclerView list_chet;
     private chetRoomAdapter chetAdapter;
@@ -60,6 +61,7 @@ public class FirebaseDB {
     private waitingRoomAdapter userAdapter;
     private LinearLayoutManager userLayoutManager;
     private boolean firstTime = true;
+    private TextView tv_count;
 
     // Listener
     private ChildEventListener RuleListener;
@@ -120,9 +122,10 @@ public class FirebaseDB {
         this.list_rule.setLayoutManager(ruleLayoutManager);
     }
 
-    public void setList_user(RecyclerView list_user, Context context){
+    public void setList_user(RecyclerView list_user, TextView tv_count, Context context){
         this.list_user = list_user;
         this.userLayoutManager = new LinearLayoutManager(context);
+        this.tv_count = tv_count;
 
         this.list_user.setAdapter(userAdapter);
         this.list_user.setLayoutManager(userLayoutManager);
@@ -141,6 +144,7 @@ public class FirebaseDB {
 
     public void resetList_user() {
         this.list_user = null;
+        this.tv_count = null;
         this.userLayoutManager = null;
     }
 
@@ -365,7 +369,7 @@ public class FirebaseDB {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(userAdapter != null) {
                     Log.e("[LOG] listener", dataSnapshot.toString());
-                    int userLen = userAdapter.getItemCount();
+                    long userLen = userAdapter.getItemCount();
                     int i = 1;
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         if(i > userLen) {
@@ -375,6 +379,11 @@ public class FirebaseDB {
                             onUsersChanged.addUser(snapshot.getKey(),user);
                         }
                         i++;
+                    }
+                    if(tv_count != null) {
+                        Log.e("[개수]", String.valueOf(dataSnapshot.getChildrenCount()));
+                        String str = "총 " + String.valueOf(dataSnapshot.getChildrenCount()) + "명";
+                        tv_count.setText(str);
                     }
                 }
                 if(firstTime) {

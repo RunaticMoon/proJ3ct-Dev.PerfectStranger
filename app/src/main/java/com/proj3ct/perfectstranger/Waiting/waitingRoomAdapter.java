@@ -38,6 +38,7 @@ public class waitingRoomAdapter extends RecyclerView.Adapter<waitingRoomViewHold
             holder.text_name.setText(name);
             user.setProfile(holder.image_profile, con.getContext());
             holder.setBackgoundColor(clicked.get(position));
+            if(position != 0) holder.text_captin.setVisibility(View.INVISIBLE);
         }
     }
     public void add(User user){
