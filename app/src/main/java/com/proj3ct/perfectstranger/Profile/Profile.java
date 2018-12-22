@@ -42,7 +42,7 @@ public class Profile {
             ((GradientDrawable) bg.mutate()).setColor(this.bg);// 배경 색 변경
             int strokeWidth = 16;
             if(img.getTag().toString().contains("big")) strokeWidth = 22;
-            else if(img.getTag().toString().contains("small")) strokeWidth = 8;
+            else if(img.getTag().toString().contains("small")) strokeWidth = 10;
             ((GradientDrawable) bg.mutate()).setStroke(strokeWidth,outline); //테두리 색 및 굵기 변경
         }
         img.setBackground(bg);

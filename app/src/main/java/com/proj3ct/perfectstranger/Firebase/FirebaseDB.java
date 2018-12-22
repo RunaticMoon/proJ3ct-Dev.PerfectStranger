@@ -281,6 +281,7 @@ public class FirebaseDB {
     // Set Listener
     private void setRuleListener() {
         ruleAdapter = new rulesAdapter();
+        //rulesAdapter.setMaster(isMaster());
         RuleListener = new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

@@ -2,6 +2,7 @@ package com.proj3ct.perfectstranger.Rule;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implemen
     Vector<Boolean> editing = new Vector<>();
     boolean newRule=false;
     ViewGroup con;
+    static boolean isMaster=false;
 
     @NonNull
     @Override
@@ -29,8 +31,9 @@ public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implemen
         con=parent;
         final rulesViewHolder holder;
         if(viewType==1) {
+
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_rule_add, parent, false);
-            holder = new rulesAddViewHolder(v);
+            holder = new rulesAddViewHolder(v,isMaster);
             holder.setOnItemClickListener(this);
         }else
         {
@@ -39,6 +42,9 @@ public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implemen
             holder.setOnItemClickListener(this);
         }
         return holder;
+    }
+    public static void setMaster(boolean tmp){
+        isMaster =tmp;
     }
     public void add(Rule rule){
         boolean doubled=false;
@@ -83,6 +89,7 @@ public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implemen
             holder.initiallizeSetting(rules.get(position));
             if(editing.get(position)) holder.ChangeSetMode(true);
             else holder.ChangeSetMode(false);
+        }else if(rules.size()>0 &&rules.size()==position ){
         }
     }
     @Override
@@ -111,14 +118,7 @@ public class rulesAdapter extends RecyclerView.Adapter<rulesViewHolder> implemen
     }
     @Override
     public void onNewButtonClick(int position) {
-        rules.add(new Rule(1,3));
-        for(int i=0;i<editing.size();i++)
-        {
-            editing.set(i,false);
-        }
-        editing.add(true);
-        newRule=true;
-        notifyDataSetChanged();
+        ((RulesActivity)con.getContext()).setAddPage();
     }
     @Override
     public void onRuleChanged(int position,Rule rule) {

@@ -52,6 +52,7 @@
             android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".Rule.RulesActivity"
+            android:windowSoftInputMode="adjustNothing"
             android:theme="@style/Theme.Transparent" />
         <activity
             android:name=".Profile.profileSettingActivity"
@@ -84,7 +85,7 @@
         </receiver>
 
         <activity android:name=".settingActivity"
-            android:theme="@style/Theme.Transparent" />
+            android:theme="@style/Theme.Transparent"/>
     </application>
 
 </manifest>
