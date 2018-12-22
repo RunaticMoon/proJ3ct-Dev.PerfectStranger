@@ -85,6 +85,9 @@ public class NotificationService extends NotificationListenerService {
         } else if (appName.equals(FACEBOOK)) {
             mainTitle = "페이스북 메신저";
             // 단체톡
+            if(extras.getString(Notification.EXTRA_TITLE).equals("활성 챗 헤드")){
+                return null;
+            }
             if (extras.getString(Notification.EXTRA_TEXT) == null) {
                 mainText = extras.getString(Notification.EXTRA_TITLE) + "\n";
                 mainText += mNotification.tickerText.toString();

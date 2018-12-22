@@ -32,13 +32,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
+
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.proj3ct.perfectstranger.Dialog.ComfirmDialog;
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
 import com.proj3ct.perfectstranger.Firebase.KakaoLink;
 import com.proj3ct.perfectstranger.Chet.chetRoom;
@@ -82,6 +80,10 @@ public class startActivity extends AppCompatActivity {
     private  Animation move_left;
     private AppVariables appVariables;
     private static final int MY_PERMISSION_STORAGE = 1111;
+    private Boolean Yes;
+    private boolean newGame;
+    private String dialogStr;
+    private boolean byShared;
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
@@ -142,42 +144,41 @@ public class startActivity extends AppCompatActivity {
         final String tempKey = kakaoLink.checkLink(getIntent());
         Log.e("[roomKey]", "카카오톡 링크 확인");
 
-        if(roomKey != null && tempKey != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("방 입장")
-                    .setMessage("링크로 들어온 방으로 입장하시겠습니까?")
-                    .setIcon(android.R.drawable.ic_menu_save)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            // 확인시 처리 로직
-                            if(roomKey != tempKey) {
-                                firebaseDB.exitRoom(roomKey);
-                            }
-                            roomKey = tempKey;
-                        }})
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            // 취소시 처리 로직
+        Yes = false;
+        dialogStr = "default String";
 
-                    }});
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        }
-        else if(roomKey == null && tempKey != null) {
-            roomKey = tempKey;
-            fromLink = true;
-        }
+        // 1. 그냥 킨경우
+        // 1.1 쉐어드에 저장되있는경우 vs 아닌경우
+        // 2. 링크를 타고들어온경우
+        // 2.1 처음 임장하는경우 vs 들어왔던 방이였던경우
+        // 2.2 처음 입장하는경우 vs 다른방에서 이미 게임중이였던경우
 
-        if (roomKey != null) {
-            byLink = true;
+        if (roomKey == null && tempKey == null) {
+            byLink = false;
+        } else if (roomKey != null && tempKey == null) {
+            dialogStr = "이미 참여중인 방이있습니다.";
+            showComfirmDialog(dialogStr, "기존 방 입장","새로운 방 입장");
+            byLink = false;
+            byShared = false;
+        } else if (roomKey == null && tempKey != null) {
             but_chetRoom.setText("게임입장");
-            Log.e("[roomKey]", roomKey);
+            roomKey = tempKey;
+            byLink = true;
+            byShared = false;
         } else {
-            Log.e("[roomKey]", "roomKey is null");
+            if( tempKey.equals(roomKey)){
+                Toast.makeText(this, "이미 참여중인 방입니다", Toast.LENGTH_SHORT).show();
+                startIntentByShared();
+            }else{
+                dialogStr = "이미 참여중인 방이 있습니다";
+                showComfirmDialog(dialogStr, "기존 방 입장","새로운 방 입장");
+                byLink = true;
+                roomKey = tempKey;
+                but_chetRoom.setText("게임입장");
+            }
         }
 
-        Log.e("[byLink]", Boolean.toString(byLink));
-        Log.e("[fromLink]", Boolean.toString(fromLink));
+
 
         but_setprofile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,13 +200,12 @@ public class startActivity extends AppCompatActivity {
                     Toast.makeText(startActivity.this, "이름을 입력해주세요.", Toast.LENGTH_LONG).show();
                 } else if (edit_name.getText().toString().trim().length() > 10) {
                     Toast.makeText(startActivity.this, "형식에 맡게 입력해주세요.", Toast.LENGTH_LONG).show();
-                } else  if(!isNotiPermissionAllowed()){
+                } else if (!isNotiPermissionAllowed()) {
                     // 버튼클릭시 permission not allowed :
-                    Toast.makeText(startActivity.this,"앱 권한이 꺼져있습니다. 설정창으로 넘어갑니다",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(startActivity.this, "앱 권한이 꺼져있습니다. 설정창으로 넘어갑니다", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
                     startActivity(intent);
-                }
-                else{
+                } else {
                     con.setVerticalBias(R.id.light, 0.1f);
                     TransitionManager.beginDelayedTransition(bg_start, transition);
                     con.applyTo(bg_start);
@@ -221,13 +221,6 @@ public class startActivity extends AppCompatActivity {
                         }
                     }, 500);
 
-                    // ## 링크를 타지않고 들어오면 byLink = false
-                    // firebaseDB객체를 통해서 createRoom()
-                    // firebaseDB객체를 통해서 getRoomkey()
-                    // intent안에 받아온 roomkey를 넣어서 액티비티 이동
-                    // ## 링크를 타고 들어오면 byLink = true
-                    // 링크를 타고 들어온상태면 초대된방의 roomkey를 가지고 있는 상태
-                    // intent에 roomkey 넣어서 액티비티 이동
 
                     // [분석] : 어떤 룸키로 들어오는지 분석
                     Bundle bundle = new Bundle();
@@ -250,11 +243,12 @@ public class startActivity extends AppCompatActivity {
                                 byLink = true;
                                 but_chetRoom.setText("게임입장");
                                 Log.e("!!!!", userKey);
+
                                 // SharedPreference에 저장
                                 SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
 
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
-                                intent.putExtra("created", true);
+                                intent.putExtra("newGame", true);
                                 startActivity(intent);
                             }
                         }, 800);
@@ -280,7 +274,7 @@ public class startActivity extends AppCompatActivity {
                                 SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
 
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
-                                intent.putExtra("created", false);
+                                intent.putExtra("newGame", true);
                                 startActivity(intent);
                             }
                         }, 800);
@@ -395,5 +389,31 @@ public class startActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+    public void showComfirmDialog(String comfirmStr,String okStr, String noStr) {
+        ComfirmDialog customDialog = new ComfirmDialog(startActivity.this, comfirmStr,okStr,noStr);
+        // 커스텀 다이얼로그를 호출한다.
+        // 커스텀 다이얼로그의 결과를 출력할 TextView를 매개변수로 같이 넘겨준다.
+        customDialog.callFunction();
+    }
+
+    public void setYes(Boolean Yes) {
+        this.Yes = Yes;
+    }
+
+    public void startIntentByShared() {
+        user = SharedPref.getUser(this);
+        edit_name.setText(user.getName());
+        user.setProfile(but_setprofile, this);
+
+        firebaseDB.setUser(user);
+        firebaseDB.enterRoom(roomKey);
+        firebaseDB.setUserKey(userKey);
+        firebaseDB.updateUser();
+        Intent intent = new Intent(startActivity.this, chetRoom.class);
+        newGame = false;
+        intent.putExtra("newGame", newGame);
+        startActivity(intent);
+        finish();
     }
 }
