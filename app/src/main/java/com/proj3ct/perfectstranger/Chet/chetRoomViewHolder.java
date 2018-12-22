@@ -91,8 +91,6 @@ public class chetRoomViewHolder extends RecyclerView.ViewHolder {
         text_time.setText(sendTime.substring(0,sendTime.lastIndexOf(':')));
         text_appname.setText(chet.getMainTitle());
         text_description.setText(chet.getMainText());
-
-
     }
     public ImageView getProfile(){
         return image_profile;

@@ -71,6 +71,8 @@ public class startActivity extends AppCompatActivity {
     // AdMob
     private AdMob adMob = new AdMob();
 
+    // SharedPreferences
+    private SharedPref sharedPref = new SharedPref();
 
     // View component
     private TextView text_title;
@@ -88,7 +90,7 @@ public class startActivity extends AppCompatActivity {
     private boolean byShared;
     private boolean isAllowed;
 
-    //permission
+    // permission
     private int permission_WRITE_CONTACTS;
     private int permission_READ_CONTACTS;
     private int permission_RECEIVE_SMS;
@@ -109,6 +111,10 @@ public class startActivity extends AppCompatActivity {
 
         appVariables = (AppVariables) getApplication();
         appVariables.setFirebaseDB(firebaseDB);
+
+        sharedPref.setContext(getApplicationContext());
+        firebaseDB.setSharedPref(sharedPref);
+        appVariables.setSharedPref(sharedPref);
 
         setAnimations();
 
@@ -141,10 +147,10 @@ public class startActivity extends AppCompatActivity {
         //---------------------------------------------------------------------------------------------------------------------------------------
 
         // SharedPreferences에 룸키가 있는가?
-        roomKey = SharedPref.getRoomKey(this);
+        roomKey = sharedPref.getRoomKey();
         if (roomKey != null) {
             Log.e("[Shared roomKey]", roomKey);
-            user = SharedPref.getUser(this);
+            user = sharedPref.getUser();
             edit_name.setText(user.getName());
             user.setProfile(but_setprofile, this);
         } else {
@@ -270,7 +276,7 @@ public class startActivity extends AppCompatActivity {
                                         but_chetRoom.setText("게임입장");
 
                                         // SharedPreference에 저장
-                                        SharedPref.setPref(getApplicationContext(), roomKey, user);
+                                        sharedPref.setPref(roomKey, user);
 
                                         Intent intent = new Intent(startActivity.this, chetRoom.class);
                                         intent.putExtra("newGame", true);
@@ -293,7 +299,7 @@ public class startActivity extends AppCompatActivity {
                                         firebaseDB.addUser(user);
 
                                         // SharedPreference에 저장
-                                        SharedPref.setPref(getApplicationContext(), roomKey, user);
+                                        sharedPref.setPref(roomKey, user);
 
                                         Intent intent = new Intent(startActivity.this, chetRoom.class);
                                         intent.putExtra("newGame", true);
@@ -458,11 +464,11 @@ public class startActivity extends AppCompatActivity {
                         @Override
                         public void callback() {
                             Log.e("[콜백]", "startIntent 함수");
-                            user = SharedPref.getUser(getApplicationContext());
+                            user = sharedPref.getUser();
                             edit_name.setText(user.getName());
                             user.setProfile(but_setprofile, getApplicationContext());
 
-                            roomKey = SharedPref.getRoomKey(getApplicationContext());
+                            roomKey = sharedPref.getRoomKey();
 
                             firebaseDB.setUser(user);
                             firebaseDB.enterRoom(roomKey);

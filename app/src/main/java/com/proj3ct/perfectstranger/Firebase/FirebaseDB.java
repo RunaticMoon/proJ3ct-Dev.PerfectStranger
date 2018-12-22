@@ -1,8 +1,12 @@
 package com.proj3ct.perfectstranger.Firebase;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,12 +20,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
-import com.proj3ct.perfectstranger.AppVariables;
 import com.proj3ct.perfectstranger.Rule.Rule;
 import com.proj3ct.perfectstranger.Chet.aChet;
 import com.proj3ct.perfectstranger.Chet.chetRoomAdapter;
 import com.proj3ct.perfectstranger.Rule.rulesAdapter;
 import com.proj3ct.perfectstranger.SharedPref;
+import com.proj3ct.perfectstranger.Timer;
 import com.proj3ct.perfectstranger.User;
 import com.proj3ct.perfectstranger.Waiting.waitingRoomAdapter;
 
@@ -39,6 +43,9 @@ public class FirebaseDB {
     OnUsersChanged onUsersChanged;
     private Vector<String> chetKeys = new Vector<>();
 
+    // SharedPreferences
+    private SharedPref sharedPref;
+
     // User
     private User user;
     private Boolean isMe = false;
@@ -50,8 +57,9 @@ public class FirebaseDB {
     private LinearLayoutManager chetLayoutManager;
     private TextView butNewMessage;
     private onAlarmListener alarmListener;
-    private int lastusercount=0;
-    private String lastuser="";
+    private int lastusercount = 0;
+    private String lastuser = "";
+    private long chetLength = 0;
 
     // rule Listview
     private RecyclerView list_rule;
@@ -66,9 +74,13 @@ public class FirebaseDB {
     private TextView tv_count;
 
     // Listener
-    private ChildEventListener RuleListener;
+    private ValueEventListener RuleListener;
     private ValueEventListener UserListener;
     private ChildEventListener ChetListener;
+    private ChildEventListener SettingListener;
+
+    // Timer
+    private Timer timer;
 
     // Getter & Setter
     public User getUser() {
@@ -91,6 +103,14 @@ public class FirebaseDB {
             return null;
 
         return myRef.getKey();
+    }
+
+    public void setSharedPref(SharedPref sharedPref) {
+        this.sharedPref = sharedPref;
+    }
+
+    public void setTimer(Timer timer) {
+        this.timer = timer;
     }
 
     // Get Adapter
@@ -176,9 +196,9 @@ public class FirebaseDB {
         myRef.setValue(user);
     }
 
-    public void setSetting(int maxNum) {
+    public void setSetting() {
         Map<String, Object> setting = new HashMap<>();
-        setting.put("maxNum", maxNum);
+        setting.put("start", true);
         setRef.setValue(setting);
     }
 
@@ -244,11 +264,12 @@ public class FirebaseDB {
         ruleRef = roomRef.child("ruleList");
         userRef = roomRef.child("userList");
 
-        setSetting(10);
+        setSetting();
 
        // addRule(0, 0, "모든 알람 공유하기");
         setRuleListener();
         setUserListener();
+        setSettingListener();
         chetAdapter = new chetRoomAdapter();
         chetAdapter.setUsers(onUsersChanged.getUsers());
     }
@@ -260,51 +281,77 @@ public class FirebaseDB {
         ruleRef = roomRef.child("ruleList");
         userRef = roomRef.child("userList");
 
+        checkRoom();
         setRuleListener();
         setUserListener();
+        setSettingListener();
         chetAdapter = new chetRoomAdapter();
         chetAdapter.setUsers(onUsersChanged.getUsers());
     }
 
-    public void exitRoom(Context context) {
+    public void exitRoom() {
         myRef.removeValue();
-        SharedPref.destroy(context);
+        if(getUserAdapter().getItemCount() == 1) {
+            roomRef.removeValue();
+        }
+        sharedPref.destroy();
         resetListener();
     }
 
-    public void destroyRoom(Context context) {
+    public void destroyRoom() {
         roomRef.removeValue();
-        SharedPref.destroy(context);
+        sharedPref.destroy();
         resetListener();
+    }
+
+    public void checkRoom() {
+        setRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()) {
+                    exitRoom();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     // Set Listener
     private void setRuleListener() {
         ruleAdapter = new rulesAdapter();
-        RuleListener = new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
+        RuleListener = new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if(ruleAdapter != null) {
-                    Log.e("[LOG] listener", dataSnapshot.toString());
-                    Rule rule = dataSnapshot.getValue(Rule.class);
-                    ruleAdapter.add(rule);
-                }
-            }
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ruleAdapter = new rulesAdapter();
+                Vector<Integer> alarms = new Vector<>();
+
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if(ruleAdapter != null) {
+                        Log.e("[LOG] listener", snapshot.toString());
+                        Rule rule = snapshot.getValue(Rule.class);
+                        ruleAdapter.add(rule);
+                        if(rule.getRuleType() == 4) {
+                            alarms.add(rule.getDetail_i());
+                        }
+                    }
+                }
+
+                for(int alarm : alarms) {
+                    Log.e("[룰리스너]", String.valueOf(alarm));
+                }
+                timer.checkAlarm(alarms);
             }
 
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) { }
+            }
         };
-        ruleRef.addChildEventListener(RuleListener);
+        ruleRef.addValueEventListener(RuleListener);
     }
 
     private void setMessageListener() {
@@ -312,10 +359,12 @@ public class FirebaseDB {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.e("!!!chetList 갯수", Integer.toString(chetAdapter.getItemCount()));
-                if(chetAdapter.getItemCount() > 1000){
-                    for(int i = 0 ; i < 200; i++) {
-                        chetAdapter.deleteByIndex(i);
-                        chetRef.child(chetKeys.get(i)).removeValue();
+                if(isMaster()) {
+                    if(chetAdapter.getItemCount() > 1000){
+                        for(int i = 0 ; i < 200; i++) {
+                            chetAdapter.deleteByIndex(i);
+                            chetRef.child(chetKeys.get(i)).removeValue();
+                        }
                     }
                 }
                 if(chetAdapter != null) {
@@ -324,34 +373,37 @@ public class FirebaseDB {
                     Log.e("[LOG] message", achet.toString());
                     if(achet.getUserKey() == getUserKey()){
                         isMe = true;
-                    }else{
+                    } else{
                         isMe = false;
                     }
 
-                    if( lastuser == achet.getUserKey())
-                    {
+                    if(lastuser == achet.getUserKey()) {
                         lastusercount++;
-                    }else
-                    {
+                    } else {
                         if(lastuser.equals(""))lastusercount = -1;
                         lastuser = achet.getUserKey();
                         lastusercount = 0;
                     }
 
                     boolean wrong_rule = ruleChecker(achet);
+
                     chetKeys.add(dataSnapshot.getKey());
-                    if((!chetAdapter.isBottomReached())&&chetAdapter.getItemCount()>0)
-                    {
-                        chetAdapter.add(achet, isMe,wrong_rule);
-                        if(list_chet != null) {
-                            butNewMessage.setVisibility(View.VISIBLE);
+                    if((!chetAdapter.isBottomReached())&&chetAdapter.getItemCount()>0) {
+                        if(!achet.getAppName().equals("alarm")) {
+                            chetAdapter.add(achet, isMe, wrong_rule);
+
+                            if(list_chet != null) {
+                                butNewMessage.setVisibility(View.VISIBLE);
+                            }
                         }
-                    }else
-                    {
-                        chetAdapter.add(achet, isMe,wrong_rule);
-                        if(list_chet != null) {
-                            list_chet.smoothScrollToPosition(chetAdapter.getItemCount() - 1);
-                            butNewMessage.setVisibility(View.GONE);
+                    } else {
+                        if(!achet.getAppName().equals("alarm")) {
+                            chetAdapter.add(achet, isMe, wrong_rule);
+
+                            if(list_chet != null) {
+                                list_chet.smoothScrollToPosition(chetAdapter.getItemCount() - 1);
+                                butNewMessage.setVisibility(View.GONE);
+                            }
                         }
                     }
 
@@ -369,7 +421,19 @@ public class FirebaseDB {
             @Override
             public void onCancelled(DatabaseError databaseError) { }
         };
-        chetRef.addChildEventListener(ChetListener);
+        chetRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                chetLength = dataSnapshot.getChildrenCount();
+                Log.e("[채팅길이]", String.valueOf(chetLength));
+                chetRef.addChildEventListener(ChetListener);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void setUserListener() {
@@ -411,11 +475,45 @@ public class FirebaseDB {
         userRef.addValueEventListener(UserListener);
     }
 
+    private void setSettingListener() {
+        SettingListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Log.e("[세팅]", "setRef 삭제");
+                exitRoom();
+                android.os.Process.killProcess(android.os.Process.myPid());
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        setRef.addChildEventListener(SettingListener);
+    }
+
     // reset Listner
     private void resetListener() {
         userRef.removeEventListener(UserListener);
         chetRef.removeEventListener(ChetListener);
         ruleRef.removeEventListener(RuleListener);
+        setRef.removeEventListener(SettingListener);
+        timer.exit();
     }
 
     // Rule Checker
@@ -447,7 +545,13 @@ public class FirebaseDB {
                     detected = true;
                     break;
                 } else if (rule.getRuleType() == 4) {
-
+                    if(chet.getAppName().equals("alarm")) {
+                        if(onUsersChanged.getUsers().containsKey(chet.getUserKey())) {
+                            alarmListener.onAlarm(onUsersChanged.getUser(chet.getUserKey()).getName(), rule.getDetail_i() + "분간 연락 안온 사람 벌칙");
+                            detected = true;
+                            break;
+                        }
+                    }
                 } else if (rule.getRuleType() == 5 && chet.getAppName().contains(rule.getDetail_s())) {
                     alarmListener.onAlarm(onUsersChanged.getUser(chet.getUserKey()).getName(), rule.getDetail_s() + " 알림 시 벌칙");
                     detected = true;

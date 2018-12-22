@@ -33,6 +33,7 @@ import com.proj3ct.perfectstranger.AdMob;
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
 import com.proj3ct.perfectstranger.R;
 import com.proj3ct.perfectstranger.Rule.RulesActivity;
+import com.proj3ct.perfectstranger.Timer;
 import com.proj3ct.perfectstranger.User;
 import com.proj3ct.perfectstranger.Waiting.waitingRoom;
 
@@ -56,6 +57,9 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
     private AdMob adMob;
     private boolean created;
 
+    // Timer
+    private Timer timer;
+
     // BroadcasRecevier : service를 감시하여 값을 받아서 firebaseDB 방아온 메세지를 넘겨줌
     // 받아오는 메세지 : 앱이름 / MainText / subText / 시간 / text / 프로필( 예정 ) 정도.
     private BroadcastReceiver onNotice = new BroadcastReceiver() {
@@ -65,6 +69,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
             String mainTitle = intent.getStringExtra("mainTitle");
             String mainText = intent.getStringExtra("mainText");
             String appName = intent.getStringExtra("appName");
+            timer.update();
             firebaseDB.sendMessage(firebaseDB.getUserKey(), appName, mainTitle, mainText);
         }
     };
@@ -108,6 +113,12 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
                 sound.stop(soundId);
             }
         });
+
+        // Timer 설정
+        timer = new Timer();
+        timer.start();
+        firebaseDB.setTimer(timer);
+        timer.setFirebaseDB(firebaseDB);
 
         // fireBaseDB 설정
         firebaseDB.setList_chet(list_chet, getApplicationContext(), but_newMessage);
@@ -154,7 +165,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         bt_exitRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firebaseDB.exitRoom(getApplicationContext());
+                firebaseDB.exitRoom();
                 finish();
             }
         });
@@ -163,7 +174,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
             @Override
             public void onClick(View v) {
                 if(firebaseDB.isMaster()) {
-                    firebaseDB.destroyRoom(getApplicationContext());
+                    firebaseDB.destroyRoom();
                     finish();
                 }
             }
@@ -183,13 +194,13 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
 
     @Override
     public void onBackPressed() {
-        firebaseDB.exitRoom(getApplicationContext());
+        firebaseDB.exitRoom();
         super.onBackPressed();
     }
 
     @Override
     protected void onDestroy() {
-        firebaseDB.exitRoom(getApplicationContext());
+        firebaseDB.exitRoom();
         super.onDestroy();
     }
 }
