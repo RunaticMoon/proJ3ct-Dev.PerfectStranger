@@ -40,19 +40,32 @@ public class chetRoomAdapter extends RecyclerView.Adapter<chetRoomViewHolder> {
     }
 
     public void setUsers(HashMap<String,User> users){
-        this.users=users;
+        this.users = users;
     }
 
     @Override
     public void onBindViewHolder(chetRoomViewHolder holder, int position) {
         if(chet.size()>0){
             aChet tmp = chet.get(position);
-            holder.setInfo(chet.get(position), users.get(tmp.getUserKey()).getName(),me.get(position));
-            users.get(chet.get(position).getUserKey()).setProfile(holder.getProfile(),con);
+            Log.e("[뷰홀더]", tmp.getUserKey());
+            Log.e("[뷰홀더2]", String.valueOf(users.containsKey(tmp.getUserKey())));
+            for(String key : users.keySet()) {
+                Log.e("[뷰홀더 users]", key);
+                Log.e("[뷰홀더 usersName]", users.get(key).getName());
+            }
+
+            if(users.containsKey(tmp.getUserKey())) {
+                holder.setInfo(chet.get(position), users.get(tmp.getUserKey()).getName(),me.get(position));
+                users.get(chet.get(position).getUserKey()).setProfile(holder.getProfile(),con);
+            }
+            else {
+                holder.setInfo(chet.get(position), "이름없음", false);
+                (new User("이름없음")).setProfile(holder.getProfile(), con);
+            }
         }
         if(position==chet.size()-1){
             BottomReached=true;
-        }else BottomReached=false;
+        } else BottomReached=false;
     }
     public boolean isBottomReached(){
         return BottomReached;

@@ -16,6 +16,15 @@ public class AppVariables extends Application implements FirebaseDB.OnUsersChang
     FirebaseDB firebaseDB;
     HashMap<String,User> users;
     AdMob adMob;
+    SharedPref sharedPref;
+
+    public SharedPref getSharedPref() {
+        return sharedPref;
+    }
+
+    public void setSharedPref(SharedPref sharedPref) {
+        this.sharedPref = sharedPref;
+    }
 
     int soundSet;
 
