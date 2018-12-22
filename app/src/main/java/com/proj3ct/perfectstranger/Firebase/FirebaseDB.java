@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.proj3ct.perfectstranger.Callback;
+import com.proj3ct.perfectstranger.Chet.chetRoom;
 import com.proj3ct.perfectstranger.Rule.Rule;
 import com.proj3ct.perfectstranger.Chet.aChet;
 import com.proj3ct.perfectstranger.Chet.chetRoomAdapter;
@@ -282,7 +284,6 @@ public class FirebaseDB {
         ruleRef = roomRef.child("ruleList");
         userRef = roomRef.child("userList");
 
-        checkRoom();
         setRuleListener();
         setUserListener();
         setSettingListener();
@@ -305,12 +306,16 @@ public class FirebaseDB {
         resetListener();
     }
 
-    public void checkRoom() {
-        setRef.addListenerForSingleValueEvent(new ValueEventListener() {
+    public void checkRoom(String roomKey, final Callback callback) {
+        dbRef.child(roomKey).child("setList").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.exists()) {
-                    exitRoom();
+                if(dataSnapshot.exists()) {
+                    callback.callback();
+                }
+                else {
+                    sharedPref.destroy();
+                    firstTime = true;
                 }
             }
 
@@ -373,7 +378,9 @@ public class FirebaseDB {
                     Log.e("[LOG] listener", dataSnapshot.toString());
                     aChet achet = dataSnapshot.getValue(aChet.class);
                     Log.e("[LOG] message", achet.toString());
-                    if(achet.getUserKey() == getUserKey()){
+                    Log.e("[Message Key]", achet.getUserKey());
+                    Log.e("[Message Key]", getUserKey());
+                    if(achet.getUserKey().equals(getUserKey())){
                         isMe = true;
                     } else{
                         isMe = false;
@@ -510,7 +517,7 @@ public class FirebaseDB {
     }
 
     // reset Listner
-    private void resetListener() {
+    public void resetListener() {
         userRef.removeEventListener(UserListener);
         chetRef.removeEventListener(ChetListener);
         ruleRef.removeEventListener(RuleListener);

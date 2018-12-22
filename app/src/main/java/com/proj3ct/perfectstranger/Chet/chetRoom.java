@@ -69,6 +69,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
     private BroadcastReceiver onNotice = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.e("[BroadcastReceiver]","BroadcastReceiver receive");
             String mainTitle = intent.getStringExtra("mainTitle");
             String mainText = intent.getStringExtra("mainText");
             String appName = intent.getStringExtra("appName");
@@ -208,6 +209,12 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
     public void showComfirmDialog(String comfirmStr, String okStr, String noStr) {
         ComfirmDialog customDialog = new ComfirmDialog(chetRoom.this, comfirmStr, okStr, noStr);
         customDialog.callFunction2();
+    }
+
+    @Override
+    protected void onDestroy() {
+        firebaseDB.resetListener();
+        super.onDestroy();
     }
 
     @Override

@@ -53,7 +53,7 @@ public class chetRoomAdapter extends RecyclerView.Adapter<chetRoomViewHolder> {
                 Log.e("[뷰홀더 users]", key);
                 Log.e("[뷰홀더 usersName]", users.get(key).getName());
             }
-
+            Log.e("[뷰홀더3]", String.valueOf(me.get(position)));
             if(users.containsKey(tmp.getUserKey())) {
                 holder.setInfo(chet.get(position), users.get(tmp.getUserKey()).getName(),me.get(position));
                 users.get(chet.get(position).getUserKey()).setProfile(holder.getProfile(),con);

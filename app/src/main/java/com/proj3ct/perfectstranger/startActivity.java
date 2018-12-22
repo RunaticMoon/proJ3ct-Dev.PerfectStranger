@@ -287,20 +287,25 @@ public class startActivity extends AppCompatActivity {
                                 adMob.showInterstitial(new Callback() {
                                     @Override
                                     public void callback() {
-                                        Log.e("[콜백]", "byLink true 방 들어가기");
-                                        // 임시로 participant를 user로 변환해서 set하게 해놓음
-                                        firebaseDB.setUser(user);
-                                        firebaseDB.enterRoom(roomKey);
-                                        firebaseDB.addUser(user);
+                                        firebaseDB.checkRoom(roomKey, new Callback() {
+                                            @Override
+                                            public void callback() {
+                                                Log.e("[콜백]", "byLink true 방 들어가기");
+                                                // 임시로 participant를 user로 변환해서 set하게 해놓음
+                                                firebaseDB.setUser(user);
+                                                firebaseDB.enterRoom(roomKey);
+                                                firebaseDB.addUser(user);
 
-                                        userKey = firebaseDB.getUserKey();
+                                                userKey = firebaseDB.getUserKey();
 
-                                        // SharedPreference에 저장
-                                        sharedPref.setPref(roomKey, userKey, user);
+                                                // SharedPreference에 저장
+                                                sharedPref.setPref(roomKey, userKey, user);
 
-                                        Intent intent = new Intent(startActivity.this, chetRoom.class);
-                                        intent.putExtra("newGame", true);
-                                        startActivity(intent);
+                                                Intent intent = new Intent(startActivity.this, chetRoom.class);
+                                                intent.putExtra("newGame", true);
+                                                startActivity(intent);
+                                            }
+                                        });
                                     }
                                 });
                             }
@@ -466,23 +471,27 @@ public class startActivity extends AppCompatActivity {
                     adMob.showInterstitial(new Callback() {
                         @Override
                         public void callback() {
-                            Log.e("[콜백]", "startIntent 함수");
-                            user = sharedPref.getUser();
-                            edit_name.setText(user.getName());
-                            user.setProfile(but_setprofile, getApplicationContext());
-
                             roomKey = sharedPref.getRoomKey();
-                            userKey = sharedPref.getUserKey();
+                            firebaseDB.checkRoom(roomKey, new Callback() {
+                                @Override
+                                public void callback() {
+                                    Log.e("[콜백]", "startIntent 함수");
+                                    user = sharedPref.getUser();
+                                    edit_name.setText(user.getName());
+                                    user.setProfile(but_setprofile, getApplicationContext());
 
-                            firebaseDB.setUser(user);
-                            firebaseDB.enterRoom(roomKey);
-                            firebaseDB.setUserKey(userKey);
-                            firebaseDB.updateUser();
+                                    userKey = sharedPref.getUserKey();
 
-                            Intent intent = new Intent(startActivity.this, chetRoom.class);
-                            newGame = false;
-                            intent.putExtra("newGame", newGame);
-                            startActivity(intent);
+                                    firebaseDB.setUser(user);
+                                    firebaseDB.enterRoom(roomKey);
+                                    firebaseDB.setUserKey(userKey);
+                                    firebaseDB.updateUser();
+                                    Intent intent = new Intent(startActivity.this, chetRoom.class);
+                                    newGame = false;
+                                    intent.putExtra("newGame", newGame);
+                                    startActivity(intent);
+                                }
+                            });
                         }
                     });
                 }
