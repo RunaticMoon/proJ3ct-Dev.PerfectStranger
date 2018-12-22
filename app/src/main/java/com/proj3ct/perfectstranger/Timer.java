@@ -69,7 +69,6 @@ public class Timer extends Thread {
 
     public void checkAlarm(Vector<Integer> nalarms) {
         for(int i = 0; i < alarms.size(); i++) {
-            Log.e("[checkAlarm1]", String.valueOf(alarms.get(i)));
             if(!nalarms.contains(alarms.get(i))) {
                 alarms.remove(i);
                 startTime.remove(i);
@@ -78,7 +77,6 @@ public class Timer extends Thread {
         }
 
         for(int i = 0; i < nalarms.size(); i++) {
-            Log.e("[checkAlarm2]", String.valueOf(nalarms.get(i)));
             if(!alarms.contains(nalarms.get(i))) {
                 alarms.add(nalarms.get(i));
                 startTime.add(second);
@@ -91,14 +89,12 @@ public class Timer extends Thread {
     public void run() {
         while(play) {
             second++;
-            Log.e("[알람 초]", String.valueOf(second));
 
             for(int i = 0; i < alarms.size(); i++) {
                 int alarm = alarms.get(i) * 60;
                 int start = startTime.get(i);
 
                 if(second >= start + alarm) {
-                    Log.e("[알람]", "알람 울림");
                     startTime.set(i, second);
                     firebaseDB.sendMessage(firebaseDB.getUserKey(), "alarm", "", "");
                 }

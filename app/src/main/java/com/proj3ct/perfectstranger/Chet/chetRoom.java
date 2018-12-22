@@ -136,9 +136,11 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         // callback 함수
         // LocalBroadcastManager( Local를 사용한 이유 : 다른앱의 서비스의 방해를 방지 )
         // 값을 받아오면 onNotice함수를 실행( "Msg"태그의 intent를 함께 전달 )
-        if (newGame && startActivity.status.equals("init")) {
+        Log.e("[status]",startActivity.status);
+        if (newGame) {
             LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("Msg"));
         }
+
 
         adMob = appVariables.getAdMob();
 
@@ -202,6 +204,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
     }
 
     public void exitRoom() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(onNotice);
         firebaseDB.exitRoom();
         finish();
     }
