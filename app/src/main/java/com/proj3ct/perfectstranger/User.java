@@ -6,8 +6,6 @@ import android.widget.ImageView;
 
 import com.proj3ct.perfectstranger.Profile.Profile;
 
-import java.io.Serializable;
-
 public class User {
     private String name;
     private int vectorType, vectorColor, backgroundColor, outlineColor;

@@ -21,17 +21,17 @@ import java.util.Vector;
  */
 
 public class chetRoomAdapter extends RecyclerView.Adapter<chetRoomViewHolder> {
-    Vector<Boolean> me = new Vector<>();
-    Vector<Boolean> wrong = new Vector<>();
-    List<aChet> chet= new ArrayList<>();
-    HashMap<String,User> users;
+    private Vector<Boolean> me = new Vector<>();
+    private Vector<Boolean> wrong = new Vector<>();
+    private List<aChet> chet = new ArrayList<>();
+    private HashMap<String,User> users;
     private boolean BottomReached;
-    AppVariables appVariables;
-    Context con;
+    private Context con;
+
     @Override
     public chetRoomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
-        if(viewType==1)
+        if(viewType == 1)
             v= LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_chet_me,parent,false);
         else v= LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_chet,parent,false);
         final chetRoomViewHolder holder = new chetRoomViewHolder(v);
@@ -49,11 +49,8 @@ public class chetRoomAdapter extends RecyclerView.Adapter<chetRoomViewHolder> {
             aChet tmp = chet.get(position);
             Log.e("[뷰홀더]", tmp.getUserKey());
             Log.e("[뷰홀더2]", String.valueOf(users.containsKey(tmp.getUserKey())));
-            for(String key : users.keySet()) {
-                Log.e("[뷰홀더 users]", key);
-                Log.e("[뷰홀더 usersName]", users.get(key).getName());
-            }
             Log.e("[뷰홀더3]", String.valueOf(me.get(position)));
+
             if(users.containsKey(tmp.getUserKey())) {
                 holder.setInfo(chet.get(position), users.get(tmp.getUserKey()).getName(),me.get(position));
                 users.get(chet.get(position).getUserKey()).setProfile(holder.getProfile(),con);
@@ -63,9 +60,9 @@ public class chetRoomAdapter extends RecyclerView.Adapter<chetRoomViewHolder> {
                 (new User("이름없음")).setProfile(holder.getProfile(), con);
             }
         }
-        if(position==chet.size()-1){
-            BottomReached=true;
-        } else BottomReached=false;
+        if(position == chet.size() - 1){
+            BottomReached = true;
+        } else BottomReached = false;
     }
     public boolean isBottomReached(){
         return BottomReached;
@@ -81,7 +78,7 @@ public class chetRoomAdapter extends RecyclerView.Adapter<chetRoomViewHolder> {
         this.chet.add(chet);
         this.me.add(me);
         this.wrong.add(wrong);
-        Log.e("!!!!",chet.getUserKey());
+        Log.e("!!!!", chet.getUserKey());
         notifyDataSetChanged();
     }
 
@@ -93,6 +90,5 @@ public class chetRoomAdapter extends RecyclerView.Adapter<chetRoomViewHolder> {
     public void deleteByIndex(int position){
         chet.remove(position);
         notifyDataSetChanged();
-
     }
 }

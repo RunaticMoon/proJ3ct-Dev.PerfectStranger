@@ -37,12 +37,22 @@ import java.util.Vector;
 
 public class FirebaseDB {
     // Firebase
+    /*
+        roomRef : 채팅방 전체
+        setRef : 설정 리스트
+        chetRef : 채팅 리스트
+        ruleRef : 룰 리스트
+        userRef : 유저 리스트
+        myRef : userRef 중에서 나 자신의 레퍼런스
+        onUsersChanged : <String, User>(유저키, 유저)의 해시맵을 가지는 객체로 유저키로부터 유저를 빠르게 얻어내기 위함
+        chetKeys : 채팅의 개수를 확인하고 삭제하기 위한 벡터
+     */
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
     private DatabaseReference dbRef = db.getReference("talks");
     private DatabaseReference roomRef;
     private DatabaseReference setRef, chetRef, ruleRef, userRef;
     private DatabaseReference myRef;
-    OnUsersChanged onUsersChanged;
+    private OnUsersChanged onUsersChanged;
     private Vector<String> chetKeys = new Vector<>();
 
     // SharedPreferences
@@ -72,7 +82,7 @@ public class FirebaseDB {
     private RecyclerView list_user;
     private waitingRoomAdapter userAdapter;
     private LinearLayoutManager userLayoutManager;
-    private boolean firstTime = true;
+    private boolean firstTime = true;       // 처음 상태일때 setMessageListener()를 호출해준다.
     private TextView tv_count;
 
     // Listener
@@ -256,7 +266,7 @@ public class FirebaseDB {
     }
 
     public boolean isMaster() {
-        return user.getName().equals(userAdapter.getUsers().get(0).getName());
+        return getUserKey().equals(userAdapter.getMasterKey());
     }
 
     // Room Function
@@ -454,12 +464,18 @@ public class FirebaseDB {
                     Log.e("[LOG] listener", dataSnapshot.toString());
                     Vector<User> newUsers = new Vector<User>();
                     HashMap<String, User> newMap = new HashMap<>();
+                    boolean firstIndex = true;
 
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User user = snapshot.getValue(User.class);
                         Log.e("[LOG] user", user.getName());
                         newUsers.add(user);
                         newMap.put(snapshot.getKey(), user);
+
+                        if(firstIndex) {
+                            userAdapter.setMasterKey(snapshot.getKey());
+                            firstIndex = false;
+                        }
                     }
                     userAdapter.setUsers(newUsers);
                     onUsersChanged.setUsers(newMap);

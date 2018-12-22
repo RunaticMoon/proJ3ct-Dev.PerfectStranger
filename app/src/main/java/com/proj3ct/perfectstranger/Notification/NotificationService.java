@@ -14,8 +14,6 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.proj3ct.perfectstranger.Timer;
-
 // https://www.learn2crack.com/2014/11/reading-notification-using-notificationlistenerservice.html
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class NotificationService extends NotificationListenerService {

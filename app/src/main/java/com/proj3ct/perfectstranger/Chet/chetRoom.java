@@ -27,9 +27,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.proj3ct.perfectstranger.AppVariables;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
 import com.proj3ct.perfectstranger.AdMob;
 import com.proj3ct.perfectstranger.Dialog.ComfirmDialog;
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
@@ -38,15 +35,14 @@ import com.proj3ct.perfectstranger.Rule.RulesActivity;
 import com.proj3ct.perfectstranger.Timer;
 import com.proj3ct.perfectstranger.User;
 import com.proj3ct.perfectstranger.Waiting.waitingRoom;
-import com.proj3ct.perfectstranger.sendContext;
 import com.proj3ct.perfectstranger.settingActivity;
 import com.proj3ct.perfectstranger.startActivity;
 
 public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmListener {
-    private String roomkey;
     private FirebaseDB firebaseDB;
     private AppVariables appVariables;
     Boolean newGame;
+
     // View component
     private RecyclerView list_chet;
     private TextView but_friends, but_rules, but_newMessage, alarm_name, alarm_rule;
@@ -54,15 +50,18 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
     private ConstraintLayout alarm_layout, alarm;
     private Button bt_exitRoom, bt_destroyRoom;
 
+    // SoundPool
     private SoundPool sound;
     private int soundId;
 
     // AdMob
     private AdMob adMob;
-    private boolean created;
 
     // Timer
     private Timer timer;
+
+    // User
+    private User user;
 
     // BroadcasRecevier : service를 감시하여 값을 받아서 firebaseDB 방아온 메세지를 넘겨줌
     // 받아오는 메세지 : 앱이름 / MainText / subText / 시간 / text / 프로필( 예정 ) 정도.
@@ -78,7 +77,6 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         }
     };
 
-    private User user;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +86,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         Intent intent = getIntent();
         firebaseDB = appVariables.getFirebaseDB();
         user = appVariables.getUser();
+        adMob = appVariables.getAdMob();
 
         but_friends = (TextView) findViewById(R.id.text_friends);
         but_rules = (TextView) findViewById(R.id.text_rules);
@@ -127,20 +126,18 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         firebaseDB.setList_chet(list_chet, getApplicationContext(), but_newMessage);
         firebaseDB.setOnAlarmListener(this);
         Log.e("[챗룸]", firebaseDB.getRoomKey());
-        // intent에 created 저장되어 있음.
 
+        // intent에 newGame 저장되어 있음.
         if (intent != null) {
-            created = intent.getBooleanExtra("created", false);
             newGame = intent.getBooleanExtra("newGame", false);
         }
+
         // callback 함수
         // LocalBroadcastManager( Local를 사용한 이유 : 다른앱의 서비스의 방해를 방지 )
         // 값을 받아오면 onNotice함수를 실행( "Msg"태그의 intent를 함께 전달 )
         if (newGame && startActivity.status.equals("init")) {
             LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("Msg"));
         }
-
-        adMob = appVariables.getAdMob();
 
         but_friends.setOnClickListener(new View.OnClickListener() {
             @Override

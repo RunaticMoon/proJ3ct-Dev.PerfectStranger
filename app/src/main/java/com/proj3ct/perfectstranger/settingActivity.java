@@ -1,30 +1,24 @@
 package com.proj3ct.perfectstranger;
 
-import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.google.firebase.database.core.view.View;
-import com.proj3ct.perfectstranger.Chet.chetRoom;
 import com.proj3ct.perfectstranger.Dialog.ComfirmDialog;
 
 public class settingActivity extends AppCompatActivity {
-
-    TextView but_setSound,but_gotoEmail,but_gotoBlog,but_exitRoom,but_deleteRoom;
+    TextView but_setSound, but_gotoEmail, but_gotoBlog, but_exitRoom, but_deleteRoom;
     AppVariables appVariables;
-    sendContext sendCon;
-    Context previousContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         but_setSound = (TextView)findViewById(R.id.but_setSound);
-        but_gotoBlog=(TextView)findViewById(R.id.but_linkblog);
-        but_gotoEmail=(TextView)findViewById(R.id.but_linkemail);
-        but_exitRoom=(TextView)findViewById(R.id.but_exit);
-        but_deleteRoom=(TextView)findViewById(R.id.but_delRoom);
+        but_gotoBlog = (TextView)findViewById(R.id.but_linkblog);
+        but_gotoEmail = (TextView)findViewById(R.id.but_linkemail);
+        but_exitRoom = (TextView)findViewById(R.id.but_exit);
+        but_deleteRoom = (TextView)findViewById(R.id.but_delRoom);
         appVariables = (AppVariables)getApplication();
 
         if(!appVariables.firebaseDB.isMaster()){

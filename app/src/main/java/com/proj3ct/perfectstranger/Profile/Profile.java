@@ -29,12 +29,12 @@ public class Profile {
     {
         this.vectorType = vectorType;
     }
-    public void setColor(int bg, int outline, int vector){
+    public void setColor(int bg, int outline, int vector) {
         this.bg = bg;
         this.outline = outline;
         this.vector = vector;
     }
-    public void setProfile(ImageView img, Context con){
+    public void setProfile(ImageView img, Context con) {
         img.setImageResource(vectorid[vectorType]);
         Drawable bg = con.getResources().getDrawable(R.drawable.circle);
 
@@ -43,11 +43,11 @@ public class Profile {
             int strokeWidth = 16;
             if(img.getTag().toString().contains("big")) strokeWidth = 22;
             else if(img.getTag().toString().contains("small")) strokeWidth = 8;
-            ((GradientDrawable) bg.mutate()).setStroke(strokeWidth,outline); //테두리 색 및 굵기 변경
+            ((GradientDrawable) bg.mutate()).setStroke(strokeWidth, outline); //테두리 색 및 굵기 변경
         }
         img.setBackground(bg);
 
-        img.getDrawable().mutate().setColorFilter(new LightingColorFilter(Color.WHITE,vector));
+        img.getDrawable().mutate().setColorFilter(new LightingColorFilter(Color.WHITE, vector));
     }
 
 
