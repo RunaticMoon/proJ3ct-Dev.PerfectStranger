@@ -1,13 +1,18 @@
 package com.proj3ct.perfectstranger.Chet;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.proj3ct.perfectstranger.AppVariables;
 import com.proj3ct.perfectstranger.R;
+import com.proj3ct.perfectstranger.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -19,7 +24,10 @@ public class chetRoomAdapter extends RecyclerView.Adapter<chetRoomViewHolder> {
     Vector<Boolean> me = new Vector<>();
     Vector<Boolean> wrong = new Vector<>();
     List<aChet> chet= new ArrayList<>();
+    HashMap<String,User> users;
     private boolean BottomReached;
+    AppVariables appVariables;
+    Context con;
     @Override
     public chetRoomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
@@ -27,14 +35,23 @@ public class chetRoomAdapter extends RecyclerView.Adapter<chetRoomViewHolder> {
             v= LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_chet_me,parent,false);
         else v= LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_chet,parent,false);
         final chetRoomViewHolder holder = new chetRoomViewHolder(v);
+        con = parent.getContext();
         return holder;
     }
 
+    public void setUsers(HashMap<String,User> users){
+        this.users=users;
+    }
 
     @Override
     public void onBindViewHolder(chetRoomViewHolder holder, int position) {
         if(chet.size()>0){
-            holder.setInfo(chet.get(position),wrong.get(position),me.get(position));
+            aChet tmp = chet.get(position);
+            Log.e("!!!뷰홀더", tmp.getMainText());
+            Log.e("!!!뷰홀더", tmp.getUserKey());
+            Log.e("!!!뷰홀더2", Boolean.toString(users.containsKey(tmp.getUserKey())));
+            holder.setInfo(chet.get(position), users.get(tmp.getUserKey()).getName(),me.get(position));
+            users.get(chet.get(position).getUserKey()).setProfile(holder.getProfile(),con);
         }
         if(position==chet.size()-1){
             BottomReached=true;
@@ -54,6 +71,7 @@ public class chetRoomAdapter extends RecyclerView.Adapter<chetRoomViewHolder> {
         this.chet.add(chet);
         this.me.add(me);
         this.wrong.add(wrong);
+        Log.e("!!!!",chet.getUserKey());
         notifyDataSetChanged();
     }
 

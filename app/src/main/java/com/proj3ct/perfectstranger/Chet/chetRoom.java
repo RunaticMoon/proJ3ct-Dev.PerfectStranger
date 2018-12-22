@@ -64,7 +64,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
             String mainTitle = intent.getStringExtra("mainTitle");
             String mainText = intent.getStringExtra("mainText");
             String appName = intent.getStringExtra("appName");
-            firebaseDB.sendMessage(user.getName(), appName, mainTitle, mainText);
+            firebaseDB.sendMessage(firebaseDB.getUserKey(), appName, mainTitle, mainText);
         }
     };
 

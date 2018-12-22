@@ -244,9 +244,12 @@ public class startActivity extends AppCompatActivity {
                                 firebaseDB.createNewRoom();
                                 firebaseDB.addUser(user);
 
+                                roomKey = firebaseDB.getRoomKey();
+                                userKey = firebaseDB.getUserKey();
+
                                 byLink = true;
                                 but_chetRoom.setText("게임입장");
-
+                                Log.e("!!!!", userKey);
                                 // SharedPreference에 저장
                                 SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
 
@@ -265,6 +268,7 @@ public class startActivity extends AppCompatActivity {
 
                                 if(fromLink) {
                                     firebaseDB.addUser(user);
+                                    userKey = firebaseDB.getUserKey();
                                 }
                                 else {
                                     Log.e("[userKey]", userKey);

@@ -5,16 +5,16 @@ package com.proj3ct.perfectstranger.Chet;
  */
 
 public class aChet {
-    private String userName;
+    private String userKey;
     private String appName, mainText, mainTitle;
     private Long timeStamp;
 
-    public String getUserName() {
-        return userName;
+    public String getUserKey() {
+        return userKey;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserKey(String userKey) {
+        this.userKey = userKey;
     }
 
     public String getAppName() {
@@ -49,4 +49,16 @@ public class aChet {
     public void setTimeStamp(Long timeStamp) {
         this.timeStamp = timeStamp;
     }
+
+    @Override
+    public String toString() {
+        return "aChet{" +
+                "userKey='" + userKey + '\'' +
+                ", appName='" + appName + '\'' +
+                ", mainText='" + mainText + '\'' +
+                ", mainTitle='" + mainTitle + '\'' +
+                ", timeStamp=" + timeStamp +
+                '}';
+    }
 }
+

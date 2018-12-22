@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.proj3ct.perfectstranger.R;
+import com.proj3ct.perfectstranger.User;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -61,7 +62,7 @@ public class chetRoomViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void setInfo(aChet chet, boolean wrong,boolean me){
+    public void setInfo(aChet chet,String userName,boolean me){
         appName=chet.getAppName();
         if(appName.equals(KAKAO)){
             image_logo.setImageResource(R.drawable.logo_kakaotalk);
@@ -86,19 +87,15 @@ public class chetRoomViewHolder extends RecyclerView.ViewHolder {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd hh:mm:ss", Locale.KOREA);
 
         sendTime=sdf.format(time);
-        userName=chet.getUserName();
         text_name.setText(userName);
         text_time.setText(sendTime.substring(0,sendTime.lastIndexOf(':')));
         text_appname.setText(chet.getMainTitle());
         text_description.setText(chet.getMainText());
 
-        //에러난 뷰 빨갛게 표시, 다른것도 같이 표시되는 이유 모름
-        /*if(wrong) {
-            if(me){
-                bg.setBackground(itemView.getResources().getDrawable(R.drawable.bg_chet_me_red));
-            }else{
-                bg.setBackground(itemView.getResources().getDrawable(R.drawable.bg_chet_red));
-            }
-        }*/
+
     }
+    public ImageView getProfile(){
+        return image_profile;
+    }
+
 }
