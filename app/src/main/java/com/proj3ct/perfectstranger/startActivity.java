@@ -1,23 +1,32 @@
 package com.proj3ct.perfectstranger;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationManagerCompat;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.transition.AutoTransition;
 import android.transition.Transition;
 import android.transition.TransitionManager;
@@ -32,22 +41,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.proj3ct.perfectstranger.Chet.chetRoom;
 import com.proj3ct.perfectstranger.Dialog.ComfirmDialog;
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
 import com.proj3ct.perfectstranger.Firebase.KakaoLink;
-import com.proj3ct.perfectstranger.Chet.chetRoom;
 import com.proj3ct.perfectstranger.Profile.Profile;
 import com.proj3ct.perfectstranger.Profile.profileSettingActivity;
-import com.proj3ct.perfectstranger.Rule.Rule;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 public class startActivity extends AppCompatActivity {
+
     // animator property
     private final long FINISH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
@@ -61,13 +68,10 @@ public class startActivity extends AppCompatActivity {
     // KakaoLink
     private KakaoLink kakaoLink = new KakaoLink();
     private boolean byLink = false;
-    private boolean fromLink = false;
-
-    // notification
-    private  Boolean isPermissionAllowe;
 
     // SharedPreferences
     private SharedPreferences pref;
+
 
     // View component
     private TextView text_title;
@@ -77,29 +81,34 @@ public class startActivity extends AppCompatActivity {
     private EditText edit_name;
     private Button but_chetRoom;
     private ImageView but_setprofile;
-    private  Animation move_left;
+    private Animation move_left;
     private AppVariables appVariables;
-    private static final int MY_PERMISSION_STORAGE = 1111;
     private Boolean Yes;
     private boolean newGame;
     private String dialogStr;
     private boolean byShared;
+    private boolean isAllowed;
+
+    //permission
+    private int permission_WRITE_CONTACTS;
+    private int permission_READ_CONTACTS;
+    private int permission_RECEIVE_SMS;
+    private int permission_READ_PHONE_STATE;
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-
         // view 설정
-        but_chetRoom = (Button)findViewById(R.id.but_room);
-        text_title = (TextView)findViewById(R.id.text_title);
-        bg_start = (ConstraintLayout)findViewById(R.id.bg_start);
-        but_setprofile=(ImageView)findViewById(R.id.but_profile);
-        layout_profile=(ConstraintLayout)findViewById(R.id.layout_profile);
-        edit_name=(EditText)findViewById(R.id.edit_name);
+        but_chetRoom = (Button) findViewById(R.id.but_room);
+        text_title = (TextView) findViewById(R.id.text_title);
+        bg_start = (ConstraintLayout) findViewById(R.id.bg_start);
+        but_setprofile = (ImageView) findViewById(R.id.but_profile);
+        layout_profile = (ConstraintLayout) findViewById(R.id.layout_profile);
+        edit_name = (EditText) findViewById(R.id.edit_name);
 
-        appVariables = (AppVariables)getApplication();
+        appVariables = (AppVariables) getApplication();
         appVariables.setFirebaseDB(firebaseDB);
 
         setAnimations();
@@ -113,7 +122,7 @@ public class startActivity extends AppCompatActivity {
         move_left = AnimationUtils.loadAnimation(startActivity.this, R.anim.fade_right_to_left);
         move_left.setFillAfter(true);
 
-        Log.e("[hash]",kakaoLink.getKeyHash(getApplicationContext()));
+        Log.e("[hash]", kakaoLink.getKeyHash(getApplicationContext()));
 
         // AdMob
         AdMob.initialize(this);
@@ -130,13 +139,12 @@ public class startActivity extends AppCompatActivity {
         // SharedPreferences에 룸키가 있는가?
         roomKey = SharedPref.getRoomKey(this);
         userKey = SharedPref.getUserKey(this);
-        if(roomKey != null) {
+        if (roomKey != null) {
             Log.e("[Shared roomKey]", roomKey);
             user = SharedPref.getUser(this);
             edit_name.setText(user.getName());
             user.setProfile(but_setprofile, this);
-        }
-        else {
+        } else {
             Log.e("[Shared roomKey]", "null");
         }
 
@@ -147,37 +155,34 @@ public class startActivity extends AppCompatActivity {
         Yes = false;
         dialogStr = "default String";
 
-        // 1. 그냥 킨경우
-        // 1.1 쉐어드에 저장되있는경우 vs 아닌경우
-        // 2. 링크를 타고들어온경우
-        // 2.1 처음 임장하는경우 vs 들어왔던 방이였던경우
-        // 2.2 처음 입장하는경우 vs 다른방에서 이미 게임중이였던경우
-
         if (roomKey == null && tempKey == null) {
+            Log.e("!!!입장체크", "roomKey == null && tempKey == null");
             byLink = false;
+            byShared = false;
         } else if (roomKey != null && tempKey == null) {
+            Log.e("!!!입장체크", "roomKey != null && tempKey == null");
             dialogStr = "이미 참여중인 방이있습니다.";
-            showComfirmDialog(dialogStr, "기존 방 입장","새로운 방 입장");
+            showComfirmDialog(dialogStr, "기존 방 입장", "새로운 방 입장");
             byLink = false;
             byShared = false;
         } else if (roomKey == null && tempKey != null) {
+            Log.e("!!!입장체크", "roomKey == null && tempKey != null");
             but_chetRoom.setText("게임입장");
             roomKey = tempKey;
             byLink = true;
             byShared = false;
         } else {
-            if( tempKey.equals(roomKey)){
+            if (tempKey.equals(roomKey)) {
                 Toast.makeText(this, "이미 참여중인 방입니다", Toast.LENGTH_SHORT).show();
                 startIntentByShared();
-            }else{
+            } else {
                 dialogStr = "이미 참여중인 방이 있습니다";
-                showComfirmDialog(dialogStr, "기존 방 입장","새로운 방 입장");
+                showComfirmDialog(dialogStr, "기존 방 입장", "새로운 방 입장");
                 byLink = true;
                 roomKey = tempKey;
                 but_chetRoom.setText("게임입장");
             }
         }
-
 
 
         but_setprofile.setOnClickListener(new View.OnClickListener() {
@@ -200,11 +205,10 @@ public class startActivity extends AppCompatActivity {
                     Toast.makeText(startActivity.this, "이름을 입력해주세요.", Toast.LENGTH_LONG).show();
                 } else if (edit_name.getText().toString().trim().length() > 10) {
                     Toast.makeText(startActivity.this, "형식에 맡게 입력해주세요.", Toast.LENGTH_LONG).show();
+                } else if (!isAllPermissionAloowed()) {
+                    checkDangerousPermission();
                 } else if (!isNotiPermissionAllowed()) {
-                    // 버튼클릭시 permission not allowed :
-                    Toast.makeText(startActivity.this, "앱 권한이 꺼져있습니다. 설정창으로 넘어갑니다", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-                    startActivity(intent);
+                    checkSignaturePermission();
                 } else {
                     con.setVerticalBias(R.id.light, 0.1f);
                     TransitionManager.beginDelayedTransition(bg_start, transition);
@@ -238,7 +242,7 @@ public class startActivity extends AppCompatActivity {
                                 firebaseDB.addUser(user);
 
                                 // SharedPreference에 저장
-                                SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
+                                SharedPref.setPref(getApplicationContext(), firebaseDB.getRoomKey(), firebaseDB.getUserKey(), user);
 
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
                                 intent.putExtra("newGame", true);
@@ -254,7 +258,7 @@ public class startActivity extends AppCompatActivity {
                                 firebaseDB.enterRoom(roomKey);
                                 firebaseDB.addUser(user);
 
-                                SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
+                                SharedPref.setPref(getApplicationContext(), firebaseDB.getRoomKey(), firebaseDB.getUserKey(), user);
 
                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
                                 intent.putExtra("newGame", true);
@@ -300,7 +304,6 @@ public class startActivity extends AppCompatActivity {
     }
 
     // 뒤로가기
-
     @Override
     public void onBackPressed() {
         long tempTime = System.currentTimeMillis();
@@ -320,8 +323,7 @@ public class startActivity extends AppCompatActivity {
         con.setVerticalBias(R.id.light, 0.3f);
         TransitionManager.beginDelayedTransition(bg_start, transition);
         con.applyTo(bg_start);
-        if(text_title.getAnimation()==move_left)
-        {
+        if (text_title.getAnimation() == move_left) {
             Handler delayHandler = new Handler();
             delayHandler.postDelayed(new Runnable() {
                 @Override
@@ -342,26 +344,30 @@ public class startActivity extends AppCompatActivity {
             }, 800);
         }
 
-        if(appVariables.getMyProfile() == null)
-        {
+        if (appVariables.getMyProfile() == null) {
             Profile profile = new Profile();
             appVariables.setMyProfile(profile);
-            profile.setProfile(but_setprofile,startActivity.this);
+            profile.setProfile(but_setprofile, startActivity.this);
             user.setWithProfile(profile);
-        }else
-        {
+        } else {
             Profile profile = appVariables.getMyProfile();
-            profile.setProfile(but_setprofile,startActivity.this);
+            profile.setProfile(but_setprofile, startActivity.this);
             user.setWithProfile(profile);
         }
 
         super.onResume();
     }
 
+    private boolean isAllPermissionAloowed() {
+        return (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS) == 0 &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == 0 &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) == 0 &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == 0);
+    }
+
     private boolean isNotiPermissionAllowed() {
         Set<String> notiListenerSet = NotificationManagerCompat.getEnabledListenerPackages(this);
         String myPackageName = getPackageName();
-
         for (String packageName : notiListenerSet) {
             if (packageName == null) {
                 continue;
@@ -370,13 +376,11 @@ public class startActivity extends AppCompatActivity {
                 return true;
             }
         }
-
         return false;
     }
-    public void showComfirmDialog(String comfirmStr,String okStr, String noStr) {
-        ComfirmDialog customDialog = new ComfirmDialog(startActivity.this, comfirmStr,okStr,noStr);
-        // 커스텀 다이얼로그를 호출한다.
-        // 커스텀 다이얼로그의 결과를 출력할 TextView를 매개변수로 같이 넘겨준다.
+
+    public void showComfirmDialog(String comfirmStr, String okStr, String noStr) {
+        ComfirmDialog customDialog = new ComfirmDialog(startActivity.this, comfirmStr, okStr, noStr);
         customDialog.callFunction();
     }
 
@@ -384,19 +388,95 @@ public class startActivity extends AppCompatActivity {
         this.Yes = Yes;
     }
 
-    public void startIntentByShared() {
-        user = SharedPref.getUser(this);
-        edit_name.setText(user.getName());
-        user.setProfile(but_setprofile, this);
 
-        firebaseDB.setUser(user);
-        firebaseDB.enterRoom(roomKey);
-        firebaseDB.setUserKey(userKey);
-        firebaseDB.updateUser();
-        Intent intent = new Intent(startActivity.this, chetRoom.class);
-        newGame = false;
-        intent.putExtra("newGame", newGame);
+    public void startIntentByShared() {
+        if (!isAllPermissionAloowed()) {
+            checkDangerousPermission();
+        } else if (!isNotiPermissionAllowed()) {
+            checkSignaturePermission();
+        }else {
+            user = SharedPref.getUser(this);
+            edit_name.setText(user.getName());
+            user.setProfile(but_setprofile, this);
+            firebaseDB.setUser(user);
+            firebaseDB.enterRoom(roomKey);
+            firebaseDB.setUserKey(userKey);
+            firebaseDB.updateUser();
+            Intent intent = new Intent(startActivity.this, chetRoom.class);
+            newGame = false;
+            intent.putExtra("newGame", newGame);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1111) {
+            if (grantResults.length > 0) {
+                for (int i = 0; i < grantResults.length; ++i) {
+                    if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                        // 하나라도 거부한다면.
+                        new AlertDialog.Builder(this).setTitle("알림").setMessage("권한을 허용해주셔야 앱을 이용할 수 있습니다.")
+                                .setPositiveButton("종료", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        finish();
+                                    }
+                                }).setNegativeButton("권한 설정", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                        .setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+                                getApplicationContext().startActivity(intent);
+                            }
+                        }).setCancelable(false).show();
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    public void checkDangerousPermission() {
+        if (ContextCompat.checkSelfPermission(startActivity.this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(startActivity.this, Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(startActivity.this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(startActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(startActivity.this, Manifest.permission.READ_CONTACTS)
+                    || ActivityCompat.shouldShowRequestPermissionRationale(startActivity.this, Manifest.permission.WRITE_CONTACTS)
+                    || ActivityCompat.shouldShowRequestPermissionRationale(startActivity.this, Manifest.permission.RECEIVE_SMS)
+                    || ActivityCompat.shouldShowRequestPermissionRationale(startActivity.this, Manifest.permission.READ_PHONE_STATE)) {
+                new AlertDialog.Builder(this).setTitle("알림").setMessage("권한을 허용해주셔야 앱을 이용할 수 있습니다.")
+                        .setPositiveButton("종료", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                finish();
+                            }
+                        }).setNegativeButton("권한 설정", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                .setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
+                        getApplicationContext().startActivity(intent);
+                    }
+                }).setCancelable(false).show();
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(startActivity.this,
+                        new String[]{Manifest.permission.READ_CONTACTS,
+                                Manifest.permission.WRITE_CONTACTS,
+                                Manifest.permission.RECEIVE_SMS,
+                                Manifest.permission.READ_PHONE_STATE,
+                        },
+                        1111);
+            }
+        }
+    }
+
+    public void checkSignaturePermission() {
+        Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
         startActivity(intent);
-        finish();
     }
 }

@@ -2,6 +2,7 @@ package com.proj3ct.perfectstranger.Firebase;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -34,6 +35,7 @@ public class FirebaseDB {
     private DatabaseReference roomRef;
     private DatabaseReference setRef, chetRef, ruleRef, userRef;
     private DatabaseReference myRef;
+    private Vector<String> chetKeys = new Vector<>();
 
     // User
     private User user;
@@ -286,11 +288,21 @@ public class FirebaseDB {
         });
     }
 
+
+
+
     private void setMessageListener() {
         chetAdapter = new chetRoomAdapter();
         chetRef.addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.e("!!!chetList 갯수", Integer.toString(chetAdapter.getItemCount()));
+                if(chetAdapter.getItemCount() > 1000){
+                    for(int i = 0 ; i < 200; i++) {
+                        chetAdapter.deleteByIndex(i);
+                        chetRef.child(chetKeys.get(i)).removeValue();
+                    }
+                }
                 if(chetAdapter != null) {
                     Log.e("[LOG] listener", dataSnapshot.toString());
                     aChet achet = dataSnapshot.getValue(aChet.class);
@@ -311,6 +323,7 @@ public class FirebaseDB {
                     }
 
                      boolean wrong_rule = ruleChecker(achet);
+                    chetKeys.add(dataSnapshot.getKey());
                     if((!chetAdapter.isBottomReached())&&chetAdapter.getItemCount()>0)
                     {
                         chetAdapter.add(achet, isMe,wrong_rule);
@@ -341,7 +354,6 @@ public class FirebaseDB {
             public void onCancelled(DatabaseError databaseError) { }
         });
     }
-
     private void setUserListener() {
         userAdapter = new waitingRoomAdapter();
         userRef.addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
