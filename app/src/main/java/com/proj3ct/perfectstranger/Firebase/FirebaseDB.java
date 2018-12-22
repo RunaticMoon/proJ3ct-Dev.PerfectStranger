@@ -158,7 +158,8 @@ public class FirebaseDB {
         welcomMessage.put("mainText", mainText);
         welcomMessage.put("appName", appName);
         welcomMessage.put("timeStamp", ServerValue.TIMESTAMP);
-        Log.e("!!보내기",userKey);
+        Log.e("!!보내기", userKey);
+        Log.e("!!보내기[룸]", getRoomKey());
         chetRef.push().setValue(welcomMessage);
     }
 
@@ -311,6 +312,7 @@ public class FirebaseDB {
         ChetListener = new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.e("!!!", "실setMessageListenersetMessageListener행");
                 Log.e("!!!chetList 갯수", Integer.toString(chetAdapter.getItemCount()));
                 if(chetAdapter.getItemCount() > 1000){
                     for(int i = 0 ; i < 200; i++) {
@@ -416,6 +418,7 @@ public class FirebaseDB {
         userRef.removeEventListener(UserListener);
         chetRef.removeEventListener(ChetListener);
         ruleRef.removeEventListener(RuleListener);
+        firstTime = true;
     }
 
     // Rule Checker

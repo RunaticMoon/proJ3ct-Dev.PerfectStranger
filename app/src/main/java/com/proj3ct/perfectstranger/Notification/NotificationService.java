@@ -70,6 +70,7 @@ public class NotificationService extends NotificationListenerService {
         // kakaoTalk
         if (appName.equals(KAKAO)) {
             mainTitle = "카카오톡";
+            Log.e("!!!","카카오톡");
             if ( extras.getString(Notification.EXTRA_TEXT) == null){
                 return null;
             }

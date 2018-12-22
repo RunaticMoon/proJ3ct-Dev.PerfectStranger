@@ -6,9 +6,7 @@ import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,7 +20,6 @@ import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -48,8 +45,6 @@ import com.proj3ct.perfectstranger.Firebase.KakaoLink;
 import com.proj3ct.perfectstranger.Profile.Profile;
 import com.proj3ct.perfectstranger.Profile.profileSettingActivity;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 public class startActivity extends AppCompatActivity {
@@ -94,6 +89,8 @@ public class startActivity extends AppCompatActivity {
     private int permission_RECEIVE_SMS;
     private int permission_READ_PHONE_STATE;
 
+    public static String status = "init";
+
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +108,7 @@ public class startActivity extends AppCompatActivity {
         appVariables.setFirebaseDB(firebaseDB);
 
         setAnimations();
-
+        status = "init";
         con = new ConstraintSet();
         transition = new AutoTransition();
         transition.setDuration(500);
@@ -265,13 +262,10 @@ public class startActivity extends AppCompatActivity {
                                         firebaseDB.addUser(user);
 
                                         roomKey = firebaseDB.getRoomKey();
-
-                                        byLink = true;
-                                        but_chetRoom.setText("게임입장");
+                                        userKey = firebaseDB.getUserKey();
 
                                         // SharedPreference에 저장
-                                        SharedPref.setPref(getApplicationContext(), roomKey, user);
-
+                                        SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
                                         Intent intent = new Intent(startActivity.this, chetRoom.class);
                                         intent.putExtra("newGame", true);
                                         startActivity(intent);
@@ -292,8 +286,10 @@ public class startActivity extends AppCompatActivity {
                                         firebaseDB.enterRoom(roomKey);
                                         firebaseDB.addUser(user);
 
+                                        userKey = firebaseDB.getUserKey();
+
                                         // SharedPreference에 저장
-                                        SharedPref.setPref(getApplicationContext(), roomKey, user);
+                                        SharedPref.setPref(getApplicationContext(), roomKey, userKey, user);
 
                                         Intent intent = new Intent(startActivity.this, chetRoom.class);
                                         intent.putExtra("newGame", true);
@@ -392,6 +388,12 @@ public class startActivity extends AppCompatActivity {
             user.setWithProfile(profile);
         }
 
+        if(startActivity.status.equals("exit")){
+            but_chetRoom.setText("방 만들기");
+            startActivity.status = "notinit";
+            byLink = false;
+            byShared = false;
+        }
         super.onResume();
     }
 
@@ -461,12 +463,14 @@ public class startActivity extends AppCompatActivity {
                             user = SharedPref.getUser(getApplicationContext());
                             edit_name.setText(user.getName());
                             user.setProfile(but_setprofile, getApplicationContext());
-
                             roomKey = SharedPref.getRoomKey(getApplicationContext());
+                            userKey = SharedPref.getUserKey(getApplicationContext());
 
                             firebaseDB.setUser(user);
                             firebaseDB.enterRoom(roomKey);
-                            firebaseDB.addUser(user);
+                            firebaseDB.setUserKey(userKey);
+                            firebaseDB.updateUser();
+
                             Intent intent = new Intent(startActivity.this, chetRoom.class);
                             newGame = false;
                             intent.putExtra("newGame", newGame);
