@@ -11,12 +11,22 @@ import java.util.Vector;
 public class AppVariables extends Application {
     Profile myProfile;
     FirebaseDB firebaseDB;
+    AdMob adMob;
 
     public FirebaseDB getFirebaseDB() {
         return firebaseDB;
     }
+
     public void setFirebaseDB(FirebaseDB firebaseDB) {
         this.firebaseDB = firebaseDB;
+    }
+
+    public void setAdMob(AdMob adMob) {
+        this.adMob = adMob;
+    }
+
+    public AdMob getAdMob() {
+        return adMob;
     }
 
     public Profile getMyProfile() {

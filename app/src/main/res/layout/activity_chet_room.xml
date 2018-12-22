@@ -7,6 +7,26 @@
     android:background="#33000000"
     tools:context="com.proj3ct.perfectstranger.Chet.chetRoom">
 
+    <Button
+        android:id="@+id/bt_exitRoom"
+        android:layout_width="88dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="방나가기"
+        app:layout_constraintEnd_toStartOf="@+id/bt_destoryRoom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/bt_destoryRoom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="방 삭제"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/bt_exitRoom"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/listview_chat"
         android:layout_width="0dp"
@@ -111,6 +131,7 @@
             </LinearLayout>
 
         </android.support.constraint.ConstraintLayout>
+
     </android.support.constraint.ConstraintLayout>
 
     <LinearLayout

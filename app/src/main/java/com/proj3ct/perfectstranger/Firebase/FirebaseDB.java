@@ -20,6 +20,7 @@ import com.proj3ct.perfectstranger.Rule.Rule;
 import com.proj3ct.perfectstranger.Chet.aChet;
 import com.proj3ct.perfectstranger.Chet.chetRoomAdapter;
 import com.proj3ct.perfectstranger.Rule.rulesAdapter;
+import com.proj3ct.perfectstranger.SharedPref;
 import com.proj3ct.perfectstranger.User;
 import com.proj3ct.perfectstranger.Waiting.waitingRoomAdapter;
 
@@ -58,6 +59,11 @@ public class FirebaseDB {
     private RecyclerView list_user;
     private waitingRoomAdapter userAdapter;
     private LinearLayoutManager userLayoutManager;
+
+    // Listener
+    private ChildEventListener RuleListener;
+    private ChildEventListener UserListener;
+    private ChildEventListener ChetListener;
 
     // Getter & Setter
     public User getUser() {
@@ -169,7 +175,6 @@ public class FirebaseDB {
         setRef.setValue(setting);
     }
 
-
     public void setRule() {
         ruleRef.removeValue();
         ruleRef = roomRef.child("ruleList");
@@ -180,7 +185,6 @@ public class FirebaseDB {
            addRule(rule.getRuleType(), rule.getDetail_i(), rule.getDetail_s());
         }
     }
-
 
     // User Function
     public void setUserKey(String userKey) {
@@ -254,14 +258,22 @@ public class FirebaseDB {
         setUserListener();
     }
 
-    public void exitRoom(String roomKey) {
+    public void exitRoom(Context context) {
+        myRef.removeValue();
+        SharedPref.destroy(context);
+        resetListener();
+    }
 
+    public void destroyRoom(Context context) {
+        roomRef.removeValue();
+        SharedPref.destroy(context);
+        resetListener();
     }
 
     // Set Listener
     private void setRuleListener() {
         ruleAdapter = new rulesAdapter();
-        ruleRef.addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
+        RuleListener = new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if(ruleAdapter != null) {
@@ -283,12 +295,13 @@ public class FirebaseDB {
 
             @Override
             public void onCancelled(DatabaseError databaseError) { }
-        });
+        };
+        ruleRef.addChildEventListener(RuleListener);
     }
 
     private void setMessageListener() {
         chetAdapter = new chetRoomAdapter();
-        chetRef.addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
+        ChetListener = new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if(chetAdapter != null) {
@@ -310,7 +323,7 @@ public class FirebaseDB {
                         lastusercount=0;
                     }
 
-                     boolean wrong_rule = ruleChecker(achet);
+                    boolean wrong_rule = ruleChecker(achet);
                     if((!chetAdapter.isBottomReached())&&chetAdapter.getItemCount()>0)
                     {
                         chetAdapter.add(achet, isMe,wrong_rule);
@@ -339,12 +352,13 @@ public class FirebaseDB {
 
             @Override
             public void onCancelled(DatabaseError databaseError) { }
-        });
+        };
+        chetRef.addChildEventListener(ChetListener);
     }
 
     private void setUserListener() {
         userAdapter = new waitingRoomAdapter();
-        userRef.addChildEventListener(new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
+        UserListener = new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if(userAdapter != null) {
@@ -365,9 +379,16 @@ public class FirebaseDB {
 
             @Override
             public void onCancelled(DatabaseError databaseError) { }
-        });
+        };
+        userRef.addChildEventListener(UserListener);
     }
 
+    // reset Listner
+    private void resetListener() {
+        userRef.removeEventListener(UserListener);
+        chetRef.removeEventListener(ChetListener);
+        ruleRef.removeEventListener(RuleListener);
+    }
 
     // Rule Checker
     public boolean ruleChecker(aChet chet) {
@@ -406,6 +427,7 @@ public class FirebaseDB {
         }
         return detected;
     }
+
     public void setOnAlarmListener(FirebaseDB.onAlarmListener alarmListener){
         this.alarmListener=alarmListener;
     }
