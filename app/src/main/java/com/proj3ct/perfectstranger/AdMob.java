@@ -1,9 +1,6 @@
 package com.proj3ct.perfectstranger;
 
 import android.content.Context;
-import android.content.Intent;
-import android.telecom.Call;
-import android.util.Log;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;

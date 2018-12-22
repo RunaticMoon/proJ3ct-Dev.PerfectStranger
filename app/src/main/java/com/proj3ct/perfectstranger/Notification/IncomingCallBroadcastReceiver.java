@@ -29,10 +29,8 @@ public class IncomingCallBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-
         Log.d("!!!onReceive()",intent.getStringExtra(TelephonyManager.EXTRA_STATE));
         String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-
 
         if (state.equals(mLastState)) {
             return;
@@ -48,19 +46,13 @@ public class IncomingCallBroadcastReceiver extends BroadcastReceiver {
 
         String displayName = "";
 
-
         Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
 
         if (cursor != null) {
-
             if (cursor.moveToFirst()) {
-
                 displayName = cursor.getString(0);
-
             }
-
             cursor.close();
-
         }
 
         if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {

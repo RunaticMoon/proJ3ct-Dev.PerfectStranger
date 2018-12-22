@@ -5,11 +5,13 @@ import android.content.Context;
 import java.io.Serializable;
 
 
-public class sendContext  implements Serializable {
+public class sendContext implements Serializable {
     private Context mContext;
 
     public sendContext() {
+
     }
+
     public Context getmContext() {
         return mContext;
     }

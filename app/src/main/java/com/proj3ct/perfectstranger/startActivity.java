@@ -48,7 +48,6 @@ import com.proj3ct.perfectstranger.Profile.profileSettingActivity;
 import java.util.Set;
 
 public class startActivity extends AppCompatActivity {
-
     // animator property
     private final long FINISH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
@@ -83,13 +82,6 @@ public class startActivity extends AppCompatActivity {
     private boolean newGame;
     private String dialogStr;
     private boolean byShared;
-    private boolean isAllowed;
-
-    // permission
-    private int permission_WRITE_CONTACTS;
-    private int permission_READ_CONTACTS;
-    private int permission_RECEIVE_SMS;
-    private int permission_READ_PHONE_STATE;
 
     public static String status = "init";
 

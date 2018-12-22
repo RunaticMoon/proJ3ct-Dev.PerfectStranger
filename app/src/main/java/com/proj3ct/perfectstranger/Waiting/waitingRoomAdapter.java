@@ -6,11 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.database.annotations.NotNull;
 import com.proj3ct.perfectstranger.R;
 import com.proj3ct.perfectstranger.User;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
 /**
@@ -18,9 +17,12 @@ import java.util.Vector;
  */
 
 public class waitingRoomAdapter extends RecyclerView.Adapter<waitingRoomViewHolder> implements waitingRoomViewHolder.OnItemClickListener{
-    Vector<User> users = new Vector<>();
-    Vector<Boolean> clicked = new Vector<>();
-    View con;
+    private Vector<User> users = new Vector<>();
+    private Vector<Boolean> clicked = new Vector<>();
+    private View con;
+    private String masterKey;
+
+    @NotNull
     @Override
     public waitingRoomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview_waitingroom,parent,false);
@@ -41,6 +43,7 @@ public class waitingRoomAdapter extends RecyclerView.Adapter<waitingRoomViewHold
             if(position != 0) holder.text_captin.setVisibility(View.INVISIBLE);
         }
     }
+
     public void setUsers(Vector<User> users) {
         this.users = users;
         Vector<Boolean> temp = new Vector<Boolean>();
@@ -50,34 +53,42 @@ public class waitingRoomAdapter extends RecyclerView.Adapter<waitingRoomViewHold
         this.clicked = temp;
         notifyDataSetChanged();
     }
-    public void add(User user){
+
+    public void add(User user) {
         users.add(user);
         clicked.add(false);
         notifyDataSetChanged();
     }
-    public void del(){
-        for(int i=0;i<clicked.size();i++)
-        {
-            if(clicked.get(i))
-            {
+
+    public void del() {
+        for(int i = 0; i < clicked.size(); i++) {
+            if(clicked.get(i)) {
                 users.remove(i);
                 clicked.remove(i);
                 notifyDataSetChanged();
                 return;
             }
         }
-        Toast.makeText(con.getContext(),"선택된 참가자가 없습니다",Toast.LENGTH_SHORT).show();
+        Toast.makeText(con.getContext(), "선택된 참가자가 없습니다", Toast.LENGTH_SHORT).show();
     }
+
     public String getUserName() {
-        for(int i=0;i<clicked.size();i++)
-        {
-            if(clicked.get(i))
-            {
+        for(int i = 0; i < clicked.size(); i++){
+            if(clicked.get(i)) {
                 return users.get(i).getName();
             }
         }
         return null;
     }
+
+    public String getMasterKey() {
+        return this.masterKey;
+    }
+
+    public void setMasterKey(String masterKey) {
+        this.masterKey = masterKey;
+    }
+
     @Override
     public int getItemCount() {
         return users.size();
@@ -89,9 +100,9 @@ public class waitingRoomAdapter extends RecyclerView.Adapter<waitingRoomViewHold
             clicked.set(position,false);
         else
         {
-            for(int i=0;i<clicked.size();i++)
-                clicked.set(i,false);
-            clicked.set(position,true);
+            for(int i = 0; i < clicked.size(); i++)
+                clicked.set(i, false);
+            clicked.set(position, true);
         }
         notifyDataSetChanged();
     }

@@ -1,8 +1,6 @@
 package com.proj3ct.perfectstranger;
 
 import android.app.Application;
-import android.content.Context;
-import android.util.Log;
 
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
 import com.proj3ct.perfectstranger.Profile.Profile;
