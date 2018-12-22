@@ -73,10 +73,23 @@ public class profileSettingActivity extends AppCompatActivity{
                     profile.setProfile(image_profile,profileSettingActivity.this);
                 }else if(tag.contains("but")) {
                     nowChanging=index;
+
                     but_bg.setTypeface(Typeface.DEFAULT);
                     but_outline.setTypeface(Typeface.DEFAULT);
                     but_vec.setTypeface(Typeface.DEFAULT);
+
+                    but_bg.setTextColor(Color.BLACK);
+                    but_outline.setTextColor(Color.BLACK);
+                    but_vec.setTextColor(Color.BLACK);
+
+                    but_bg.setBackground(profileSettingActivity.this.getResources().getDrawable(R.drawable.white_allround_small));
+                    but_outline.setBackground(profileSettingActivity.this.getResources().getDrawable(R.drawable.white_allround_small));
+                    but_vec.setBackground(profileSettingActivity.this.getResources().getDrawable(R.drawable.white_allround_small));
+
+                    v.setBackground(profileSettingActivity.this.getResources().getDrawable(R.drawable.white_allround_small_black));
                     ((TextView)v).setTypeface(((TextView)v).getTypeface(), Typeface.BOLD);
+                    ((TextView)v).setTextColor(Color.WHITE);
+
                 }else if(tag.contains("col")) {
                     if(nowChanging>=0)
                     {
