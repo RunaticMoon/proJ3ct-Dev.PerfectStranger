@@ -11,10 +11,6 @@ public class SharedPref {
         SharedPreferences pref = context.getSharedPreferences("room", context.MODE_PRIVATE);
         return pref.getString("roomKey", null);
     }
-    public static String getUserKey(Context context) {
-        SharedPreferences pref = context.getSharedPreferences("room", context.MODE_PRIVATE);
-        return pref.getString("userKey", null);
-    }
     public static User getUser(Context context) {
         SharedPreferences pref = context.getSharedPreferences("room", context.MODE_PRIVATE);
         String strUser = pref.getString("user", null);
@@ -25,7 +21,7 @@ public class SharedPref {
         else
             return null;
     }
-    public static void setPref(Context context, String roomKey, String userKey, User user) {
+    public static void setPref(Context context, String roomKey, User user) {
         SharedPreferences pref = context.getSharedPreferences("room", context.MODE_PRIVATE);
 
         Gson gson = new GsonBuilder().create();
@@ -33,19 +29,6 @@ public class SharedPref {
 
         SharedPreferences.Editor editor = pref.edit();
         editor.putString("roomKey", roomKey);
-        editor.putString("userKey", userKey);
-        editor.putString("user", strUser);
-        editor.apply();
-    }
-    public static void updateUser(Context context, User user) {
-        SharedPreferences pref = context.getSharedPreferences("room", context.MODE_PRIVATE);
-
-        Gson gson = new GsonBuilder().create();
-        String strUser = gson.toJson(user, User.class);
-
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString("roomKey", pref.getString("roomKey", null));
-        editor.putString("userKey", pref.getString("userKey", null));
         editor.putString("user", strUser);
         editor.apply();
     }

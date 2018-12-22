@@ -20,10 +20,12 @@
 
         <!-- Admob -->
         <meta-data
+
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-4219946444843853~2674332869" />
 
         <activity
+
             android:name=".startActivity"
             android:screenOrientation="portrait">
             <intent-filter>

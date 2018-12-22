@@ -2,6 +2,7 @@ package com.proj3ct.perfectstranger.Firebase;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,11 +37,13 @@ public class FirebaseDB {
     private DatabaseReference setRef, chetRef, ruleRef, userRef;
     private DatabaseReference myRef;
     OnUsersChanged onUsersChanged;
+    private Vector<String> chetKeys = new Vector<>();
 
     // User
     private User user;
     private Boolean isMe = false;
     private String userName;
+
     // chet Listview
     private RecyclerView list_chet;
     private chetRoomAdapter chetAdapter;
@@ -60,6 +63,7 @@ public class FirebaseDB {
     private waitingRoomAdapter userAdapter;
     private LinearLayoutManager userLayoutManager;
     private boolean firstTime = true;
+    private TextView tv_count;
 
     // Listener
     private ChildEventListener RuleListener;
@@ -120,9 +124,10 @@ public class FirebaseDB {
         this.list_rule.setLayoutManager(ruleLayoutManager);
     }
 
-    public void setList_user(RecyclerView list_user, Context context){
+    public void setList_user(RecyclerView list_user, TextView tv_count, Context context){
         this.list_user = list_user;
         this.userLayoutManager = new LinearLayoutManager(context);
+        this.tv_count = tv_count;
 
         this.list_user.setAdapter(userAdapter);
         this.list_user.setLayoutManager(userLayoutManager);
@@ -141,6 +146,7 @@ public class FirebaseDB {
 
     public void resetList_user() {
         this.list_user = null;
+        this.tv_count = null;
         this.userLayoutManager = null;
     }
 
@@ -305,6 +311,13 @@ public class FirebaseDB {
         ChetListener = new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.e("!!!chetList 갯수", Integer.toString(chetAdapter.getItemCount()));
+                if(chetAdapter.getItemCount() > 1000){
+                    for(int i = 0 ; i < 200; i++) {
+                        chetAdapter.deleteByIndex(i);
+                        chetRef.child(chetKeys.get(i)).removeValue();
+                    }
+                }
                 if(chetAdapter != null) {
                     Log.e("[LOG] listener", dataSnapshot.toString());
                     aChet achet = dataSnapshot.getValue(aChet.class);
@@ -326,6 +339,7 @@ public class FirebaseDB {
                     }
 
                     boolean wrong_rule = ruleChecker(achet);
+                    chetKeys.add(dataSnapshot.getKey());
                     if((!chetAdapter.isBottomReached())&&chetAdapter.getItemCount()>0)
                     {
                         chetAdapter.add(achet, isMe,wrong_rule);
@@ -365,16 +379,23 @@ public class FirebaseDB {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(userAdapter != null) {
                     Log.e("[LOG] listener", dataSnapshot.toString());
-                    int userLen = userAdapter.getItemCount();
-                    int i = 1;
+                    Vector<User> newUsers = new Vector<User>();
+                    HashMap<String, User> newMap = new HashMap<>();
+
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        if(i > userLen) {
-                            User user = snapshot.getValue(User.class);
-                            Log.e("[LOG] user", user.getName());
-                            userAdapter.add(user);
-                            onUsersChanged.addUser(snapshot.getKey(),user);
-                        }
-                        i++;
+                        User user = snapshot.getValue(User.class);
+                        Log.e("[LOG] user", user.getName());
+                        newUsers.add(user);
+                        newMap.put(snapshot.getKey(), user);
+                    }
+                    userAdapter.setUsers(newUsers);
+                    onUsersChanged.setUsers(newMap);
+                    chetAdapter.setUsers(newMap);
+
+                    if(tv_count != null) {
+                        Log.e("[개수]", String.valueOf(dataSnapshot.getChildrenCount()));
+                        String str = "총 " + String.valueOf(dataSnapshot.getChildrenCount()) + "명";
+                        tv_count.setText(str);
                     }
                 }
                 if(firstTime) {
@@ -448,6 +469,7 @@ public class FirebaseDB {
     public interface OnUsersChanged{
         public void addUser(String key, User user);
         public User getUser(String key);
+        public void setUsers(HashMap<String, User> users);
         public void deleteUser(String key);
         public HashMap<String,User> getUsers();
     }

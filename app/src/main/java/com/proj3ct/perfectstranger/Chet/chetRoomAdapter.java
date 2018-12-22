@@ -47,9 +47,6 @@ public class chetRoomAdapter extends RecyclerView.Adapter<chetRoomViewHolder> {
     public void onBindViewHolder(chetRoomViewHolder holder, int position) {
         if(chet.size()>0){
             aChet tmp = chet.get(position);
-            Log.e("!!!뷰홀더", tmp.getMainText());
-            Log.e("!!!뷰홀더", tmp.getUserKey());
-            Log.e("!!!뷰홀더2", Boolean.toString(users.containsKey(tmp.getUserKey())));
             holder.setInfo(chet.get(position), users.get(tmp.getUserKey()).getName(),me.get(position));
             users.get(chet.get(position).getUserKey()).setProfile(holder.getProfile(),con);
         }
@@ -78,5 +75,11 @@ public class chetRoomAdapter extends RecyclerView.Adapter<chetRoomViewHolder> {
     @Override
     public int getItemCount() {
         return chet.size();
+    }
+
+    public void deleteByIndex(int position){
+        chet.remove(position);
+        notifyDataSetChanged();
+
     }
 }

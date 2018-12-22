@@ -43,11 +43,11 @@ public class RulesActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    protected void onDestroy() {
+        super.onDestroy();
         if(firebaseDB.isMaster()) {
             firebaseDB.setRule();
         }
-        // 파베에 바뀐 룰 넣는 함수;
-        super.onBackPressed();
+        firebaseDB.resetList_rule();
     }
 }
