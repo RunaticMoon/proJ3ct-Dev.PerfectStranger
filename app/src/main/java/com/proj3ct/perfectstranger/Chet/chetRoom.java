@@ -35,6 +35,7 @@ import com.proj3ct.perfectstranger.R;
 import com.proj3ct.perfectstranger.Rule.RulesActivity;
 import com.proj3ct.perfectstranger.User;
 import com.proj3ct.perfectstranger.Waiting.waitingRoom;
+import com.proj3ct.perfectstranger.settingActivity;
 
 public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmListener{
     private String roomkey;
@@ -50,7 +51,6 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
 
     private SoundPool sound;
     private int soundId;
-    private boolean alarmsound;
 
     // AdMob
     private AdMob adMob;
@@ -152,8 +152,10 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         bt_exitRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firebaseDB.exitRoom(getApplicationContext());
-                finish();
+                //firebaseDB.exitRoom(getApplicationContext());
+                //finish();
+                Intent intent = new Intent(chetRoom.this, settingActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -172,7 +174,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         alarm_name.setText(name);
         alarm_rule.setText(rule);
         alarm.setVisibility(View.VISIBLE);
-        if(alarmsound) {
+        if(appVariables.getSoundStatus()!=4) {
             int streamId = sound.play(soundId,0.5F,0.5F,1,0,1.2F);
         }
     }

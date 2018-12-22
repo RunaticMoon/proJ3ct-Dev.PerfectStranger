@@ -1,58 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff">
+    android:background="#00000000">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center"
-        android:textColor="#ffffff"
-        android:textSize="16dp"
-        android:text="시간표 이름 바꾸기"
-        android:background="@color/ic_launcher_background"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000000"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/gray_allround">
 
-        <Button
-            android:id="@+id/btn_ok"
+        <TextView
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_weight="1"
+            android:layout_margin="10dp"
             android:gravity="center"
-            android:text="확인"
-            android:textColor="#000000"
-            android:textSize="16dp"
-            android:background="#ffffff"/>
+            android:padding="10dp"
+            android:text="시간표 이름 바꾸기"
+            android:textColor="#FFFFFF"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:layout_width="1dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#000000" />
+            android:background="@drawable/white_halfround"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_cancel"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="취소"
-            android:textColor="#000000"
-            android:textSize="16dp"
-            android:background="#ffffff"/>
+            <Button
+                android:id="@+id/btn_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:gravity="center"
+                android:text="확인"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#000000"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="1dp"
+                android:background="#404040"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="취소"
+                android:textColor="#000000"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btn_ok"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
+        </LinearLayout>
+
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000000"/>
 </LinearLayout>

@@ -424,20 +424,41 @@ public class startActivity extends AppCompatActivity {
 
     public void startIntentByShared() {
         adMob.showInterstitial(new Callback() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void callback() {
-                user = SharedPref.getUser(getApplicationContext());
-                edit_name.setText(user.getName());
-                user.setProfile(but_setprofile, getApplicationContext());
+                con.setVerticalBias(R.id.light, 0.1f);
+                TransitionManager.beginDelayedTransition(bg_start, transition);
+                con.applyTo(bg_start);
+                but_chetRoom.setEnabled(false);
+                but_setprofile.setEnabled(false);
+                Handler delayHandler = new Handler();
+                delayHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        text_title.startAnimation(move_left);
+                        layout_profile.startAnimation(move_left);
 
-                firebaseDB.setUser(user);
-                firebaseDB.enterRoom(roomKey);
-                firebaseDB.setUserKey(userKey);
-                firebaseDB.updateUser();
-                Intent intent = new Intent(startActivity.this, chetRoom.class);
-                newGame = false;
-                intent.putExtra("newGame", newGame);
-                startActivity(intent);
+                    }
+                }, 500);
+                delayHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        user = SharedPref.getUser(getApplicationContext());
+                        edit_name.setText(user.getName());
+                        user.setProfile(but_setprofile, getApplicationContext());
+
+                        firebaseDB.setUser(user);
+                        firebaseDB.enterRoom(roomKey);
+                        firebaseDB.setUserKey(userKey);
+                        firebaseDB.updateUser();
+                        Intent intent = new Intent(startActivity.this, chetRoom.class);
+                        newGame = false;
+                        intent.putExtra("newGame", newGame);
+                        startActivity(intent);
+                    }
+                }, 1000);
+
             }
         });
     }

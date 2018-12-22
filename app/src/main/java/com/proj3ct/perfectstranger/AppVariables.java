@@ -16,14 +16,30 @@ public class AppVariables extends Application implements FirebaseDB.OnUsersChang
     HashMap<String,User> users;
     AdMob adMob;
 
+    int soundSet;
+
     public FirebaseDB getFirebaseDB() {
         return firebaseDB;
+    }
+
+    public AppVariables() {
+        soundSet=0;
     }
 
     public void setFirebaseDB(FirebaseDB firebaseDB) {
         this.firebaseDB = firebaseDB;
         this.firebaseDB.setOnUsersChanged(this);
         users = new HashMap<String,User>();
+    }
+
+    public String setSound(){
+        String[] str = {"진동+소리","소리","진동","무음"};
+        soundSet++;
+        if(soundSet>3) soundSet=0;
+        return str[soundSet];
+    }
+    public int getSoundStatus(){
+        return soundSet;
     }
 
     public void setAdMob(AdMob adMob) {
