@@ -76,4 +76,10 @@ public class chetRoomAdapter extends RecyclerView.Adapter<chetRoomViewHolder> {
     public int getItemCount() {
         return chet.size();
     }
+
+    public void deleteByIndex(int position){
+        chet.remove(position);
+        notifyDataSetChanged();
+
+    }
 }

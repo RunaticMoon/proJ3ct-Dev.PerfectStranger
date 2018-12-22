@@ -58,10 +58,11 @@ public class AppVariables extends Application implements FirebaseDB.OnUsersChang
     @Override
     public void addUser(String key, User user) {
         users.put(key,user);
-        for(String k : users.keySet()) {
-            Log.e("!!!유저 key", k);
-            Log.e("!!!유저 user", users.get(k).getName());
-        }
+    }
+
+    @Override
+    public void setUsers(HashMap<String,User> users) {
+        this.users = users;
     }
 
     @Override

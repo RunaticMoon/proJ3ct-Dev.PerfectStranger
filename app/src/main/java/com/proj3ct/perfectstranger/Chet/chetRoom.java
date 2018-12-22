@@ -40,7 +40,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
     private String roomkey;
     private FirebaseDB firebaseDB;
     private AppVariables appVariables;
-
+    Boolean newGame;
     // View component
     private RecyclerView list_chet;
     private TextView but_friends,but_rules,but_newMessage,alarm_name,alarm_rule;
@@ -112,15 +112,17 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         // fireBaseDB 설정
         firebaseDB.setList_chet(list_chet, getApplicationContext(), but_newMessage);
         firebaseDB.setOnAlarmListener(this);
+        // intent에 created 저장되어 있음.
 
+        if (intent != null) {
+            created = intent.getBooleanExtra("created", false);
+           newGame = intent.getBooleanExtra("newGame",false);
+        }
         // callback 함수
         // LocalBroadcastManager( Local를 사용한 이유 : 다른앱의 서비스의 방해를 방지 )
         // 값을 받아오면 onNotice함수를 실행( "Msg"태그의 intent를 함께 전달 )
-        LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("Msg"));
-
-        // intent에 created 저장되어 있음.
-        if (intent != null) {
-            created = intent.getBooleanExtra("created",false);
+        if(newGame) {
+            LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("Msg"));
         }
 
         adMob = appVariables.getAdMob();

@@ -41,6 +41,15 @@ public class waitingRoomAdapter extends RecyclerView.Adapter<waitingRoomViewHold
             if(position != 0) holder.text_captin.setVisibility(View.INVISIBLE);
         }
     }
+    public void setUsers(Vector<User> users) {
+        this.users = users;
+        Vector<Boolean> temp = new Vector<Boolean>();
+        for(int i = 0; i < users.size(); i++) {
+            temp.add(false);
+        }
+        this.clicked = temp;
+        notifyDataSetChanged();
+    }
     public void add(User user){
         users.add(user);
         clicked.add(false);
