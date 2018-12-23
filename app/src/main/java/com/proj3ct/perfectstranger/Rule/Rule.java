@@ -39,24 +39,32 @@ public class Rule {
     }
 
 
-    String[] apps={"카카오톡","페이스북","인스타그램","유튜브","비트윈","메세지","전화"};
+    private String[] apps = { "카카오톡", "페이스북", "인스타그램", "유튜브", "비트윈", "메세지", "전화" };
+
     public Rule() { }
+
     public Rule(int ruleType, int detail_i) {
         this.ruleType = ruleType;
         this.detail_i = detail_i;
     }
+
     public Rule(int ruleType, String detail_s) {
         this.ruleType = ruleType;
         this.detail_s = detail_s;
     }
-    public void setforType(){
-        detail_i++;
-        if(detail_i>=7) detail_i=0;
+
+    public void setforType(int i){
+        detail_i += i;
+        if(detail_i >= 7) detail_i = 0;
+        if(detail_i < 0) detail_i = 6;
         detail_s = apps[detail_i];
     }
+    public String getAppname(int n){
+        return apps[n];
+    }
 
-    public boolean isEqual(Rule r){
-        if(r.ruleType!=ruleType) return false;
+    public boolean isEqual(Rule r) {
+        if(r.ruleType != ruleType) return false;
         switch(r.ruleType) {
             case 1:
             case 2:
@@ -65,7 +73,7 @@ public class Rule {
                 break;
             case 3:
             case 5:
-                if (r.detail_s != this.detail_s) return false;
+                if (!r.detail_s.equals(this.detail_s)) return false;
                 break;
         }
         return true;

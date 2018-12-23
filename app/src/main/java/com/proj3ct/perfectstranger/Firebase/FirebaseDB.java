@@ -1,16 +1,16 @@
 package com.proj3ct.perfectstranger.Firebase;
 
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.IntentCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -21,7 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.proj3ct.perfectstranger.Callback;
-import com.proj3ct.perfectstranger.Chet.chetRoom;
+import com.proj3ct.perfectstranger.R;
 import com.proj3ct.perfectstranger.Rule.Rule;
 import com.proj3ct.perfectstranger.Chet.aChet;
 import com.proj3ct.perfectstranger.Chet.chetRoomAdapter;
@@ -30,6 +30,7 @@ import com.proj3ct.perfectstranger.SharedPref;
 import com.proj3ct.perfectstranger.Timer;
 import com.proj3ct.perfectstranger.User;
 import com.proj3ct.perfectstranger.Waiting.waitingRoomAdapter;
+import com.proj3ct.perfectstranger.startActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,12 +38,22 @@ import java.util.Vector;
 
 public class FirebaseDB {
     // Firebase
+    /*
+        roomRef : 채팅방 전체
+        setRef : 설정 리스트
+        chetRef : 채팅 리스트
+        ruleRef : 룰 리스트
+        userRef : 유저 리스트
+        myRef : userRef 중에서 나 자신의 레퍼런스
+        onUsersChanged : <String, User>(유저키, 유저)의 해시맵을 가지는 객체로 유저키로부터 유저를 빠르게 얻어내기 위함
+        chetKeys : 채팅의 개수를 확인하고 삭제하기 위한 벡터
+     */
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
     private DatabaseReference dbRef = db.getReference("talks");
     private DatabaseReference roomRef;
     private DatabaseReference setRef, chetRef, ruleRef, userRef;
     private DatabaseReference myRef;
-    OnUsersChanged onUsersChanged;
+    private OnUsersChanged onUsersChanged;
     private Vector<String> chetKeys = new Vector<>();
 
     // SharedPreferences
@@ -72,7 +83,7 @@ public class FirebaseDB {
     private RecyclerView list_user;
     private waitingRoomAdapter userAdapter;
     private LinearLayoutManager userLayoutManager;
-    private boolean firstTime = true;
+    private boolean firstTime = true;       // 처음 상태일때 setMessageListener()를 호출해준다.
     private TextView tv_count;
 
     // Listener
@@ -256,7 +267,7 @@ public class FirebaseDB {
     }
 
     public boolean isMaster() {
-        return user.getName().equals(userAdapter.getUsers().get(0).getName());
+        return getUserKey().equals(userAdapter.getMasterKey());
     }
 
     // Room Function
@@ -306,16 +317,19 @@ public class FirebaseDB {
         resetListener();
     }
 
-    public void checkRoom(String roomKey, final Callback callback) {
+    public void checkRoom(String roomKey, final Callback callback, final Callback callback2) {
         dbRef.child(roomKey).child("setList").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()) {
+                    Log.e("[check]", "콜백 true");
                     callback.callback();
                 }
                 else {
+                    Log.e("[check]", "콜백 false");
                     sharedPref.destroy();
                     firstTime = true;
+                    callback2.callback();
                 }
             }
 
@@ -333,6 +347,7 @@ public class FirebaseDB {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ruleAdapter = new rulesAdapter();
+                rulesAdapter.setMaster(isMaster());
                 Vector<Integer> alarms = new Vector<>();
 
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -454,12 +469,18 @@ public class FirebaseDB {
                     Log.e("[LOG] listener", dataSnapshot.toString());
                     Vector<User> newUsers = new Vector<User>();
                     HashMap<String, User> newMap = new HashMap<>();
+                    boolean firstIndex = true;
 
                     for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User user = snapshot.getValue(User.class);
                         Log.e("[LOG] user", user.getName());
                         newUsers.add(user);
                         newMap.put(snapshot.getKey(), user);
+
+                        if(firstIndex) {
+                            userAdapter.setMasterKey(snapshot.getKey());
+                            firstIndex = false;
+                        }
                     }
                     userAdapter.setUsers(newUsers);
                     onUsersChanged.setUsers(newMap);

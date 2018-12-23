@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rule_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
@@ -11,10 +12,10 @@
         android:id="@+id/layout_checklist"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="64dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="64dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="64dp"
         android:background="@drawable/gray_allround"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,14 +29,14 @@
         android:id="@+id/layout_base"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="94dp"
-        android:layout_marginEnd="47dp"
         android:layout_marginStart="47dp"
         android:layout_marginTop="94dp"
+        android:layout_marginEnd="47dp"
+        android:layout_marginBottom="94dp"
         android:background="@android:color/white"
         android:paddingLeft="0dp"
-        android:paddingRight="0dp"
         android:paddingTop="32dp"
+        android:paddingRight="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -52,39 +53,30 @@
             app:layout_constraintBottom_toTopOf="@+id/but_add"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
         <LinearLayout
-            android:id="@+id/linearLayout"
+            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="#FFFFFF"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="#FFFFFF"
-                android:button="@drawable/custom_checkbox"
-                android:enabled="false"
-                android:scaleX="0.7"
-                android:scaleY="0.7"
-                android:translationY="-3dp" />
-
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:background="#FFFFFF"
                 android:gravity="center_vertical"
+                android:paddingLeft="10dp"
                 android:text="규칙"
                 android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold"
                 android:visibility="visible" />
 
             <TextView
@@ -98,8 +90,8 @@
             android:id="@+id/but_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -120,6 +112,713 @@
                 app:srcCompat="@drawable/ic_close" />
 
         </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/layout_newrule"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginTop="94dp"
+        android:layout_marginEnd="47dp"
+        android:layout_marginBottom="94dp"
+        android:background="@android:color/white"
+        android:paddingLeft="0dp"
+        android:paddingTop="32dp"
+        android:paddingRight="0dp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="#404040"
+            android:padding="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_weight="1"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_weight="5"
+                    android:background="#FFFFFF"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/check_rule1"
+                        android:layout_width="25dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="#FFFFFF"
+                        android:button="@drawable/custom_checkbox"
+                        android:clickable="false"
+                        android:enabled="false"
+                        android:scaleX="0.5"
+                        android:scaleY="0.5"
+                        android:text=""
+                        android:translationY="-1dp" />
+
+                    <TextView
+                        android:id="@+id/text_rule1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:text="금지어"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:visibility="visible" />
+
+
+                </LinearLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_weight="1"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_weight="5"
+                    android:background="#FFFFFF"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/check_rule2"
+                        android:layout_width="25dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="#FFFFFF"
+                        android:button="@drawable/custom_checkbox"
+                        android:clickable="false"
+                        android:enabled="false"
+                        android:scaleX="0.5"
+                        android:scaleY="0.5"
+                        android:text=""
+                        android:translationY="-1dp" />
+
+                    <TextView
+                        android:id="@+id/text_rule2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:text="연속 알림"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:visibility="visible" />
+
+
+                </LinearLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_weight="1"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="종류"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_weight="5"
+                    android:background="#FFFFFF"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/check_rule3"
+                        android:layout_width="25dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="#FFFFFF"
+                        android:button="@drawable/custom_checkbox"
+                        android:clickable="false"
+                        android:enabled="false"
+                        android:scaleX="0.5"
+                        android:scaleY="0.5"
+                        android:text=""
+                        android:translationY="-2dp" />
+
+                    <TextView
+                        android:id="@+id/text_rule3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:text="N번 째 알림 시"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:visibility="visible" />
+
+
+                </LinearLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_weight="1"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_weight="5"
+                    android:background="#FFFFFF"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/check_rule4"
+                        android:layout_width="25dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="#FFFFFF"
+                        android:button="@drawable/custom_checkbox"
+                        android:clickable="false"
+                        android:enabled="false"
+                        android:scaleX="0.5"
+                        android:scaleY="0.5"
+                        android:text=""
+                        android:translationY="-1dp" />
+
+                    <TextView
+                        android:id="@+id/text_rule4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:text="N분 동안 연락 없을 시"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:visibility="visible" />
+
+
+                </LinearLayout>
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_weight="1"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_weight="5"
+                    android:background="#FFFFFF"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/check_rule5"
+                        android:layout_width="25dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="#FFFFFF"
+                        android:button="@drawable/custom_checkbox"
+                        android:clickable="false"
+                        android:enabled="false"
+                        android:scaleX="0.5"
+                        android:scaleY="0.5"
+                        android:text=""
+                        android:translationY="-1dp" />
+
+                    <TextView
+                        android:id="@+id/text_rule5"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:text="특정 앱 알림 시"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:visibility="visible" />
+
+
+                </LinearLayout>
+
+            </TableRow>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="1dp"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="내용"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold"
+                android:visibility="visible" />
+        </TableLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:background="#404040"
+            android:paddingLeft="2dp"
+            android:paddingTop="1dp"
+            android:paddingRight="2dp"
+            android:paddingBottom="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tableLayout"
+            app:layout_constraintStart_toStartOf="@+id/tableLayout"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout">
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/layout_rule2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="1"
+                    android:text='"'
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    app:layout_constraintBottom_toBottomOf="@+id/edit_num"
+                    app:layout_constraintStart_toEndOf="@+id/edit_num"
+                    app:layout_constraintTop_toTopOf="@+id/edit_num"
+                    app:layout_constraintVertical_bias="0.06999999" />
+
+                <TextView
+                    android:id="@+id/textView16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="1"
+                    android:text='"'
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    app:layout_constraintBottom_toBottomOf="@+id/edit_num"
+                    app:layout_constraintEnd_toStartOf="@+id/edit_num"
+                    app:layout_constraintTop_toTopOf="@+id/edit_num"
+                    app:layout_constraintVertical_bias="0.06999999" />
+
+                <TextView
+                    android:id="@+id/text_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="번 연속 알림 시 벌칙!"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.6" />
+
+
+                <TextView
+                    android:id="@+id/edit_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:ems="2"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="10dp"
+                    android:text="6"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#000000"
+                    app:layout_constraintBottom_toTopOf="@+id/text_description"
+                    app:layout_constraintEnd_toEndOf="@+id/text_description"
+                    app:layout_constraintStart_toStartOf="@+id/text_description"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.7" />
+
+                <TextView
+                    android:id="@+id/but_up"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/allround_rectengle"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="7dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="7dp"
+                    android:text="+1"
+                    app:layout_constraintBottom_toBottomOf="@+id/edit_num"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.3"
+                    app:layout_constraintStart_toStartOf="@+id/textView15"
+                    app:layout_constraintTop_toTopOf="@+id/edit_num" />
+
+                <TextView
+                    android:id="@+id/but_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/allround_rectengle"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="7dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="7dp"
+                    android:text="-1"
+                    app:layout_constraintBottom_toBottomOf="@+id/edit_num"
+                    app:layout_constraintEnd_toStartOf="@+id/edit_num"
+                    app:layout_constraintHorizontal_bias="0.7"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/edit_num" />
+
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/layout_rule1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="포함된 메세지 받으면 벌칙!"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edit_text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_weight="1"
+                    android:text='"'
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    app:layout_constraintBottom_toBottomOf="@+id/edit_text"
+                    app:layout_constraintEnd_toStartOf="@+id/edit_text"
+                    app:layout_constraintTop_toTopOf="@+id/edit_text"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_weight="1"
+                    android:text='"'
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    app:layout_constraintBottom_toBottomOf="@+id/edit_text"
+                    app:layout_constraintStart_toEndOf="@+id/edit_text"
+                    app:layout_constraintTop_toTopOf="@+id/edit_text"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <EditText
+                    android:id="@+id/edit_text"
+                    android:layout_width="132dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:ems="6"
+                    android:gravity="center"
+                    android:hint="금지어"
+                    android:inputType="textPersonName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/layout_rule3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_weight="1"
+                    android:text='"'
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    app:layout_constraintBottom_toBottomOf="@+id/edit_app"
+                    app:layout_constraintEnd_toStartOf="@+id/edit_app"
+                    app:layout_constraintTop_toTopOf="@+id/edit_app"
+                    app:layout_constraintVertical_bias="0.06999999" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_weight="1"
+                    android:text='"'
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    app:layout_constraintBottom_toBottomOf="@+id/edit_app"
+                    app:layout_constraintStart_toEndOf="@+id/edit_app"
+                    app:layout_constraintTop_toTopOf="@+id/edit_app"
+                    app:layout_constraintVertical_bias="0.06999999" />
+
+
+                <TextView
+                    android:id="@+id/text_description2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="#FFFFFF"
+                    android:gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="앱 알림 시 벌칙!"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.6" />
+
+                <TextView
+                    android:id="@+id/edit_app"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingRight="10dp"
+                    android:text="카카오톡"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#000000"
+                    app:layout_constraintBottom_toTopOf="@+id/text_description2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.7" />
+
+                <TextView
+                    android:id="@+id/but_next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/allround_rectengle"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="7dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="7dp"
+                    android:text="다음"
+                    app:layout_constraintBottom_toBottomOf="@+id/edit_app"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@+id/edit_app"
+                    app:layout_constraintTop_toTopOf="@+id/edit_app" />
+
+                <TextView
+                    android:id="@+id/but_prev"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/allround_rectengle"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="7dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="7dp"
+                    android:text="이전"
+                    app:layout_constraintBottom_toBottomOf="@+id/edit_app"
+                    app:layout_constraintEnd_toStartOf="@+id/edit_app"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/edit_app" />
+
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.constraint.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="#FFFFFF"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="#FFFFFF"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="새 규칙"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/but_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/redrectangle_small"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:text="확인"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#AAAAAA"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
+            app:layout_constraintEnd_toEndOf="@+id/constraintLayout" />
 
     </android.support.constraint.ConstraintLayout>
 

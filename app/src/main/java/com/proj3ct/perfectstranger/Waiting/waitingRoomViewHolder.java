@@ -18,12 +18,13 @@ public class waitingRoomViewHolder extends RecyclerView.ViewHolder {
     TextView text_name,text_captin;
     ConstraintLayout bg;
     OnItemClickListener itemListener;
+
     public waitingRoomViewHolder(View itemView) {
         super(itemView);
-        text_name=(TextView)itemView.findViewById(R.id.text_name);
-        image_profile=(ImageView)itemView.findViewById(R.id.image_profile);
-        text_captin=(TextView)itemView.findViewById(R.id.text_captin);
-        bg=(ConstraintLayout)itemView.findViewById(R.id.listview_waiting_bg);
+        text_name = (TextView)itemView.findViewById(R.id.text_name);
+        image_profile = (ImageView)itemView.findViewById(R.id.image_profile);
+        text_captin = (TextView)itemView.findViewById(R.id.text_captin);
+        bg = (ConstraintLayout)itemView.findViewById(R.id.listview_waiting_bg);
 
         bg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -33,15 +34,15 @@ public class waitingRoomViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    public void setBackgoundColor(boolean clicked)
-    {
+    public void setBackgoundColor(boolean clicked) {
         if(clicked) bg.setBackgroundColor(Color.LTGRAY);
         else bg.setBackgroundColor(Color.WHITE);
     }
-    public void setOnItemClickListener(waitingRoomViewHolder.OnItemClickListener itemClickListener){
-        itemListener=itemClickListener;
+
+    public void setOnItemClickListener(waitingRoomViewHolder.OnItemClickListener itemClickListener) {
+        itemListener = itemClickListener;
     }
-    public interface OnItemClickListener{
-        public void onBackgroundClickListener(int position);
+    public interface OnItemClickListener {
+        void onBackgroundClickListener(int position);
     }
 }

@@ -29,6 +29,7 @@ public class KakaoLink {
     public KakaoLink() {
     }
 
+    // 공유하기 링크를 보내는 함수
     public void sendLink(Context context, String roomKey) {
         TextTemplate params = TextTemplate.newBuilder("완벽한 타인 채팅방에 초대합니다.",
                 LinkObject.newBuilder().setWebUrl("https://developers.kakao.com").setMobileWebUrl("https://developers.kakao.com").setAndroidExecutionParams("roomKey=" + roomKey).build())
@@ -51,6 +52,7 @@ public class KakaoLink {
         });
     }
 
+    // 인텐트로부터 query를 뽑아내어 roomKey를 얻어 받환한다.
     public String checkLink(Intent intent) {
         if (intent != null) {
             Uri uri = intent.getData();
@@ -68,6 +70,7 @@ public class KakaoLink {
         return null;
     }
 
+    // [디버그용] : 카카오 개발자 키해시 등록을 위한 함수
     public String getKeyHash(final Context context) {
         PackageInfo packageInfo = getPackageInfo(context, PackageManager.GET_SIGNATURES);
         if (packageInfo == null)

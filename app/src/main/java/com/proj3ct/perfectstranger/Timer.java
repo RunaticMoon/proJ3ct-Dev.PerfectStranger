@@ -1,7 +1,5 @@
 package com.proj3ct.perfectstranger;
 
-import android.util.Log;
-
 import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
 
 import java.util.Vector;

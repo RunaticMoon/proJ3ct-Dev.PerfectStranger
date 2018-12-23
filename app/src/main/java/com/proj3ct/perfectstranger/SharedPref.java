@@ -13,6 +13,10 @@ public class SharedPref {
         this.context = context;
     }
 
+    public Context getContext() {
+        return this.context;
+    }
+
     public String getRoomKey() {
         SharedPreferences pref = context.getSharedPreferences("room", Context.MODE_PRIVATE);
         return pref.getString("roomKey", null);
