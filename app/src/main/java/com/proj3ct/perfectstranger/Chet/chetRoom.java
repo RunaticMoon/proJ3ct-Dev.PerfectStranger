@@ -23,6 +23,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
@@ -199,6 +200,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
     }
 
     public void exitRoom() {
+        Toast.makeText(chetRoom.this,"방에서 퇴장합니다",Toast.LENGTH_SHORT);
         LocalBroadcastManager.getInstance(this).unregisterReceiver(onNotice);
         firebaseDB.exitRoom();
         finish();
@@ -223,7 +225,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         }
     }
     public void exitSettingActivity(){
-        startActivity.status = "exit";
+        startActivity.status = "exit";  
         exitRoom();
     }
 

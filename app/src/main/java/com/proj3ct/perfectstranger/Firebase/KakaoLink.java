@@ -26,13 +26,14 @@ import static com.kakao.util.helper.Utility.getPackageInfo;
 
 public class KakaoLink {
 
-    public KakaoLink() { }
+    public KakaoLink() {
+    }
 
     // 공유하기 링크를 보내는 함수
     public void sendLink(Context context, String roomKey) {
         TextTemplate params = TextTemplate.newBuilder("완벽한 타인 채팅방에 초대합니다.",
-                                LinkObject.newBuilder().setWebUrl("https://developers.kakao.com").setMobileWebUrl("https://developers.kakao.com").setAndroidExecutionParams("roomKey=" + roomKey).build())
-                                .setButtonTitle("채팅방 들어가기").build();
+                LinkObject.newBuilder().setWebUrl("https://developers.kakao.com").setMobileWebUrl("https://developers.kakao.com").setAndroidExecutionParams("roomKey=" + roomKey).build())
+                .setButtonTitle("채팅방 들어가기").build();
 
         Map<String, String> serverCallbackArgs = new HashMap<String, String>();
         serverCallbackArgs.put("user_id", "${current_user_id}");
@@ -53,13 +54,13 @@ public class KakaoLink {
 
     // 인텐트로부터 query를 뽑아내어 roomKey를 얻어 받환한다.
     public String checkLink(Intent intent) {
-        if(intent != null) {
+        if (intent != null) {
             Uri uri = intent.getData();
 
-            if(uri != null) {
+            if (uri != null) {
                 String query = uri.getQuery();
 
-                if(query != null) {
+                if (query != null) {
                     String roomKey = query.split("=")[1];
                     Log.e("[Intent Data]", roomKey);
                     return roomKey;
