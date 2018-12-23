@@ -188,7 +188,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         alarm_name.setText(name);
         alarm_rule.setText(rule);
         alarm.setVisibility(View.VISIBLE);
-        if (appVariables.getSoundStatus() != 4) {
+        if (appVariables.getSoundStatus() > 3) {
             int streamId = sound.play(soundId, 0.5F, 0.5F, 1, 0, 1.2F);
         }
     }

@@ -18,7 +18,7 @@ public class AdMob {
     private boolean reward = false;
 
     static public void initialize(Context context) {
-        MobileAds.initialize(context, "ca-app-pub-4219946444843853~2674332869");
+        MobileAds.initialize(context, "ca-app-pub-8025062398820458~2176010546");
     }
 
     public void setTestDevice(String device) {
@@ -49,7 +49,7 @@ public class AdMob {
     // 전면광고
     public void Interstitial(Context context) {
         mInterstitialAd = new InterstitialAd(context);
-        mInterstitialAd.setAdUnitId("ca-app-pub-4219946444843853/6304131275");
+        mInterstitialAd.setAdUnitId("ca-app-pub-8025062398820458/4868077907");
         if(deviceId == null) {
             mInterstitialAd.loadAd(new AdRequest.Builder().build());
         }
@@ -95,11 +95,11 @@ public class AdMob {
     public void RewardedVideo(Context context) {
         mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(context);
         if(deviceId == null) {
-            mRewardedVideoAd.loadAd("ca-app-pub-4219946444843853/8532453761",
+            mRewardedVideoAd.loadAd("ca-app-pub-8025062398820458/7857257224",
                     new AdRequest.Builder().build());
         }
         else {
-            mRewardedVideoAd.loadAd("ca-app-pub-4219946444843853/8532453761",
+            mRewardedVideoAd.loadAd("ca-app-pub-8025062398820458/7857257224",
                     new AdRequest.Builder().addTestDevice(deviceId).build());
         }
         mRewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
@@ -125,11 +125,11 @@ public class AdMob {
                     reward = false;
                 }
                 if(deviceId == null) {
-                    mRewardedVideoAd.loadAd("ca-app-pub-4219946444843853/8532453761",
+                    mRewardedVideoAd.loadAd("ca-app-pub-8025062398820458/7857257224",
                             new AdRequest.Builder().build());
                 }
                 else {
-                    mRewardedVideoAd.loadAd("ca-app-pub-4219946444843853/8532453761",
+                    mRewardedVideoAd.loadAd("ca-app-pub-8025062398820458/7857257224",
                             new AdRequest.Builder().addTestDevice(deviceId).build());
                 }
             }
