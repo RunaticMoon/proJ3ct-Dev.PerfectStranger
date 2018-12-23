@@ -38,6 +38,13 @@ public class waitingRoom extends AppCompatActivity {
         // FirebaseDB에 리스트뷰 연결
         firebaseDB.setList_user(list_user, text_count, this);
 
+        if(firebaseDB.isMaster()) {
+            but_add.setVisibility(View.VISIBLE);
+        }
+        else {
+            but_add.setVisibility(View.INVISIBLE);
+        }
+
         String str = "총 " + firebaseDB.getUserAdapter().getUsers().size() + "명";
         text_count.setText(str);
 

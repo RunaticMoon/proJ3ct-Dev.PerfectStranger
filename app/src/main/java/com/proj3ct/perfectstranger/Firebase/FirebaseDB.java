@@ -1,12 +1,16 @@
 package com.proj3ct.perfectstranger.Firebase;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -17,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.proj3ct.perfectstranger.Callback;
+import com.proj3ct.perfectstranger.R;
 import com.proj3ct.perfectstranger.Rule.Rule;
 import com.proj3ct.perfectstranger.Chet.aChet;
 import com.proj3ct.perfectstranger.Chet.chetRoomAdapter;
@@ -25,6 +30,7 @@ import com.proj3ct.perfectstranger.SharedPref;
 import com.proj3ct.perfectstranger.Timer;
 import com.proj3ct.perfectstranger.User;
 import com.proj3ct.perfectstranger.Waiting.waitingRoomAdapter;
+import com.proj3ct.perfectstranger.startActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -311,16 +317,19 @@ public class FirebaseDB {
         resetListener();
     }
 
-    public void checkRoom(String roomKey, final Callback callback) {
+    public void checkRoom(String roomKey, final Callback callback, final Callback callback2) {
         dbRef.child(roomKey).child("setList").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()) {
+                    Log.e("[check]", "콜백 true");
                     callback.callback();
                 }
                 else {
+                    Log.e("[check]", "콜백 false");
                     sharedPref.destroy();
                     firstTime = true;
+                    callback2.callback();
                 }
             }
 
@@ -338,6 +347,7 @@ public class FirebaseDB {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ruleAdapter = new rulesAdapter();
+                rulesAdapter.setMaster(isMaster());
                 Vector<Integer> alarms = new Vector<>();
 
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {

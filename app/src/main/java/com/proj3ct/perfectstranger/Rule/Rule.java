@@ -53,10 +53,14 @@ public class Rule {
         this.detail_s = detail_s;
     }
 
-    public void setforType() {
-        detail_i++;
+    public void setforType(int i){
+        detail_i += i;
         if(detail_i >= 7) detail_i = 0;
+        if(detail_i < 0) detail_i = 6;
         detail_s = apps[detail_i];
+    }
+    public String getAppname(int n){
+        return apps[n];
     }
 
     public boolean isEqual(Rule r) {

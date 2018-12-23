@@ -68,6 +68,9 @@ public class startActivity extends AppCompatActivity {
     // SharedPreferences
     private SharedPref sharedPref = new SharedPref();
 
+    // Callback
+    private Callback returnCallback;
+
     // View component
     private TextView text_title;
     private Transition transition;
@@ -122,7 +125,7 @@ public class startActivity extends AppCompatActivity {
         AdMob.initialize(this);
         appVariables.setAdMob(adMob);
 
-        adMob.setTestDevice("3D5BFF3A93A8D14EFF77FDC4E69BED78");
+        adMob.setTestDevice("BA0687BEB87A4E9C574684C8BFA19B7F");
         adMob.RewardedVideo(this);
         adMob.Interstitial(this);
 
@@ -211,6 +214,39 @@ public class startActivity extends AppCompatActivity {
             }
         });
 
+        returnCallback = new Callback() {
+            @Override
+            public void callback() {
+                con.setVerticalBias(R.id.light, 0.3f);
+                TransitionManager.beginDelayedTransition(bg_start, transition);
+                con.applyTo(bg_start);
+                if (text_title.getAnimation() == move_left) {
+                    Handler delayHandler = new Handler();
+                    delayHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Animation move_right = AnimationUtils.loadAnimation(startActivity.this, R.anim.fade_left_to_right);
+                            move_right.setFillBefore(true);
+                            move_right.setFillAfter(true);
+                            text_title.startAnimation(move_right);
+                            layout_profile.startAnimation(move_right);
+                        }
+                    }, 500);
+                    delayHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            but_setprofile.setEnabled(true);
+                            but_chetRoom.setEnabled(true);
+                        }
+                    }, 800);
+                }
+
+                but_chetRoom.setText("방 만들기");
+                byLink = false;
+                Toast.makeText(startActivity.this,"존재하지 않는 방입니다.",Toast.LENGTH_SHORT).show();
+            }
+        };
+
         but_chetRoom.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
@@ -297,7 +333,7 @@ public class startActivity extends AppCompatActivity {
                                                 intent.putExtra("newGame", true);
                                                 startActivity(intent);
                                             }
-                                        });
+                                        }, returnCallback);
                                     }
                                 });
                             }
@@ -483,13 +519,15 @@ public class startActivity extends AppCompatActivity {
                                     intent.putExtra("newGame", newGame);
                                     startActivity(intent);
                                 }
-                            });
+                            }, returnCallback);
                         }
                     });
                 }
             }, 800);
         }
     }
+
+
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
