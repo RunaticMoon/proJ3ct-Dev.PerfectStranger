@@ -100,7 +100,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         alarm_rule = (TextView) findViewById(R.id.text_rule_wrong);
         alarm.setVisibility(View.GONE);
 
-        bt_exitRoom = findViewById(R.id.bt_exitRoom);
+        bt_exitRoom = findViewById(R.id.but_setting);
         bt_destroyRoom = findViewById(R.id.bt_destoryRoom);
 
         sound = new SoundPool(1, AudioManager.STREAM_RING, 0);
@@ -189,7 +189,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         alarm_name.setText(name);
         alarm_rule.setText(rule);
         alarm.setVisibility(View.VISIBLE);
-        if (appVariables.getSoundStatus() > 3) {
+        if (appVariables.getSoundStatus() < 3) {
             int streamId = sound.play(soundId, 0.5F, 0.5F, 1, 0, 1.2F);
         }
     }

@@ -8,23 +8,13 @@
     tools:context="com.proj3ct.perfectstranger.Chet.chetRoom">
 
     <Button
-        android:id="@+id/bt_exitRoom"
-        android:layout_width="88dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="방나가기"
-        app:layout_constraintEnd_toStartOf="@+id/bt_destoryRoom"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
         android:id="@+id/bt_destoryRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-1dp"
         android:layout_marginEnd="8dp"
         android:text="방 삭제"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/bt_exitRoom"
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
@@ -146,20 +136,46 @@
 
         <TextView
             android:id="@+id/text_friends"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="10dp"
+            android:padding="15dp"
             android:gravity="center"
+            android:textColor="@android:color/darker_gray"
             android:text="참가자 목록" />
 
+
+        <View
+            android:background="#BBBBBB"
+            android:layout_width="1dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"
+            android:layout_height="match_parent"/>
+
+        <Button
+            android:id="@+id/but_setting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:background="@null"
+            android:padding="15dp"
+            android:text="설정"
+            android:textColor="@android:color/darker_gray" />
+
+        <View
+            android:background="#BBBBBB"
+            android:layout_width="1dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"
+            android:layout_height="match_parent"/>
         <TextView
             android:id="@+id/text_rules"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="10dp"
+            android:padding="15dp"
             android:gravity="center"
+            android:textColor="@android:color/darker_gray"
             android:text="방 규칙" />
     </LinearLayout>
 
