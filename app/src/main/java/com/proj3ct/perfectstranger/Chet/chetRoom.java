@@ -49,7 +49,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
     private TextView but_friends, but_rules, but_newMessage, alarm_name, alarm_rule;
     private ImageView image_siren;
     private ConstraintLayout alarm_layout, alarm;
-    private Button bt_exitRoom, bt_destroyRoom;
+    private Button btn_setting;
 
     // SoundPool
     private SoundPool sound;
@@ -99,9 +99,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         alarm_name = (TextView) findViewById(R.id.text_name_alarm);
         alarm_rule = (TextView) findViewById(R.id.text_rule_wrong);
         alarm.setVisibility(View.GONE);
-
-        bt_exitRoom = findViewById(R.id.but_setting);
-        bt_destroyRoom = findViewById(R.id.bt_destoryRoom);
+        btn_setting = (Button) findViewById(R.id.but_setting);
 
         sound = new SoundPool(1, AudioManager.STREAM_RING, 0);
         soundId = sound.load(this, R.raw.air_horn, 1);
@@ -164,7 +162,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
             }
         });
 
-        bt_exitRoom.setOnClickListener(new View.OnClickListener() {
+        btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), settingActivity.class);
@@ -172,15 +170,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
             }
         });
 
-        bt_destroyRoom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(firebaseDB.isMaster()) {
-                    firebaseDB.destroyRoom();
-                    finish();
-                }
-            }
-        });
+
     }
 
 
@@ -216,12 +206,16 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         firebaseDB.resetListener();
         super.onDestroy();
     }
-
     @Override
     protected void onResume() {
         super.onResume();
         if (startActivity.status.equals("exit")) {
             exitRoom();
+        }else if(startActivity.status.equals("delete")){
+            if(firebaseDB.isMaster()) {
+                firebaseDB.destroyRoom();
+                finish();
+            }
         }
     }
     public void exitSettingActivity(){

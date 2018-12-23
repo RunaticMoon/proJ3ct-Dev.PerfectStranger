@@ -7,16 +7,6 @@
     android:background="#33000000"
     tools:context="com.proj3ct.perfectstranger.Chet.chetRoom">
 
-    <Button
-        android:id="@+id/bt_destoryRoom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-1dp"
-        android:layout_marginEnd="8dp"
-        android:text="방 삭제"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/listview_chat"
         android:layout_width="0dp"
@@ -42,8 +32,10 @@
         android:background="@drawable/redrectangle"
         app:layout_constraintBottom_toBottomOf="@+id/listview_chat"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/listview_chat">
+        app:layout_constraintTop_toTopOf="@+id/listview_chat"
+        app:layout_constraintVertical_bias="1.0">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/alarm_layout"

@@ -433,6 +433,11 @@ public class startActivity extends AppCompatActivity {
             startActivity.status = "notinit";
             byLink = false;
             byShared = false;
+        }else if(startActivity.status.equals("exit")){
+            but_chetRoom.setText("방 만들기");
+            startActivity.status = "notinit";
+            byLink = false;
+            byShared = false;
         }
         super.onResume();
     }
