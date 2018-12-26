@@ -364,7 +364,9 @@ public class FirebaseDB {
                 for(int alarm : alarms) {
                     Log.e("[룰리스너]", String.valueOf(alarm));
                 }
-                timer.checkAlarm(alarms);
+                if(timer != null) {
+                    timer.checkAlarm(alarms);
+                }
             }
 
             @Override
