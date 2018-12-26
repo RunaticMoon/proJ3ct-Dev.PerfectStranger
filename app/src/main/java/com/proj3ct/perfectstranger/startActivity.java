@@ -78,7 +78,7 @@ public class startActivity extends AppCompatActivity {
     private ConstraintSet con;
     private EditText edit_name;
     private Button but_chetRoom;
-    private ImageView but_setprofile;
+    private ImageView but_setprofile,but_profile2;
     private Animation move_left;
     private AppVariables appVariables;
     private Boolean Yes;
@@ -98,6 +98,7 @@ public class startActivity extends AppCompatActivity {
         text_title = (TextView) findViewById(R.id.text_title);
         bg_start = (ConstraintLayout) findViewById(R.id.bg_start);
         but_setprofile = (ImageView) findViewById(R.id.but_profile);
+        but_profile2=(ImageView)findViewById(R.id.but_profile2);
         layout_profile = (ConstraintLayout) findViewById(R.id.layout_profile);
         edit_name = (EditText) findViewById(R.id.edit_name);
 
@@ -213,6 +214,17 @@ public class startActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         });
+        but_profile2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(startActivity.this, profileSettingActivity.class);
+                intent.putExtra("vectorType", user.getVectorType());
+                intent.putExtra("backgroundColor", user.getBackgroundColor());
+                intent.putExtra("outlineColor", user.getOutlineColor());
+                intent.putExtra("vectorColor", user.getVectorColor());
+                startActivityForResult(intent, 1);
+            }
+        });
 
         returnCallback = new Callback() {
             @Override
@@ -299,7 +311,7 @@ public class startActivity extends AppCompatActivity {
                                         userKey = firebaseDB.getUserKey();
 
                                         // SharedPreference에 저장
-                                        sharedPref.setPref(roomKey, userKey, user);
+                                        sharedPref.setPref(roomKey, userKey, user,appVariables.getSoundStatus());
 
                                         Intent intent = new Intent(startActivity.this, chetRoom.class);
                                         intent.putExtra("newGame", true);
@@ -327,7 +339,7 @@ public class startActivity extends AppCompatActivity {
                                                 userKey = firebaseDB.getUserKey();
 
                                                 // SharedPreference에 저장
-                                                sharedPref.setPref(roomKey, userKey, user);
+                                                sharedPref.setPref(roomKey, userKey, user,appVariables.getSoundStatus());
 
                                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
                                                 intent.putExtra("newGame", true);

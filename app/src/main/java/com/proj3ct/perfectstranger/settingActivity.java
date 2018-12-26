@@ -24,7 +24,7 @@ public class settingActivity extends AppCompatActivity {
         if(!appVariables.firebaseDB.isMaster()){
             but_deleteRoom.setVisibility(android.view.View.GONE);
         }
-        appVariables.soundSet--;
+        appVariables.soundOption--;
         but_setSound.setText(appVariables.setSound());
         but_setSound.setOnClickListener(new android.view.View.OnClickListener() {
             @Override

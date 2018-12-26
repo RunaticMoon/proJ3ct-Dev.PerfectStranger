@@ -197,6 +197,7 @@ public class RulesActivity extends AppCompatActivity {
                 }
                 but_ok.setEnabled(false);
                 but_ok.setTextColor(Color.RED);
+                Log.i("!!!",ruleEditing.ruleType+" ! "+ruleEditing.detail_s+" ! "+ruleEditing.detail_i+" ! ");
                 firebaseDB.getRuleAdapter().add(ruleEditing);
 
                 Animation animation = AnimationUtils.loadAnimation(RulesActivity.this,R.anim.rotate_and_zoom);
@@ -267,7 +268,9 @@ public class RulesActivity extends AppCompatActivity {
                 break;
             case 4:
                 ruleEditing.setRuleType(5);
-                edit_app.setText(ruleEditing.getAppname(0));
+                ruleEditing.setDetail_i(-1);
+                ruleEditing.setforType(1);
+                edit_app.setText(ruleEditing.getDetail_s());
                 layout_rule1.setVisibility(View.GONE);
                 layout_rule2.setVisibility(View.GONE);
                 layout_rule3.setVisibility(View.VISIBLE);

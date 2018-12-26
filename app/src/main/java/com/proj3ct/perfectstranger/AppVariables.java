@@ -14,6 +14,7 @@ public class AppVariables extends Application implements FirebaseDB.OnUsersChang
     FirebaseDB firebaseDB;
     HashMap<String,User> users;
     AdMob adMob;
+    int soundOption;
     SharedPref sharedPref;
 
     public SharedPref getSharedPref() {
@@ -22,16 +23,17 @@ public class AppVariables extends Application implements FirebaseDB.OnUsersChang
 
     public void setSharedPref(SharedPref sharedPref) {
         this.sharedPref = sharedPref;
+        soundOption = sharedPref.getSoundOption();
     }
 
-    int soundSet;
+
 
     public FirebaseDB getFirebaseDB() {
         return firebaseDB;
     }
 
     public AppVariables() {
-        soundSet=0;
+        soundOption=0;
     }
 
     public void setFirebaseDB(FirebaseDB firebaseDB) {
@@ -42,12 +44,12 @@ public class AppVariables extends Application implements FirebaseDB.OnUsersChang
 
     public String setSound(){
         String[] str = {"진동+소리","소리","진동","무음"};
-        soundSet++;
-        if(soundSet>3) soundSet=0;
-        return str[soundSet];
+        soundOption++;
+        if(soundOption>3) soundOption=0;
+        return str[soundOption];
     }
     public int getSoundStatus(){
-        return soundSet;
+        return soundOption;
     }
 
     public void setAdMob(AdMob adMob) {

@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Vibrator;
 import android.support.constraint.ConstraintLayout;
 
 import android.os.Build;
@@ -54,6 +55,7 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
     // SoundPool
     private SoundPool sound;
     private int soundId;
+    private Vibrator vibrator;
 
     // AdMob
     private AdMob adMob;
@@ -78,6 +80,8 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         }
     };
 
+
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +105,9 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         alarm.setVisibility(View.GONE);
         btn_setting = (Button) findViewById(R.id.but_setting);
 
-        sound = new SoundPool(1, AudioManager.STREAM_RING, 0);
+        sound = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
         soundId = sound.load(this, R.raw.air_horn, 1);
+        vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
         DrawableImageViewTarget imageViewTarget = new DrawableImageViewTarget(image_siren);
         Glide.with(chetRoom.this).load(R.raw.alarm_red).into(imageViewTarget);
         Animation animation = AnimationUtils.loadAnimation(chetRoom.this, R.anim.vibrate);
@@ -179,8 +184,21 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         alarm_name.setText(name);
         alarm_rule.setText(rule);
         alarm.setVisibility(View.VISIBLE);
-        if (appVariables.getSoundStatus() < 3) {
-            int streamId = sound.play(soundId, 0.5F, 0.5F, 1, 0, 1.2F);
+
+        switch (appVariables.getSoundStatus()){
+            case 0:
+                vibrator.vibrate(1500);
+            case 1:
+                int streamId = sound.play(soundId, 0.5F, 0.5F, 1, 0, 1.2F);
+                break;
+            case 2:
+                vibrator.vibrate(1500);
+                break;
+            case 3:
+                break;
+            default:
+                break;
+
         }
     }
 

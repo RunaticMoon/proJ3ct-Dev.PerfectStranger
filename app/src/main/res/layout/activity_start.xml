@@ -139,6 +139,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edit_name" />
+
+            <ImageView
+                android:id="@+id/but_profile2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:elevation="2dp"
+                app:layout_constraintBottom_toTopOf="@+id/edit_name"
+                app:layout_constraintEnd_toEndOf="@+id/but_profile"
+                app:layout_constraintStart_toEndOf="@+id/but_profile"
+                app:srcCompat="@drawable/ic_edit" />
         </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
 

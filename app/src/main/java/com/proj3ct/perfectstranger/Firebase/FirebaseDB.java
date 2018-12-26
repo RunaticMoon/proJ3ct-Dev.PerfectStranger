@@ -381,7 +381,6 @@ public class FirebaseDB {
         ChetListener = new ChildEventListener() {  // message는 child의 이벤트를 수신합니다.
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.e("!!!", "실setMessageListenersetMessageListener행");
                 Log.e("!!!chetList 갯수", Integer.toString(chetAdapter.getItemCount()));
                 if(isMaster()) {
                     if(chetAdapter.getItemCount() > 1000){
@@ -552,6 +551,7 @@ public class FirebaseDB {
     // Rule Checker
     public boolean ruleChecker(aChet chet) {
         Vector<Rule> rules = ruleAdapter.getRules();
+        Log.i("!!!!",rules.size()+"");
         boolean detected = false;
         /**
          * ruleType=1 : n번째 메세지 온 사람 벌칙, detail_i
@@ -562,8 +562,7 @@ public class FirebaseDB {
          */
         if (chet != null && chet.getMainText() != null) {
             for (Rule rule : rules) {
-                Log.e("!!!", chet.getUserKey());
-                Log.e("!!!", Boolean.toString(onUsersChanged.getUsers().containsKey(chet.getUserKey())));
+                Log.i("!!!!",rule.getRuleType()+" "+rule.getDetail_s()+ " "+rule.getDetail_i());
                 if (rule.getRuleType() == 1 && chetAdapter.getItemCount() % rule.getDetail_i() == 0) {
                     alarmListener.onAlarm(onUsersChanged.getUser(chet.getUserKey()).getName(), rule.getDetail_i() + "번째 메세지 온 사람 벌칙");
                     detected = true;
@@ -585,10 +584,13 @@ public class FirebaseDB {
                             break;
                         }
                     }
-                } else if (rule.getRuleType() == 5 && chet.getAppName().contains(rule.getDetail_s())) {
-                    alarmListener.onAlarm(onUsersChanged.getUser(chet.getUserKey()).getName(), rule.getDetail_s() + " 알림 시 벌칙");
-                    detected = true;
-                    break;
+                } else if (rule.getRuleType() == 5 ) {
+                    if(chet.getAppName().contains(rule.getAppname()))
+                    {
+                        alarmListener.onAlarm(onUsersChanged.getUser(chet.getUserKey()).getName(), rule.getDetail_s() + " 알림 시 벌칙");
+                        detected = true;
+                        break;
+                    }
                 }
             }
         }

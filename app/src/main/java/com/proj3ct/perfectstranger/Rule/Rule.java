@@ -39,7 +39,8 @@ public class Rule {
     }
 
 
-    private String[] apps = { "카카오톡", "페이스북", "인스타그램", "유튜브", "비트윈", "메세지", "전화" };
+    private String[] apps = { "카카오톡", "페이스북", "페이스북 메신저","인스타그램", "비트윈", "메세지", "전화" };
+    private String[] appName={"kakao","katana","orca","instagram","couple","MESSAGE","CALL"};
 
     public Rule() { }
 
@@ -59,8 +60,8 @@ public class Rule {
         if(detail_i < 0) detail_i = 6;
         detail_s = apps[detail_i];
     }
-    public String getAppname(int n){
-        return apps[n];
+    public String getAppname(){
+        return appName[detail_i];
     }
 
     public boolean isEqual(Rule r) {
