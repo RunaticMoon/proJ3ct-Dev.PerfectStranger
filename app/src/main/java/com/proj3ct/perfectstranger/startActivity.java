@@ -311,7 +311,7 @@ public class startActivity extends AppCompatActivity {
                                         userKey = firebaseDB.getUserKey();
 
                                         // SharedPreference에 저장
-                                        sharedPref.setPref(roomKey, userKey, user,appVariables.getSoundStatus());
+                                        sharedPref.setPref(roomKey, userKey, user);
 
                                         Intent intent = new Intent(startActivity.this, chetRoom.class);
                                         intent.putExtra("newGame", true);
@@ -339,7 +339,7 @@ public class startActivity extends AppCompatActivity {
                                                 userKey = firebaseDB.getUserKey();
 
                                                 // SharedPreference에 저장
-                                                sharedPref.setPref(roomKey, userKey, user,appVariables.getSoundStatus());
+                                                sharedPref.setPref(roomKey, userKey, user);
 
                                                 Intent intent = new Intent(startActivity.this, chetRoom.class);
                                                 intent.putExtra("newGame", true);

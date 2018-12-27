@@ -39,10 +39,17 @@ public class SharedPref {
     }
 
     public int getSoundOption(){
-        SharedPreferences pref = context.getSharedPreferences("room", Context.MODE_PRIVATE);
+        SharedPreferences pref = context.getSharedPreferences("base", Context.MODE_PRIVATE);
         return pref.getInt("sound", 0);
     }
-    public void setPref(String roomKey, String userKey, User user, int soundOption) {
+    public void setBasePref(int soundOption) {
+        SharedPreferences pref = context.getSharedPreferences("base", Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt("sound",soundOption);
+        editor.apply();
+    }
+    public void setPref(String roomKey, String userKey, User user) {
         SharedPreferences pref = context.getSharedPreferences("room", Context.MODE_PRIVATE);
 
         Gson gson = new GsonBuilder().create();
@@ -52,7 +59,6 @@ public class SharedPref {
         editor.putString("roomKey", roomKey);
         editor.putString("userKey", userKey);
         editor.putString("user", strUser);
-        editor.putInt("user",soundOption);
         editor.apply();
     }
     public void destroy() {

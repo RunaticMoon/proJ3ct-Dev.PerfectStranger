@@ -10,6 +10,7 @@ import com.proj3ct.perfectstranger.Dialog.ComfirmDialog;
 public class settingActivity extends AppCompatActivity {
     TextView but_setSound, but_gotoEmail, but_gotoBlog, but_exitRoom, but_deleteRoom;
     AppVariables appVariables;
+    SharedPref sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +22,8 @@ public class settingActivity extends AppCompatActivity {
         but_exitRoom = (TextView)findViewById(R.id.but_exit);
         but_deleteRoom = (TextView)findViewById(R.id.but_delRoom);
         appVariables = (AppVariables)getApplication();
+        sharedPref = appVariables.getSharedPref();
+
         if(!appVariables.firebaseDB.isMaster()){
             but_deleteRoom.setVisibility(android.view.View.GONE);
         }
@@ -73,5 +76,11 @@ public class settingActivity extends AppCompatActivity {
     public void exitSettingActivity2(){
         startActivity.status = "delete";
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        sharedPref.setBasePref(appVariables.getSoundStatus());
+        super.onDestroy();
     }
 }
