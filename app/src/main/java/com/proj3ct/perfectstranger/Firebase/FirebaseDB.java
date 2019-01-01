@@ -302,6 +302,30 @@ public class FirebaseDB {
         chetAdapter.setUsers(onUsersChanged.getUsers());
     }
 
+    public void exitRoomWithKey(final String roomKey, final String userKey) {
+        roomRef = dbRef.child(roomKey);
+        userRef = roomRef.child("userList");
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getChildrenCount() == 1) {
+                    roomRef.removeValue();
+                }
+                else {
+                    roomRef.child(userKey).removeValue();
+                }
+                sharedPref.destroy();
+                roomRef = null;
+                userRef = null;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public void exitRoom() {
         myRef.removeValue();
         if(getUserAdapter().getItemCount() == 1) {

@@ -54,7 +54,7 @@ public class startActivity extends AppCompatActivity {
 
     // firebase
     private FirebaseAnalytics mFirebaseAnalytics;
-    private FirebaseDB firebaseDB = new FirebaseDB();
+    public FirebaseDB firebaseDB = new FirebaseDB();
     private String roomKey, userKey;
     private User user = new User();
 
@@ -143,6 +143,7 @@ public class startActivity extends AppCompatActivity {
         roomKey = sharedPref.getRoomKey();
         if (roomKey != null) {
             Log.e("[Shared roomKey]", roomKey);
+            userKey = sharedPref.getUserKey();
             user = sharedPref.getUser();
             edit_name.setText(user.getName());
             user.setProfile(but_setprofile, this);
@@ -176,7 +177,7 @@ public class startActivity extends AppCompatActivity {
         } else if (roomKey != null && tempKey == null) {
             Log.e("[분기점]", "2");
             dialogStr = "이미 참여중인 방이있습니다.";
-            showComfirmDialog(dialogStr, "기존 방 입장","새로운 방 입장");
+            showComfirmDialog(dialogStr, "기존 방 입장","새로운 방 입장", roomKey, userKey);
 
             // 새로운방 입장 누를시 활성화
             byLink = false;
@@ -194,7 +195,7 @@ public class startActivity extends AppCompatActivity {
             } else{
                 Log.e("[분기점]", "4-2");
                 dialogStr = "이미 참여중인 방이 있습니다";
-                showComfirmDialog(dialogStr, "기존 방 입장","새로운 방 입장");
+                showComfirmDialog(dialogStr, "기존 방 입장","새로운 방 입장", roomKey, userKey);
 
                 // 쉐어드가 아닌 링크로 들어가는 조건
                 byLink = true;
@@ -475,8 +476,8 @@ public class startActivity extends AppCompatActivity {
         return false;
     }
 
-    public void showComfirmDialog(String comfirmStr, String okStr, String noStr) {
-        ComfirmDialog customDialog = new ComfirmDialog(startActivity.this, comfirmStr,okStr,noStr);
+    public void showComfirmDialog(String comfirmStr, String okStr, String noStr, String roomKey, String userKey) {
+        ComfirmDialog customDialog = new ComfirmDialog(startActivity.this, comfirmStr, okStr, noStr, roomKey, userKey);
         customDialog.callFunction();
     }
 
