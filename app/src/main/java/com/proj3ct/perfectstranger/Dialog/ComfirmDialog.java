@@ -64,16 +64,16 @@ public class ComfirmDialog {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View view) {
+                dlg.dismiss();
                 ((startActivity) context).setYes(true);
                 ((startActivity) context).startIntentByShared();
-                dlg.dismiss();
             }
         });
         btn_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((startActivity) context).setYes(false);
                 dlg.dismiss();
+                ((startActivity) context).setYes(false);
             }
         });
     }
@@ -104,8 +104,9 @@ public class ComfirmDialog {
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((chetRoom) context).exitSettingActivity();
                 dlg.dismiss();
+                ((chetRoom) context).exitSettingActivity();
+
             }
         });
         btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -142,8 +143,9 @@ public class ComfirmDialog {
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((settingActivity) context).exitSettingActivity();
                 dlg.dismiss();
+                ((settingActivity) context).exitSettingActivity();
+
             }
         });
         btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -179,8 +181,9 @@ public class ComfirmDialog {
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((settingActivity) context).exitSettingActivity2();
                 dlg.dismiss();
+                ((settingActivity) context).exitSettingActivity2();
+
             }
         });
         btn_cancel.setOnClickListener(new View.OnClickListener() {

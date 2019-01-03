@@ -61,7 +61,7 @@ public class startActivity extends AppCompatActivity {
     // KakaoLink
     private KakaoLink kakaoLink = new KakaoLink();
     private boolean byLink = false;
-
+    private String tempKey;
     // AdMob
     private AdMob adMob = new AdMob();
 
@@ -151,7 +151,7 @@ public class startActivity extends AppCompatActivity {
         }
 
         // 링크를 타고 들어왔는가?
-        final String tempKey = kakaoLink.checkLink(getIntent());
+        tempKey = kakaoLink.checkLink(getIntent());
         Log.e("[roomKey]", "카카오톡 링크 확인");
         if(tempKey != null) {
             Log.e("[roomKey]", tempKey);
@@ -176,7 +176,7 @@ public class startActivity extends AppCompatActivity {
         } else if (roomKey != null && tempKey == null) {
             Log.e("[분기점]", "2");
             dialogStr = "이미 참여중인 방이있습니다.";
-            showComfirmDialog(dialogStr, "기존 방 입장","새로운 방 입장");
+            showComfirmDialog(dialogStr, "기존 방 입장","새로운 방 만들기");
 
             // 새로운방 입장 누를시 활성화
             byLink = false;
@@ -194,7 +194,7 @@ public class startActivity extends AppCompatActivity {
             } else{
                 Log.e("[분기점]", "4-2");
                 dialogStr = "이미 참여중인 방이 있습니다";
-                showComfirmDialog(dialogStr, "기존 방 입장","새로운 방 입장");
+                showComfirmDialog(dialogStr, "기존 방 입장","새로운 방 만들기");
 
                 // 쉐어드가 아닌 링크로 들어가는 조건
                 byLink = true;
@@ -441,11 +441,6 @@ public class startActivity extends AppCompatActivity {
         }
 
         if(startActivity.status.equals("exit")){
-            but_chetRoom.setText("방 만들기");
-            startActivity.status = "notinit";
-            byLink = false;
-            byShared = false;
-        }else if(startActivity.status.equals("exit")){
             but_chetRoom.setText("방 만들기");
             startActivity.status = "notinit";
             byLink = false;
