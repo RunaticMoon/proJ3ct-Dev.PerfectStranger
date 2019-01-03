@@ -16,7 +16,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
 import com.proj3ct.perfectstranger.Dialog.ComfirmDialog;
 
 public class settingActivity extends AppCompatActivity {
