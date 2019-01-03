@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="설정"
+            android:fontFamily="@font/hanna"
             android:textAppearance="?android:attr/textAppearanceMedium"
             app:layout_constraintBottom_toBottomOf="@+id/imageView3"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
@@ -62,6 +63,7 @@
                     android:layout_marginStart="8dp"
                     android:padding="8dp"
                     android:text="효과음"
+
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView3"
                     app:layout_constraintStart_toEndOf="@+id/imageView3"
