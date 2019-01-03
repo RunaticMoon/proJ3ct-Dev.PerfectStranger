@@ -1,6 +1,7 @@
 package com.proj3ct.perfectstranger;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -17,7 +18,10 @@ public class AdMob {
     private Callback callback = null;
     private boolean reward = false;
 
-    static public void initialize(Context context) {
+    private String interstitial_id = "";
+    private String rewardedVideo_id = "";
+
+    public void initialize(Context context) {
         MobileAds.initialize(context, "ca-app-pub-8025062398820458~2176010546");
     }
 
@@ -26,7 +30,19 @@ public class AdMob {
         deviceId = device;
     }
 
+    public void setTest(Context context, boolean test) {
+        if(test) {
+            interstitial_id = context.getString(R.string.test_ad_front_id);
+            rewardedVideo_id = context.getString(R.string.test_ad_reward_id);
+        }
+        else {
+            interstitial_id = context.getString(R.string.ad_front_id);
+            rewardedVideo_id = context.getString(R.string.ad_reward_id);
+        }
+    }
+
     public void showInterstitial(Callback callback) {
+        Log.e("[Ad Loaded]", String.valueOf(mInterstitialAd.isLoaded()));
         if(mInterstitialAd.isLoaded()) {
             this.callback = callback;
             mInterstitialAd.show();
@@ -37,6 +53,7 @@ public class AdMob {
     }
 
     public void showRewardedVideo(Callback callback) {
+        Log.e("[Ad Loaded]", String.valueOf(mRewardedVideoAd.isLoaded()));
         if(mRewardedVideoAd.isLoaded()) {
             this.callback = callback;
             mRewardedVideoAd.show();
@@ -49,16 +66,17 @@ public class AdMob {
     // 전면광고
     public void Interstitial(Context context) {
         mInterstitialAd = new InterstitialAd(context);
-        mInterstitialAd.setAdUnitId("ca-app-pub-8025062398820458/4868077907");
+        mInterstitialAd.setAdUnitId(interstitial_id);
+
         if(deviceId == null) {
             mInterstitialAd.loadAd(new AdRequest.Builder().build());
-        }
-        else {
+        } else {
             mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice(deviceId).build());
         }
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
+                Log.e("[Ad 전면]", "전면광고 로드");
                 // Code to be executed when an ad finishes loading.
             }
 
@@ -94,18 +112,20 @@ public class AdMob {
     // 동영상 리워드
     public void RewardedVideo(Context context) {
         mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(context);
+        Log.e("[리워드 광고]", rewardedVideo_id);
+
         if(deviceId == null) {
-            mRewardedVideoAd.loadAd("ca-app-pub-8025062398820458/7857257224",
+            mRewardedVideoAd.loadAd(rewardedVideo_id,
                     new AdRequest.Builder().build());
-        }
-        else {
-            mRewardedVideoAd.loadAd("ca-app-pub-8025062398820458/7857257224",
+        } else {
+            mRewardedVideoAd.loadAd(rewardedVideo_id,
                     new AdRequest.Builder().addTestDevice(deviceId).build());
         }
+
         mRewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
             @Override
             public void onRewardedVideoAdLoaded() {
-
+                Log.e("[Ad 리워드]", "리워드광고 로드");
             }
 
             @Override
@@ -125,11 +145,11 @@ public class AdMob {
                     reward = false;
                 }
                 if(deviceId == null) {
-                    mRewardedVideoAd.loadAd("ca-app-pub-8025062398820458/7857257224",
+                    mRewardedVideoAd.loadAd(rewardedVideo_id,
                             new AdRequest.Builder().build());
                 }
                 else {
-                    mRewardedVideoAd.loadAd("ca-app-pub-8025062398820458/7857257224",
+                    mRewardedVideoAd.loadAd(rewardedVideo_id,
                             new AdRequest.Builder().addTestDevice(deviceId).build());
                 }
             }
@@ -146,7 +166,7 @@ public class AdMob {
 
             @Override
             public void onRewardedVideoAdFailedToLoad(int i) {
-
+                Log.e("[리워드 로드 실패]", String.valueOf(i));
             }
 
             @Override
@@ -154,119 +174,5 @@ public class AdMob {
 
             }
         });
-
-
-    }
-
-    // 테스트용 전면광고
-    public void TestInterstitial(Context context) {
-        mInterstitialAd = new InterstitialAd(context);
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
-        if(deviceId == null) {
-            mInterstitialAd.loadAd(new AdRequest.Builder().build());
-        }
-        else {
-            mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice(deviceId).build());
-        }
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                // Code to be executed when an ad request fails.
-            }
-
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when the ad is displayed.
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-            }
-
-            @Override
-            public void onAdClosed() {
-                callback.callback();
-                if(deviceId == null) {
-                    mInterstitialAd.loadAd(new AdRequest.Builder().build());
-                }
-                else {
-                    mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice(deviceId).build());
-                }
-                // Code to be executed when when the interstitial ad is closed.
-            }
-        });
-    }
-
-    // 테스트용 동영상 리워드
-    public void TestRewardedVideo(Context context) {
-        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(context);
-        if(deviceId == null) {
-            mRewardedVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
-                    new AdRequest.Builder().build());
-        }
-        else {
-            mRewardedVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
-                    new AdRequest.Builder().addTestDevice(deviceId).build());
-        }
-        mRewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
-            @Override
-            public void onRewardedVideoAdLoaded() {
-
-            }
-
-            @Override
-            public void onRewardedVideoAdOpened() {
-
-            }
-
-            @Override
-            public void onRewardedVideoStarted() {
-
-            }
-
-            @Override
-            public void onRewardedVideoAdClosed() {
-                if(reward) {
-                    callback.callback();
-                    reward = false;
-                }
-                if(deviceId == null) {
-                    mRewardedVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
-                            new AdRequest.Builder().build());
-                }
-                else {
-                    mRewardedVideoAd.loadAd("ca-app-pub-3940256099942544/5224354917",
-                            new AdRequest.Builder().addTestDevice(deviceId).build());
-                }
-            }
-
-            @Override
-            public void onRewarded(RewardItem rewardItem) {
-                reward = true;
-            }
-
-            @Override
-            public void onRewardedVideoAdLeftApplication() {
-
-            }
-
-            @Override
-            public void onRewardedVideoAdFailedToLoad(int i) {
-
-            }
-
-            @Override
-            public void onRewardedVideoCompleted() {
-
-            }
-        });
-
-
     }
 }

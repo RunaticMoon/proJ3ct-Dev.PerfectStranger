@@ -123,12 +123,13 @@ public class startActivity extends AppCompatActivity {
         Log.e("[hash]", kakaoLink.getKeyHash(getApplicationContext()));
 
         // AdMob
-        AdMob.initialize(this);
+        adMob.initialize(this);
         appVariables.setAdMob(adMob);
 
-        //adMob.setTestDevice("BA0687BEB87A4E9C574684C8BFA19B7F");
-        adMob.RewardedVideo(this);
+        adMob.setTestDevice("3D5BFF3A93A8D14EFF77FDC4E69BED78");
+        adMob.setTest(this, false);
         adMob.Interstitial(this);
+        adMob.RewardedVideo(this);
 
         // firebase analytics
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
