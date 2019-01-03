@@ -20,12 +20,22 @@ public class ComfirmDialog {
     private Context context;
     private Context priviousContext;
     private String comfirmStr, okStr, noStr;
+    private String roomKey, userKey;
 
     public ComfirmDialog(Context context, String comfirmStr, String okStr, String noStr) {
         this.comfirmStr = comfirmStr;
         this.context = context;
         this.okStr = okStr;
         this.noStr = noStr;
+    }
+
+    public ComfirmDialog(Context context, String comfirmStr, String okStr, String noStr, String roomKey, String userKey) {
+        this.comfirmStr = comfirmStr;
+        this.context = context;
+        this.okStr = okStr;
+        this.noStr = noStr;
+        this.roomKey = roomKey;
+        this.userKey = userKey;
     }
 
     public ComfirmDialog(Context context, Context priviousContext, String comfirmStr, String okStr, String noStr) {
@@ -74,6 +84,7 @@ public class ComfirmDialog {
             public void onClick(View view) {
                 dlg.dismiss();
                 ((startActivity) context).setYes(false);
+                ((startActivity) context).firebaseDB.exitRoomWithKey(roomKey, userKey);
             }
         });
     }
