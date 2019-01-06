@@ -112,7 +112,6 @@ public class AdMob {
     // 동영상 리워드
     public void RewardedVideo(Context context) {
         mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(context);
-        Log.e("[리워드 광고]", rewardedVideo_id);
 
         if(deviceId == null) {
             mRewardedVideoAd.loadAd(rewardedVideo_id,

@@ -126,7 +126,7 @@ public class startActivity extends AppCompatActivity {
         adMob.initialize(this);
         appVariables.setAdMob(adMob);
 
-        //adMob.setTestDevice("3D5BFF3A93A8D14EFF77FDC4E69BED78");
+        //adMob.setTestDevice("3D552DAB7664A09DE8A864FE8B3FE08D");
         adMob.setTest(this, false);
         adMob.Interstitial(this);
         adMob.RewardedVideo(this);
@@ -315,6 +315,7 @@ public class startActivity extends AppCompatActivity {
 
                                         Intent intent = new Intent(startActivity.this, chetRoom.class);
                                         intent.putExtra("newGame", true);
+                                        intent.putExtra("created", 2);
                                         startActivity(intent);
                                     }
                                 });
