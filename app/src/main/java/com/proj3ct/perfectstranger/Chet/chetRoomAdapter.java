@@ -77,7 +77,7 @@ public class chetRoomAdapter extends RecyclerView.Adapter<chetRoomViewHolder> {
         this.chet.add(chet);
         this.me.add(me);
         this.wrong.add(wrong);
-        Log.e("!!!!", chet.getUserKey());
+        Log.e("UserKey", chet.getUserKey());
         notifyDataSetChanged();
     }
 

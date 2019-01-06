@@ -1,9 +1,5 @@
 package com.proj3ct.perfectstranger.Chet;
 
-/**
- * Created by Administrator on 2018-11-12.
- */
-
 public class aChet {
     private String userKey;
     private String appName, mainText, mainTitle;

@@ -209,6 +209,7 @@ public class RulesActivity extends AppCompatActivity {
                 objectAnimator.setDuration(500);
                 objectAnimator.start();
 
+
             }
         });
     }

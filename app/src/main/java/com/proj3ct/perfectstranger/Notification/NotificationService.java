@@ -25,6 +25,8 @@ public class NotificationService extends NotificationListenerService {
     private static final String FACEBOOK_REPLY = "com.facebook.katana";
     private static final String INSTAGRAM = "com.instagram.android";
     private static final String BETEWEEN = "kr.co.vcnc.android.couple";
+//    private static final String MESSAGE = "com.samsung.android.messaging";
+    private static final String EVERYTIME = "com.everytime.v2";
 
     @Override
     public void onCreate() {
@@ -118,7 +120,20 @@ public class NotificationService extends NotificationListenerService {
                 mainTitle = "비트윈";
                 mainText = extras.getString(Notification.EXTRA_TITLE);
             }
-        } else {
+        }
+        else if (appName.equals(EVERYTIME)) {
+                mainTitle = "에브리타임";
+                mainText =  extras.getString(Notification.EXTRA_TITLE) + "\n" + extras.getString(Notification.EXTRA_TEXT);
+        }
+//        else if (appName.equals(MESSAGE)) {
+//                 if (extras.getString(Notification.EXTRA_TEMPLATE).equals("android.app.Notification$BigTextStyle") &&
+//                        !(extras.getString(Notification.EXTRA_TITLE).equals("")) &&
+//                        !(extras.getString(Notification.EXTRA_BIG_TEXT).equals(""))){
+//                     mainTitle = "메세지";
+//                     mainText = extras.getString(Notification.EXTRA_TITLE) + " : " + extras.getString(Notification.EXTRA_BIG_TEXT);
+//             }
+//        }
+        else {
             return null;
         }
         intent.putExtra("appName", appName);
