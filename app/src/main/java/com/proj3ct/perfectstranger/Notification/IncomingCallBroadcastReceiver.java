@@ -40,7 +40,6 @@ public class IncomingCallBroadcastReceiver extends BroadcastReceiver {
         } else {
             mLastState = state;
         }
-        Log.e("VIA_MESSAGE",intent.getStringExtra(TelephonyManager.ACTION_RESPOND_VIA_MESSAGE));
         String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
         final String phone_number = PhoneNumberUtils.formatNumber(incomingNumber);
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(incomingNumber));
