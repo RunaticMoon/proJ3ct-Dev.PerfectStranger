@@ -195,7 +195,7 @@ public class startActivity extends AppCompatActivity {
             } else {
                 Log.e("[분기점]", "4-2");
                 dialogStr = "이미 참여중인 방이 있습니다";
-                showComfirmDialog(dialogStr, "기존 방 입장", "새로운 방 만들기", roomKey, userKey);
+                showComfirmDialog(dialogStr, "기존 방 입장", "초대된 방으로 입장", roomKey, userKey);
                 // 쉐어드가 아닌 링크로 들어가는 조건
                 byLink = true;
                 roomKey = tempKey;

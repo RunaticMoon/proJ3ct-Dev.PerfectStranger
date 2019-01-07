@@ -76,6 +76,7 @@ public class NotificationService extends NotificationListenerService {
             if ( extras.getString(Notification.EXTRA_TEXT) == null){
                 return null;
             }
+
             if (extras.getString(Notification.EXTRA_SUB_TEXT) != null) {
                 Log.e("!!!", extras.getString(Notification.EXTRA_SUB_TEXT));
                 mainText = extras.getString(Notification.EXTRA_SUB_TEXT) + "\n";
