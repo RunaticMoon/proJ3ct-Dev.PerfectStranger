@@ -12,6 +12,8 @@ import com.proj3ct.perfectstranger.Firebase.FirebaseDB;
 import com.proj3ct.perfectstranger.Firebase.KakaoLink;
 import com.proj3ct.perfectstranger.R;
 
+import com.proj3ct.perfectstranger.Chet.chetRoom;
+
 public class waitingRoom extends AppCompatActivity {
     private FirebaseDB firebaseDB;
     private AppVariables appVariables;
@@ -38,7 +40,7 @@ public class waitingRoom extends AppCompatActivity {
         // FirebaseDB에 리스트뷰 연결
         firebaseDB.setList_user(list_user, text_count, this);
 
-        if(firebaseDB.isMaster()) {
+        if(firebaseDB.isMaster() || chetRoom.created > 0) {
             but_add.setVisibility(View.VISIBLE);
         }
         else {

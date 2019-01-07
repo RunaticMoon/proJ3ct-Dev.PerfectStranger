@@ -43,7 +43,8 @@ import com.proj3ct.perfectstranger.startActivity;
 public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmListener {
     private FirebaseDB firebaseDB;
     private AppVariables appVariables;
-    Boolean newGame;
+    private boolean newGame;
+    static public int created;
 
     // View component
     private RecyclerView list_chet;
@@ -134,15 +135,17 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
         // intent에 newGame 저장되어 있음.
         if (intent != null) {
             newGame = intent.getBooleanExtra("newGame", false);
+            created = intent.getIntExtra("created", 0);
         }
 
         // callback 함수
         // LocalBroadcastManager( Local를 사용한 이유 : 다른앱의 서비스의 방해를 방지 )
         // 값을 받아오면 onNotice함수를 실행( "Msg"태그의 intent를 함께 전달 )
-        Log.e("[status]",startActivity.status);
+        Log.e("[status]", startActivity.status);
         if (newGame) {
             LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("Msg"));
         }
+
         but_friends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,7 +161,6 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
                 startActivity(intent);
             }
         });
-
         but_newMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,7 +168,6 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
                 but_newMessage.setVisibility(View.GONE);
             }
         });
-
         btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,8 +175,6 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
                 startActivity(intent);
             }
         });
-
-
     }
 
 
@@ -227,13 +226,23 @@ public class chetRoom extends AppCompatActivity implements FirebaseDB.onAlarmLis
     @Override
     protected void onResume() {
         super.onResume();
+        Log.e("[created]", String.valueOf(created));
+
         if (startActivity.status.equals("exit")) {
             exitRoom();
-        }else if(startActivity.status.equals("delete")){
+        } else if(startActivity.status.equals("delete")){
             if(firebaseDB.isMaster()) {
                 firebaseDB.destroyRoom();
                 finish();
             }
+        }
+
+        if(created == 2) {
+            but_friends.performClick();
+            created--;
+        } else if(created == 1) {
+            but_rules.performClick();
+            created--;
         }
     }
     public void exitSettingActivity(){
