@@ -13,12 +13,14 @@ import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 
 public class AdMob {
     private InterstitialAd mInterstitialAd;
+    private InterstitialAd mInterstitialVideoAd;
     private RewardedVideoAd mRewardedVideoAd;
     private String deviceId = null;
     private Callback callback = null;
     private boolean reward = false;
 
     private String interstitial_id = "";
+    private String interstitialVideo_id = "";
     private String rewardedVideo_id = "";
 
     public void initialize(Context context) {
@@ -34,10 +36,12 @@ public class AdMob {
         if(test) {
             interstitial_id = context.getString(R.string.test_ad_front_id);
             rewardedVideo_id = context.getString(R.string.test_ad_reward_id);
+            interstitialVideo_id = context.getString(R.string.test_ad_front_video_id);
         }
         else {
             interstitial_id = context.getString(R.string.ad_front_id);
             rewardedVideo_id = context.getString(R.string.ad_reward_id);
+            interstitialVideo_id = context.getString(R.string.ad_front_video_id);
         }
     }
 
@@ -46,6 +50,17 @@ public class AdMob {
         if(mInterstitialAd.isLoaded()) {
             this.callback = callback;
             mInterstitialAd.show();
+        }
+        else {
+            callback.callback();
+        }
+    }
+
+    public void showInterstitialVideo(Callback callback) {
+        Log.e("[Ad Loaded]", String.valueOf(mInterstitialVideoAd.isLoaded()));
+        if(mInterstitialVideoAd.isLoaded()) {
+            this.callback = callback;
+            mInterstitialVideoAd.show();
         }
         else {
             callback.callback();
@@ -103,6 +118,53 @@ public class AdMob {
                 }
                 else {
                     mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice(deviceId).build());
+                }
+                // Code to be executed when when the interstitial ad is closed.
+            }
+        });
+    }
+
+
+    // 전면 동영상 광고
+    public void InterstitialVideo(Context context) {
+        mInterstitialVideoAd = new InterstitialAd(context);
+        mInterstitialVideoAd.setAdUnitId(interstitialVideo_id);
+
+        if(deviceId == null) {
+            mInterstitialVideoAd.loadAd(new AdRequest.Builder().build());
+        } else {
+            mInterstitialVideoAd.loadAd(new AdRequest.Builder().addTestDevice(deviceId).build());
+        }
+        mInterstitialVideoAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                Log.e("[Ad 전면 동영상]", "전면 동영상광고 로드");
+                // Code to be executed when an ad finishes loading.
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when the ad is displayed.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                callback.callback();
+                if(deviceId == null) {
+                    mInterstitialVideoAd.loadAd(new AdRequest.Builder().build());
+                }
+                else {
+                    mInterstitialVideoAd.loadAd(new AdRequest.Builder().addTestDevice(deviceId).build());
                 }
                 // Code to be executed when when the interstitial ad is closed.
             }

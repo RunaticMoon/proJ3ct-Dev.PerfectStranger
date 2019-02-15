@@ -126,10 +126,11 @@ public class startActivity extends AppCompatActivity {
         adMob.initialize(this);
         appVariables.setAdMob(adMob);
 
-        //adMob.setTestDevice("3D552DAB7664A09DE8A864FE8B3FE08D");
-        adMob.setTest(this, false);
+        //adMob.setTestDevice("3D5BFF3A93A8D14EFF77FDC4E69BED78");
+        //adMob.setTest(this, false);
         adMob.Interstitial(this);
-        adMob.RewardedVideo(this);
+        adMob.InterstitialVideo(this);
+        //adMob.RewardedVideo(this);
 
         // firebase analytics
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -299,7 +300,7 @@ public class startActivity extends AppCompatActivity {
                         delayHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                adMob.showRewardedVideo(new Callback() {
+                                adMob.showInterstitialVideo(new Callback() {
                                     @Override
                                     public void callback() {
                                         Log.e("[콜백]", "byLink false 방 만들기");
