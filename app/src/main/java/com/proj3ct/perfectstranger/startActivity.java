@@ -78,7 +78,7 @@ public class startActivity extends AppCompatActivity {
     private ConstraintSet con;
     private EditText edit_name;
     private Button but_chetRoom;
-    private ImageView but_setprofile,but_profile2;
+    private ImageView but_setprofile, but_profile2;
     private Animation move_left;
     private AppVariables appVariables;
     private Boolean Yes;
@@ -98,7 +98,7 @@ public class startActivity extends AppCompatActivity {
         text_title = (TextView) findViewById(R.id.text_title);
         bg_start = (ConstraintLayout) findViewById(R.id.bg_start);
         but_setprofile = (ImageView) findViewById(R.id.but_profile);
-        but_profile2=(ImageView)findViewById(R.id.but_profile2);
+        but_profile2 = (ImageView) findViewById(R.id.but_profile2);
         layout_profile = (ConstraintLayout) findViewById(R.id.layout_profile);
         edit_name = (EditText) findViewById(R.id.edit_name);
 
@@ -126,7 +126,7 @@ public class startActivity extends AppCompatActivity {
         adMob.initialize(this);
         appVariables.setAdMob(adMob);
 
-        //adMob.setTestDevice("3D5BFF3A93A8D14EFF77FDC4E69BED78");
+        //adMob.setTestDevice("3D552DAB7664A09DE8A864FE8B3FE08D");
         adMob.setTest(this, false);
         adMob.Interstitial(this);
         adMob.RewardedVideo(this);
@@ -155,7 +155,7 @@ public class startActivity extends AppCompatActivity {
         // 링크를 타고 들어왔는가?
         tempKey = kakaoLink.checkLink(getIntent());
         Log.e("[roomKey]", "카카오톡 링크 확인");
-        if(tempKey != null) {
+        if (tempKey != null) {
             Log.e("[roomKey]", tempKey);
         }
 
@@ -178,7 +178,7 @@ public class startActivity extends AppCompatActivity {
         } else if (roomKey != null && tempKey == null) {
             Log.e("[분기점]", "2");
             dialogStr = "이미 참여중인 방이있습니다.";
-            showComfirmDialog(dialogStr, "기존 방 입장","새로운 방 만들기", roomKey, userKey);
+            showComfirmDialog(dialogStr, "기존 방 입장", "새로운 방 만들기", roomKey, userKey);
             // 새로운방 입장 누를시 활성화
             byLink = false;
             but_chetRoom.setText("방 만들기");
@@ -188,14 +188,14 @@ public class startActivity extends AppCompatActivity {
             roomKey = tempKey;
             byLink = true;
         } else {
-            if(tempKey.equals(roomKey)){
+            if (tempKey.equals(roomKey)) {
                 Log.e("[분기점]", "4-1");
                 Toast.makeText(this, "이미 참여중인 방입니다", Toast.LENGTH_SHORT).show();
                 startIntentByShared();
-            } else{
+            } else {
                 Log.e("[분기점]", "4-2");
                 dialogStr = "이미 참여중인 방이 있습니다";
-                showComfirmDialog(dialogStr, "기존 방 입장","새로운 방 만들기", roomKey, userKey);
+                showComfirmDialog(dialogStr, "기존 방 입장", "초대된 방으로 입장", roomKey, userKey);
                 // 쉐어드가 아닌 링크로 들어가는 조건
                 byLink = true;
                 roomKey = tempKey;
@@ -255,7 +255,7 @@ public class startActivity extends AppCompatActivity {
 
                 but_chetRoom.setText("방 만들기");
                 byLink = false;
-                Toast.makeText(startActivity.this,"존재하지 않는 방입니다.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(startActivity.this, "존재하지 않는 방입니다.", Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -315,6 +315,7 @@ public class startActivity extends AppCompatActivity {
 
                                         Intent intent = new Intent(startActivity.this, chetRoom.class);
                                         intent.putExtra("newGame", true);
+                                        intent.putExtra("created", 2);
                                         startActivity(intent);
                                     }
                                 });
@@ -440,7 +441,7 @@ public class startActivity extends AppCompatActivity {
             user.setWithProfile(profile);
         }
 
-        if(startActivity.status.equals("exit")){
+        if (startActivity.status.equals("exit")) {
             but_chetRoom.setText("방 만들기");
             startActivity.status = "notinit";
             byLink = false;
@@ -452,7 +453,6 @@ public class startActivity extends AppCompatActivity {
     private boolean isAllPermissionAloowed() {
         return (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS) == 0 &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) == 0 &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) == 0 &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == 0);
     }
 
@@ -485,7 +485,7 @@ public class startActivity extends AppCompatActivity {
             checkDangerousPermission();
         } else if (!isNotiPermissionAllowed()) {
             checkSignaturePermission();
-        }else {
+        } else {
             con.setVerticalBias(R.id.light, 0.1f);
             TransitionManager.beginDelayedTransition(bg_start, transition);
             con.applyTo(bg_start);
@@ -540,7 +540,6 @@ public class startActivity extends AppCompatActivity {
     }
 
 
-
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1111) {
@@ -572,12 +571,10 @@ public class startActivity extends AppCompatActivity {
     public void checkDangerousPermission() {
         if (ContextCompat.checkSelfPermission(startActivity.this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(startActivity.this, Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(startActivity.this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(startActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                || ContextCompat.checkSelfPermission(startActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(startActivity.this, Manifest.permission.READ_CONTACTS)
                     || ActivityCompat.shouldShowRequestPermissionRationale(startActivity.this, Manifest.permission.WRITE_CONTACTS)
-                    || ActivityCompat.shouldShowRequestPermissionRationale(startActivity.this, Manifest.permission.RECEIVE_SMS)
                     || ActivityCompat.shouldShowRequestPermissionRationale(startActivity.this, Manifest.permission.READ_PHONE_STATE)) {
                 new AlertDialog.Builder(this).setTitle("알림").setMessage("권한을 허용해주셔야 앱을 이용할 수 있습니다.")
                         .setPositiveButton("종료", new DialogInterface.OnClickListener() {
@@ -598,7 +595,6 @@ public class startActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(startActivity.this,
                         new String[]{Manifest.permission.READ_CONTACTS,
                                 Manifest.permission.WRITE_CONTACTS,
-                                Manifest.permission.RECEIVE_SMS,
                                 Manifest.permission.READ_PHONE_STATE,
                         },
                         1111);

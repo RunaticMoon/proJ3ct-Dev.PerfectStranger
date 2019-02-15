@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.ContactsContract;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
@@ -27,6 +29,7 @@ public class IncomingCallBroadcastReceiver extends BroadcastReceiver {
     private String mLastState;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onReceive(final Context context, Intent intent) {
         Log.d("!!!onReceive()",intent.getStringExtra(TelephonyManager.EXTRA_STATE));
@@ -37,7 +40,6 @@ public class IncomingCallBroadcastReceiver extends BroadcastReceiver {
         } else {
             mLastState = state;
         }
-
         String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
         final String phone_number = PhoneNumberUtils.formatNumber(incomingNumber);
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(incomingNumber));

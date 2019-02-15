@@ -32,8 +32,10 @@ public class chetRoomViewHolder extends RecyclerView.ViewHolder {
     private static final String CALL_ON = "CALL_ON"; // 내용1 : 현재통화 ,내용2 : 수신전화
     private static final String CALL_OUT = "CALL_OUT"; // 내용1 : 현재통화 ,내용2 : 수신전화
     private static final String INSTAGRAM = "com.instagram.android";
-    private static final String MESSAGE = "MESSAGE";
+    private static final String MESSAGE = "com.samsung.android.messaging";
+    private static final String EVERYTIME = "com.everytime.v2";
     private static final String BETEWEEN = "kr.co.vcnc.android.couple";
+    private static final String MESSAGE2 = "MESSAGE";
 
     public chetRoomViewHolder(View itemView) {
         super(itemView);
@@ -67,6 +69,10 @@ public class chetRoomViewHolder extends RecyclerView.ViewHolder {
             image_logo.setImageResource(R.drawable.logo_instagram);
         } else if(appName.equals(BETEWEEN)) {
             image_logo.setImageResource(R.drawable.logo_between);
+        }else if(appName.equals(EVERYTIME)) {
+            image_logo.setImageResource(R.drawable.logo_everytime);
+        }else if(appName.equals(MESSAGE2)) {
+            image_logo.setImageResource(R.drawable.logo_message);
         }
 
         Date time = new Date((chet.getTimeStamp()));

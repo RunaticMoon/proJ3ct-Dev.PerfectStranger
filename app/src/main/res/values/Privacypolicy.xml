@@ -6,7 +6,6 @@
 Google은 사용자에게 더 많은 선택권을 제공하기 위해 광고 및 분석 작업에 사용할 수 있는 재설정 가능한 식별자인 앱용 광고 ID를 도입했습니다. 이 식별자는 여러 용도가 있지만 대표적으로 게재할 광고를 맞춤설정하고 앱 사용 방식을 파악하는데 유용합니다.
 예를 들어 광고를 게재한 뒤에 마케팅 측에서 문맥광고, 게재빈도 설정, 전환 추적, 보고 및 보안, 사기 감지 작업을 수행할 수 있습니다.
 자세히 : https://support.google.com/googleplay/answer/3405269\n
-- SMS(android.permission. RECEIVE_SMS) 기능 접근 권한 요청\n
 -주소록(android.permission. READ_PHONE_STATE) 기능 접근 권한 요청\n
 -전화(android.permission. READ_CONTACTS) 기능 접근 권한 요청\n
 -전화(android.permission. WRITE_CONTACTS) 기능 접근 요청\n
@@ -34,7 +33,6 @@ Google 광고 개인정보 보호 및 약관 (https://policies.google.com/techno
 이는 기기의 설정(‘Google 설정앱->Google->광고’ 또는 ‘설정->계정->Google->광고’) 을 변경함으로 사용을 거부할 수 있습니다.\n
 또한 광고 추적을 선택 해제한 사용자가 해당 식별자를 재설정하여 광고 추적을 선택 해제하기 전에 수집 및 전달된 리마케팅 데이터로부터 기기의 연결을 해제할 수 있습니다.\n
 Google 서비스에서 수집하는 정보는 각 서비스가 사용하는 저장소에만 수집, 저장되며 앱에서 별도로 저장하지 않습니다.\n
-- SMS(android.permission. RECEIVE_SMS) 기능 접근 권한 요청\n
 -주소록(android.permission. READ_PHONE_STATE) 기능 접근 권한 요청\n
 -전화(android.permission. READ_CONTACTS) 기능 접근 권한 요청\n
 -전화(android.permission. WRITE_CONTACTS) 기능 접근 요청\n
@@ -59,7 +57,7 @@ Proj3ct dev. 은 서비스의 변경사항이나 정책을 반영하기 위해 �
 모바일 애플리케이션과 같이 쿠키 기술을 사용할 수 없는 서비스에 광고를 게재하기 위해 Google은 쿠키와 유사한 기능을 수행하는 기술(모바일 인앱 광고 ID)을 사용할 수도 있습니다. 모바일 인앱 광고 ID를 사용하면 개발자와 마케팅 담당자가 광고 목적에 따라 활동을 추적할 수 있습니다.또한 모바일 광고 ID는 게재 및 타겟팅 기능을 개선하는 데에도 사용됩니다.이는 기기의 설정(‘Google 설정앱->Google->광고’ 또는 ‘설정->계정->Google->광고’) 을 변경함으로 사용을 거부할 수 있습니다.
 자세히 (https://policies.google.com/technologies/ads?hl=ko)\n\n
 
-변경일자 : 2019.1.03\n\n
+변경일자 : 2019.1.06\n\n
 
 개인정보 처리방침 변경사항은 즉시 적용됩니다.\n\n
 

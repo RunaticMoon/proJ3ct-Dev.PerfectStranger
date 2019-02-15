@@ -39,8 +39,8 @@ public class Rule {
     }
 
 
-    private String[] apps = { "카카오톡", "페이스북", "페이스북 메신저","인스타그램", "비트윈", "메세지", "전화" };
-    private String[] appName={"kakao","katana","orca","instagram","couple","MESSAGE","CALL"};
+    private String[] apps = { "카카오톡", "페이스북", "페이스북 메신저","인스타그램", "비트윈","전화","에브리타임" };
+    private String[] appName={"kakao","katana","orca","instagram","couple","CALL","EVERYTIME"};
 
     public Rule() { }
 
