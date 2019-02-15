@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">완벽한 타인</string>
     <string name="ad_front_id">ca-app-pub-8025062398820458/4868077907</string>
+    <string name="ad_front_video_id">ca-app-pub-8025062398820458/8113114309</string>
     <string name="ad_reward_id">ca-app-pub-8025062398820458/7857257224</string>
     <string name="test_ad_front_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="test_ad_front_video_id">ca-app-pub-3940256099942544/8691691433</string>
     <string name="test_ad_reward_id">ca-app-pub-3940256099942544/5224354917</string>
 </resources>
