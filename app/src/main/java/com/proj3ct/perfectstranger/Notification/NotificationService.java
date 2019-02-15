@@ -25,7 +25,6 @@ public class NotificationService extends NotificationListenerService {
     private static final String FACEBOOK_REPLY = "com.facebook.katana";
     private static final String INSTAGRAM = "com.instagram.android";
     private static final String BETEWEEN = "kr.co.vcnc.android.couple";
-//    private static final String MESSAGE = "com.samsung.android.messaging";
     private static final String EVERYTIME = "com.everytime.v2";
 
     @Override
