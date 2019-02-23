@@ -24,7 +24,7 @@ public class AdMob {
     private String rewardedVideo_id = "";
 
     public void initialize(Context context) {
-        MobileAds.initialize(context, "ca-app-pub-8025062398820458~2176010546");
+        MobileAds.initialize(context, context.getString(R.string.adMob_id));
     }
 
     public void setTestDevice(String device) {
@@ -97,6 +97,7 @@ public class AdMob {
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
+                Log.e("[Ad 전면]", "전면광고 로드 실패 : " + errorCode);
                 // Code to be executed when an ad request fails.
             }
 
@@ -144,6 +145,7 @@ public class AdMob {
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
+                Log.e("[Ad 전면 동영상]", "전면 동영상광고 로드 실패 : " + errorCode);
                 // Code to be executed when an ad request fails.
             }
 

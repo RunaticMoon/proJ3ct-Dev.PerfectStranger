@@ -127,7 +127,7 @@ public class startActivity extends AppCompatActivity {
         appVariables.setAdMob(adMob);
 
         //adMob.setTestDevice("3D5BFF3A93A8D14EFF77FDC4E69BED78");
-        //adMob.setTest(this, false);
+        adMob.setTest(this, false);
         adMob.Interstitial(this);
         adMob.InterstitialVideo(this);
         //adMob.RewardedVideo(this);
